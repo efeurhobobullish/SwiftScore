@@ -1,833 +1,742 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SwiftScore Predictions - Global Sports Prediction Platform</title>
-    <link rel="icon" href="images/logo.png" type="image/png" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#101820',
-              secondary: '#FEE715',
-              accent: '#101820',
-            },
-            fontFamily: {
-              sans: ['Poppins', 'sans-serif'],
-            },
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwiftScore - Sports Predictions & Analytics</title>
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path d='M13 2L4 14H11L11 22L20 10H13L13 2Z' fill='%232563EA' fill-opacity='0.9'/><path d='M10.5 6.5L7 12H10.5L9.5 17.5L13 12H9.5L10.5 6.5Z' fill='white'/></svg>" type="image/svg+xml">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EA',
+            secondary: '#1E40AF',
+            accent: '#60A5FA',
+            light: '#F3F4F6'
           },
-        },
-      };
-    </script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <style>
-      body {
-        background-color: #101820;
-        color: #fee715;
-        overflow-x: hidden;
-      }
-
-      .splash-screen {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: #101820;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        z-index: 9999;
-        color: #fee715;
-        overflow: hidden;
-      }
-
-      .splash-content {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        width: 100%;
-        height: 100%;
-        position: relative;
-      }
-
-      .ios-logo-container {
-        position: relative;
-        width: 120px;
-        height: 120px;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 24px;
-      }
-
-      .ios-logo-background {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        background: #fee715;
-        border-radius: 24px;
-        transform: scale(0);
-        animation: scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-      }
-
-      .ios-logo {
-        width: 80px;
-        height: 80px;
-        position: relative;
-        z-index: 2;
-        opacity: 0;
-        animation: fadeIn 0.5s ease-out 0.3s forwards;
-      }
-
-      .ios-ripple {
-        position: absolute;
-        border: 2px solid rgba(254, 231, 21, 0.3);
-        border-radius: 50%;
-        animation: ripple 2s infinite;
-      }
-
-      .ios-ripple:nth-child(1) {
-        width: 140px;
-        height: 140px;
-        animation-delay: 0s;
-      }
-
-      .ios-ripple:nth-child(2) {
-        width: 180px;
-        height: 180px;
-        animation-delay: 0.5s;
-      }
-
-      .ios-ripple:nth-child(3) {
-        width: 220px;
-        height: 220px;
-        animation-delay: 1s;
-      }
-
-      @keyframes scaleIn {
-        0% {
-          transform: scale(0);
-        }
-        80% {
-          transform: scale(1.1);
-        }
-        100% {
-          transform: scale(1);
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
         }
       }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    /* iOS-inspired Splash Screen Styles */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #2563EA;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      overflow: hidden;
+    }
 
-      @keyframes fadeIn {
-        0% {
-          opacity: 0;
-          transform: scale(0.8);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
+    .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
 
-      @keyframes ripple {
-        0% {
-          transform: scale(0.8);
-          opacity: 1;
-        }
-        100% {
-          transform: scale(1.2);
-          opacity: 0;
-        }
-      }
+    .ios-logo-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
 
-      .ios-app-name {
-        font-size: 28px;
-        font-weight: 600;
-        margin-top: 20px;
-        opacity: 0;
-        animation: fadeInUp 0.5s ease-out 0.5s forwards;
-      }
+    .ios-logo-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 24px;
+      transform: scale(0);
+      animation: scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
 
-      .ios-tagline {
-        font-size: 16px;
-        font-weight: 300;
-        margin-top: 8px;
-        opacity: 0;
-        animation: fadeInUp 0.5s ease-out 0.7s forwards;
-      }
+    .ios-logo {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out 0.3s forwards;
+    }
 
-      @keyframes fadeInUp {
-        0% {
-          opacity: 0;
-          transform: translateY(10px);
-        }
-        100% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-      }
+    .ios-ripple {
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: ripple 2s infinite;
+    }
 
-      .ios-loader {
-        position: absolute;
-        bottom: 80px;
-        width: 120px;
-        height: 4px;
-        background: rgba(254, 231, 21, 0.2);
-        border-radius: 2px;
-        overflow: hidden;
-      }
+    .ios-ripple:nth-child(1) {
+      width: 140px;
+      height: 140px;
+      animation-delay: 0s;
+    }
 
-      .ios-loader-progress {
-        position: absolute;
-        left: 0;
-        top: 0;
-        height: 100%;
-        width: 0;
-        background: #fee715;
-        border-radius: 2px;
-        animation: loadProgress 3.5s ease-out forwards;
-      }
+    .ios-ripple:nth-child(2) {
+      width: 180px;
+      height: 180px;
+      animation-delay: 0.5s;
+    }
 
-      @keyframes loadProgress {
-        0% {
-          width: 0;
-        }
-        20% {
-          width: 20%;
-        }
-        40% {
-          width: 45%;
-        }
-        60% {
-          width: 70%;
-        }
-        80% {
-          width: 90%;
-        }
-        100% {
-          width: 100%;
-        }
-      }
+    .ios-ripple:nth-child(3) {
+      width: 220px;
+      height: 220px;
+      animation-delay: 1s;
+    }
 
-      .onboarding-container {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #101820;
-        z-index: 1000;
-        display: none;
-        flex-direction: column;
-        overflow: hidden;
-      }
+    @keyframes scaleIn {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
 
-      .onboarding-slides {
-        flex: 1;
-        display: flex;
-        transition: transform 0.5s ease;
-      }
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
 
-      .onboarding-slide {
-        min-width: 100%;
-        padding: 2rem;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
+    @keyframes ripple {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
 
-      .slide-image {
-        width: 200px;
-        height: 200px;
-        margin-bottom: 2rem;
-        animation: slideIn 0.8s ease-out;
-      }
+    .ios-app-name {
+      font-size: 28px;
+      font-weight: 600;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out 0.5s forwards;
+    }
 
-      @keyframes slideIn {
-        from {
-          transform: translateY(50px);
-          opacity: 0;
-        }
-        to {
-          transform: translateY(0);
-          opacity: 1;
-        }
-      }
+    .ios-tagline {
+      font-size: 16px;
+      font-weight: 300;
+      margin-top: 8px;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out 0.7s forwards;
+    }
 
-      .slide-indicators {
-        display: flex;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 1rem;
-      }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
 
-      .slide-indicator {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-        background-color: rgba(254, 231, 21, 0.3);
-        transition: all 0.3s ease;
-      }
+    .ios-loader {
+      position: absolute;
+      bottom: 80px;
+      width: 120px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
 
-      .slide-indicator.active {
-        background-color: #fee715;
-        width: 16px;
-        border-radius: 4px;
-      }
+    .ios-loader-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background: white;
+      border-radius: 2px;
+      animation: loadProgress 3.5s ease-out forwards;
+    }
 
-      .onboarding-nav {
-        padding: 1.5rem;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
+    @keyframes loadProgress {
+      0% { width: 0; }
+      20% { width: 20%; }
+      40% { width: 45%; }
+      60% { width: 70%; }
+      80% { width: 90%; }
+      100% { width: 100%; }
+    }
 
-      .skip-btn {
-        color: rgba(254, 231, 21, 0.7);
-        font-size: 0.875rem;
-      }
+    /* Onboarding Styles */
+    .onboarding-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
 
-      .next-btn {
-        background-color: #fee715;
-        color: #101820;
-        padding: 0.75rem 1.5rem;
-        border-radius: 9999px;
-        font-weight: 600;
-      }
+    .onboarding-slides {
+      flex: 1;
+      display: flex;
+      transition: transform 0.5s ease;
+    }
 
-      .main-content {
-        display: none;
-      }
+    .onboarding-slide {
+      min-width: 100%;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
 
-      .service-card {
-        transition: all 0.3s ease;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        background-color: rgba(16, 24, 32, 0.7);
-        color: #fee715;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-      }
+    .slide-image {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 2rem;
+      animation: slideIn 0.8s ease-out;
+    }
 
-      .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(254, 231, 21, 0.15);
-        border-color: rgba(254, 231, 21, 0.4);
-      }
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
 
-      .service-card::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        height: 4px;
-        background: #fee715;
-        opacity: 0;
-        transition: opacity 0.3s ease;
-      }
+    .slide-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
 
-      .service-card:hover::before {
-        opacity: 1;
-      }
+    .slide-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #d1d5db;
+      transition: all 0.3s ease;
+    }
 
-      .floating-element {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(254, 231, 21, 0.1);
-        z-index: 0;
-      }
+    .slide-indicator.active {
+      background-color: #2563EA;
+      width: 16px;
+      border-radius: 4px;
+    }
 
-      .score-badge {
-        position: relative;
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        padding: 0.25rem 0.75rem;
-        background: #fee715;
-        color: #101820;
-        border-radius: 9999px;
-        font-weight: 600;
-        font-size: 0.875rem;
-      }
+    .onboarding-nav {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
 
-      .prediction-card {
-        background: rgba(16, 24, 32, 0.7);
-        color: #fee715;
-        border-radius: 16px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(254, 231, 21, 0.05);
-        transition: all 0.3s ease;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-      }
+    .skip-btn {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
 
-      .prediction-card:hover {
-        box-shadow: 0 10px 15px -3px rgba(254, 231, 21, 0.1);
-        transform: translateY(-2px);
-        border-color: rgba(254, 231, 21, 0.4);
-      }
+    .next-btn {
+      background-color: #2563EA;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
 
-      .spinner {
-        border: 4px solid rgba(254, 231, 21, 0.3);
-        border-radius: 50%;
-        border-top: 4px solid #fee715;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-      }
+    /* Main App Styles */
+    .main-content {
+      display: none;
+    }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
-
-  <body class="min-h-screen flex flex-col relative">
-    <div id="splashScreen" class="splash-screen">
-      <div class="splash-content">
-        <div class="ios-logo-container">
-          <div class="ios-logo-background"></div>
-          <div class="ios-logo">
-            <img
-              src="images/logo.png"
-              alt="SwiftScore Logo"
-              class="w-full h-full object-contain"
-            />
-          </div>
-          <div class="ios-ripple"></div>
-          <div class="ios-ripple"></div>
-          <div class="ios-ripple"></div>
+    .service-card {
+      transition: all 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 234, 0.1);
+    }
+    
+    /* Custom styles for SwiftScore */
+    .score-badge {
+      background: linear-gradient(135deg, #2563EA 0%, #1E40AF 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .prediction-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .prediction-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .league-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col relative">
+  <!-- iOS-inspired Splash Screen -->
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="ios-logo-container">
+        <div class="ios-logo-background"></div>
+        <div class="ios-logo">
+          <img src="/logo.png" alt="SwiftScore Logo" class="w-full h-full object-contain">
         </div>
+        <div class="ios-ripple"></div>
+        <div class="ios-ripple"></div>
+        <div class="ios-ripple"></div>
+      </div>
 
-        <h1 class="ios-app-name">SwiftScore</h1>
-        <p class="ios-tagline">Global sports predictions</p>
+      <h1 class="ios-app-name">SwiftScore</h1>
+      <p class="ios-tagline">AI-Powered Sports Predictions</p>
 
-        <div class="ios-loader">
-          <div class="ios-loader-progress"></div>
+      <div class="ios-loader">
+        <div class="ios-loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Onboarding Slider -->
+  <div id="onboardingContainer" class="onboarding-container">
+    <div id="onboardingSlides" class="onboarding-slides">
+      <!-- Slide 1 -->
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
         </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">AI-Powered Predictions</h2>
+        <p class="text-gray-600 max-w-md">Get accurate match predictions using advanced algorithms and historical data analysis.</p>
+      </div>
+
+      <!-- Slide 2 -->
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">Real-time Updates</h2>
+        <p class="text-gray-600 max-w-md">Stay informed with live scores, team news, and last-minute changes that affect predictions.</p>
+      </div>
+
+      <!-- Slide 3 -->
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">Multiple Sports</h2>
+        <p class="text-gray-600 max-w-md">From football to basketball, tennis to cricket - we cover all major sports leagues worldwide.</p>
       </div>
     </div>
 
-    <div id="onboardingContainer" class="onboarding-container">
-      <div id="onboardingSlides" class="onboarding-slides">
-        <div class="onboarding-slide">
-          <div class="slide-image">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="#FEE715"
-              stroke-width="1.5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"
-              />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-medium mb-3">Global Sports Coverage</h2>
-          <p class="opacity-80 max-w-md">
-            Predict scores for football, basketball, tennis and more from leagues worldwide.
-          </p>
-        </div>
-
-        <div class="onboarding-slide">
-          <div class="slide-image">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="#FEE715"
-              stroke-width="1.5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
-              />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-medium mb-3">Smart Predictions</h2>
-          <p class="opacity-80 max-w-md">
-            Our AI analyzes team statistics, player performance, and historical data for accurate
-            predictions.
-          </p>
-        </div>
-
-        <div class="onboarding-slide">
-          <div class="slide-image">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="#FEE715"
-              stroke-width="1.5"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"
-              />
-            </svg>
-          </div>
-          <h2 class="text-2xl font-medium mb-3">Compete Globally</h2>
-          <p class="opacity-80 max-w-md">
-            Join prediction leagues, climb leaderboards, and prove your sports knowledge against fans
-            worldwide.
-          </p>
-        </div>
-      </div>
-
-      <div class="slide-indicators">
-        <div class="slide-indicator active" data-slide="0"></div>
-        <div class="slide-indicator" data-slide="1"></div>
-        <div class="slide-indicator" data-slide="2"></div>
-      </div>
-
-      <div class="onboarding-nav">
-        <button id="skipBtn" class="skip-btn">Skip</button>
-        <button id="nextBtn" class="next-btn">Next</button>
-      </div>
+    <div class="slide-indicators">
+      <div class="slide-indicator active" data-slide="0"></div>
+      <div class="slide-indicator" data-slide="1"></div>
+      <div class="slide-indicator" data-slide="2"></div>
     </div>
 
-    <div id="mainContent" class="main-content">
-      <div
-        class="floating-element top-10 left-5 w-16 h-16 animate-bounce"
-        style="animation-duration: 6s"
-        aria-hidden="true"
-      ></div>
-      <div
-        class="floating-element bottom-20 right-10 w-24 h-24 animate-pulse"
-        style="animation-duration: 8s"
-        aria-hidden="true"
-      ></div>
-      <div
-        class="floating-element top-1/2 left-1/4 w-12 h-12 animate-spin"
-        style="animation-duration: 15s"
-        aria-hidden="true"
-      ></div>
+    <div class="onboarding-nav">
+      <button id="skipBtn" class="skip-btn">Skip</button>
+      <button id="nextBtn" class="next-btn">Next</button>
+    </div>
+  </div>
 
-      <header class="relative z-10 pt-8 pb-4 px-6">
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <div
-              class="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mr-3"
-            >
-              <img
-                src="images/logo.png"
-                alt="SwiftScore Logo"
-                class="w-6 h-6 object-contain"
-              />
-            </div>
-            <h1 class="text-2xl font-bold">SwiftScore</h1>
-          </div>
-
-          <div class="flex items-center space-x-4">
-            <a href="#" class="hover:opacity-80 transition-opacity">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </a>
-            <a href="/auth/login" class="text-sm font-medium hover:opacity-80 transition-opacity"
-              >Sign In</a
-            >
-          </div>
+  <!-- Main App Content -->
+  <div id="mainContent" class="main-content">
+    <!-- Header -->
+    <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-30">
+      <div class="flex items-center justify-between max-w-6xl mx-auto">
+        <div class="flex items-center">
+          <img src="/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+          <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
         </div>
-      </header>
-
-      <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10">
-        <div class="text-center mb-8">
-          <div
-            class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-secondary text-primary mb-4"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              class="h-4 w-4 mr-1"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
-              />
+        
+        <nav class="hidden md:flex items-center space-x-6">
+          <a href="#" class="text-gray-700 hover:text-primary font-medium">Home</a>
+          <a href="#" class="text-gray-700 hover:text-primary font-medium">Predictions</a>
+          <a href="#" class="text-gray-700 hover:text-primary font-medium">Leagues</a>
+          <a href="#" class="text-gray-700 hover:text-primary font-medium">Stats</a>
+        </nav>
+        
+        <div class="flex items-center space-x-4">
+          <button class="md:hidden text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-            Global Prediction Platform
-          </div>
-          <h2 class="text-3xl font-semibold leading-tight mb-3">
-            Predict Sports Scores <span class="bg-secondary text-primary px-1">Worldwide</span>
-          </h2>
-          <p class="text-sm font-normal opacity-80 max-w-md">
-            Join millions of sports fans predicting match outcomes across football, basketball,
-            tennis and more
-          </p>
-        </div>
-
-        <div class="grid grid-cols-2 gap-4 mb-8 w-full max-w-md">
-          <div class="service-card p-5 text-center">
-            <div
-              class="w-12 h-12 mx-auto mb-3 bg-secondary/10 rounded-full flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"
-                />
-              </svg>
-            </div>
-            <h3 class="font-semibold text-sm">Football</h3>
-            <p class="text-xs opacity-80 mt-1">Premier League, La Liga, Serie A</p>
-          </div>
-
-          <div class="service-card p-5 text-center">
-            <div
-              class="w-12 h-12 mx-auto mb-3 bg-secondary/10 rounded-full flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"
-                />
-              </svg>
-            </div>
-            <h3 class="font-semibold text-sm">Basketball</h3>
-            <p class="text-xs opacity-80 mt-1">NBA, EuroLeague, NCAA</p>
-          </div>
-
-          <div class="service-card p-5 text-center">
-            <div
-              class="w-12 h-12 mx-auto mb-3 bg-secondary/10 rounded-full flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z"
-                />
-              </svg>
-            </div>
-            <h3 class="font-semibold text-sm">Tennis</h3>
-            <p class="text-xs opacity-80 mt-1">Grand Slams, ATP, WTA Tours</p>
-          </div>
-
-          <div class="service-card p-5 text-center">
-            <div
-              class="w-12 h-12 mx-auto mb-3 bg-secondary/10 rounded-full flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                class="w-6 h-6"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="1.5"
-                  d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"
-                />
-              </svg>
-            </div>
-            <h3 class="font-semibold text-sm">Statistics</h3>
-            <p class="text-xs opacity-80 mt-1">AI-powered predictions</p>
+          </button>
+          <div class="hidden md:flex items-center space-x-2">
+            <a href="/auth/login" class="text-primary font-medium">Sign In</a>
+            <a href="/auth/signup" class="bg-primary text-white px-4 py-2 rounded-full font-medium hover:bg-secondary transition">Sign Up</a>
           </div>
         </div>
+      </div>
+    </header>
 
-        <div class="space-y-4 w-full max-w-md">
-          <a
-            href="/auth/signup"
-            class="block w-full bg-secondary text-primary font-semibold rounded-full py-3 px-6 text-center transition-all hover:opacity-90 active:opacity-100 shadow"
-          >
-            Join The Prediction Game
-          </a>
-          <a
-            href="/auth/login"
-            class="block text-sm font-medium text-center hover:opacity-80 transition-opacity"
-          >
-            Already predicting? Sign In
+    <!-- Hero Section -->
+    <section class="bg-gradient-to-r from-primary to-secondary text-white py-12 px-6">
+      <div class="max-w-6xl mx-auto text-center">
+        <h2 class="text-3xl md:text-4xl font-bold mb-4">AI-Powered Sports Predictions</h2>
+        <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Get accurate match predictions with our advanced algorithms covering all major sports leagues worldwide.</p>
+        <a href="/auth/signup" class="bg-white text-primary px-6 py-3 rounded-full font-semibold inline-block hover:bg-gray-100 transition">Get Started Now</a>
+      </div>
+    </section>
+
+    <!-- Featured Predictions -->
+    <section class="py-12 px-6">
+      <div class="max-w-6xl mx-auto">
+        <div class="flex items-center justify-between mb-8">
+          <h2 class="text-2xl font-bold text-gray-800">Today's Featured Predictions</h2>
+          <a href="#" class="text-primary font-medium flex items-center">
+            View All
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+            </svg>
           </a>
         </div>
-
-        <div class="mt-8 pt-6 border-t border-secondary/30 w-full max-w-md">
-          <div class="flex justify-center space-x-8 text-sm opacity-80">
-            <div class="text-center">
-              <div class="font-bold">2M+</div>
-              <div class="text-xs">Predictions</div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <!-- Prediction Card 1 -->
+          <div class="prediction-card bg-white rounded-xl p-5">
+            <div class="league-badge">Premier League</div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-sm text-gray-500">Today, 15:00</div>
+              <div class="score-badge">85% Accuracy</div>
             </div>
-            <div class="text-center">
-              <div class="font-bold">50+</div>
-              <div class="text-xs">Leagues</div>
+            
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Arsenal</div>
+              </div>
+              
+              <div class="text-center mx-4">
+                <div class="text-xs text-gray-500">VS</div>
+                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">2-1</div>
+              </div>
+              
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Chelsea</div>
+              </div>
             </div>
-            <div class="text-center">
-              <div class="font-bold">95%</div>
-              <div class="text-xs">Accuracy</div>
+            
+            <div class="bg-gray-50 rounded-lg p-3 text-center">
+              <div class="text-xs text-gray-500 mb-1">Prediction</div>
+              <div class="font-semibold text-primary">Home Win</div>
+            </div>
+          </div>
+          
+          <!-- Prediction Card 2 -->
+          <div class="prediction-card bg-white rounded-xl p-5">
+            <div class="league-badge">La Liga</div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-sm text-gray-500">Today, 18:30</div>
+              <div class="score-badge">78% Accuracy</div>
+            </div>
+            
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Barcelona</div>
+              </div>
+              
+              <div class="text-center mx-4">
+                <div class="text-xs text-gray-500">VS</div>
+                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">2-2</div>
+              </div>
+              
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Real Madrid</div>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-3 text-center">
+              <div class="text-xs text-gray-500 mb-1">Prediction</div>
+              <div class="font-semibold text-primary">Draw</div>
+            </div>
+          </div>
+          
+          <!-- Prediction Card 3 -->
+          <div class="prediction-card bg-white rounded-xl p-5">
+            <div class="league-badge">NBA</div>
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-sm text-gray-500">Today, 20:00</div>
+              <div class="score-badge">82% Accuracy</div>
+            </div>
+            
+            <div class="flex items-center justify-between mb-4">
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Lakers</div>
+              </div>
+              
+              <div class="text-center mx-4">
+                <div class="text-xs text-gray-500">VS</div>
+                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">108-102</div>
+              </div>
+              
+              <div class="text-center">
+                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
+                <div class="font-medium text-sm">Bulls</div>
+              </div>
+            </div>
+            
+            <div class="bg-gray-50 rounded-lg p-3 text-center">
+              <div class="text-xs text-gray-500 mb-1">Prediction</div>
+              <div class="font-semibold text-primary">Home Win</div>
             </div>
           </div>
         </div>
-      </main>
+      </div>
+    </section>
 
-      <div
-        id="loadingOverlay"
-        class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden backdrop-blur-sm"
-      >
-        <div class="flex flex-col items-center space-y-4">
-          <div class="spinner"></div>
-          <p class="font-medium" id="loadingText">Loading predictions...</p>
+    <!-- Features Section -->
+    <section class="py-12 px-6 bg-white">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-12">Why Choose SwiftScore?</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div class="text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">AI-Powered Analysis</h3>
+            <p class="text-gray-600">Our algorithms analyze thousands of data points to deliver the most accurate predictions.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Real-time Updates</h3>
+            <p class="text-gray-600">Get instant notifications about team news, injuries, and last-minute changes.</p>
+          </div>
+          
+          <div class="text-center">
+            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold mb-2">Detailed Statistics</h3>
+            <p class="text-gray-600">Access comprehensive stats, trends, and historical data for informed decisions.</p>
+          </div>
         </div>
       </div>
-    </div>
+    </section>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const splashScreen = document.getElementById('splashScreen');
-        const onboardingContainer = document.getElementById('onboardingContainer');
-        const mainContent = document.getElementById('mainContent');
+    <!-- CTA Section -->
+    <section class="py-16 px-6 bg-primary">
+      <div class="max-w-4xl mx-auto text-center text-white">
+        <h2 class="text-3xl font-bold mb-6">Ready to Get Accurate Predictions?</h2>
+        <p class="text-lg mb-8">Join thousands of sports enthusiasts who trust SwiftScore for their predictions.</p>
+        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <a href="/auth/signup" class="bg-white text-primary font-semibold py-3 px-8 rounded-full hover:bg-gray-100 transition">Sign Up Now</a>
+          <a href="#" class="border-2 border-white text-white font-semibold py-3 px-8 rounded-full hover:bg-white hover:text-primary transition">View Demo</a>
+        </div>
+      </div>
+    </section>
 
-        setTimeout(() => {
-          splashScreen.style.opacity = '0';
-          splashScreen.style.transition = 'opacity 0.7s ease';
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-12 px-6">
+      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div>
+          <div class="flex items-center mb-4">
+            <img src="/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+            <h3 class="text-xl font-bold">SwiftScore</h3>
+          </div>
+          <p class="text-gray-400">AI-powered sports predictions and analytics for enthusiasts and professionals.</p>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Predictions</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Leagues</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Sports</h4>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Football</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Basketball</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Tennis</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition">Cricket</a></li>
+          </ul>
+        </div>
+        
+        <div>
+          <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
+          <ul class="space-y-2">
+            <li class="text-gray-400">support@swiftscore.com</li>
+            <li class="text-gray-400">+1 (234) 567-8900</li>
+            <li class="flex space-x-4 pt-2">
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <div class="max-w-6xl mx-auto border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2023 SwiftScore. All rights reserved.</p>
+      </div>
+    </footer>
+  </div>
 
-          setTimeout(() => {
-            splashScreen.style.display = 'none';
-
-            if (!sessionStorage.getItem('onboardingCompleted')) {
-              onboardingContainer.style.display = 'flex';
-            } else {
-              mainContent.style.display = 'block';
-            }
-          }, 500);
-        }, 2500);
-      });
-
+  <script>
+    // iOS-inspired Splash Screen Animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const splashScreen = document.getElementById('splashScreen');
       const onboardingContainer = document.getElementById('onboardingContainer');
-      const onboardingSlides = document.getElementById('onboardingSlides');
-      const nextBtn = document.getElementById('nextBtn');
-      const skipBtn = document.getElementById('skipBtn');
-      const indicators = document.querySelectorAll('.slide-indicator');
       const mainContent = document.getElementById('mainContent');
 
-      let currentSlide = 0;
-      const totalSlides = document.querySelectorAll('.onboarding-slide').length;
+      // Hide splash screen with iOS-style fade out
+      setTimeout(() => {
+        splashScreen.style.opacity = '0';
+        splashScreen.style.transition = 'opacity 0.7s ease';
 
-      function updateSlider() {
-        onboardingSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+        setTimeout(() => {
+          splashScreen.style.display = 'none';
 
-        indicators.forEach((indicator, index) => {
-          if (index === currentSlide) {
-            indicator.classList.add('active');
+          // Check if onboarding was completed before
+          if (!sessionStorage.getItem('onboardingCompleted')) {
+            onboardingContainer.style.display = 'flex';
           } else {
-            indicator.classList.remove('active');
+            mainContent.style.display = 'block';
           }
-        });
-
-        if (currentSlide === totalSlides - 1) {
-          nextBtn.textContent = 'Start Predicting';
-        } else {
-          nextBtn.textContent = 'Next';
-        }
-      }
-
-      function completeOnboarding() {
-        onboardingContainer.style.opacity = '0';
-        onboardingContainer.style.transition = 'opacity 0.5s ease';
-
-        setTimeout(() => {
-          onboardingContainer.style.display = 'none';
-          mainContent.style.display = 'block';
-          sessionStorage.setItem('onboardingCompleted', 'true');
         }, 500);
-      }
+      }, 2500);
+    });
 
-      nextBtn.addEventListener('click', () => {
-        if (currentSlide < totalSlides - 1) {
-          currentSlide++;
-          updateSlider();
+    // Onboarding Slider Functionality
+    const onboardingContainer = document.getElementById('onboardingContainer');
+    const onboardingSlides = document.getElementById('onboardingSlides');
+    const nextBtn = document.getElementById('nextBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const indicators = document.querySelectorAll('.slide-indicator');
+    const mainContent = document.getElementById('mainContent');
+
+    let currentSlide = 0;
+    const totalSlides = document.querySelectorAll('.onboarding-slide').length;
+
+    function updateSlider() {
+      onboardingSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+      // Update indicators
+      indicators.forEach((indicator, index) => {
+        if (index === currentSlide) {
+          indicator.classList.add('active');
         } else {
-          completeOnboarding();
+          indicator.classList.remove('active');
         }
       });
 
-      skipBtn.addEventListener('click', completeOnboarding);
-
-      const loadingOverlay = document.getElementById('loadingOverlay');
-      const loadingText = document.getElementById('loadingText');
-
-      window.addEventListener('load', () => {
-        loadingOverlay.classList.remove('hidden');
-        setTimeout(() => {
-          loadingOverlay.classList.add('hidden');
-        }, 2000);
-      });
-
-      function showLoading(text = 'Loading predictions...') {
-        loadingText.textContent = text;
-        loadingOverlay.classList.remove('hidden');
+      // Update button text on last slide
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.textContent = 'Get Started';
+      } else {
+        nextBtn.textContent = 'Next';
       }
+    }
 
-      function hideLoading() {
-        loadingOverlay.classList.add('hidden');
+    function completeOnboarding() {
+      onboardingContainer.style.opacity = '0';
+      onboardingContainer.style.transition = 'opacity 0.5s ease';
+
+      setTimeout(() => {
+        onboardingContainer.style.display = 'none';
+        mainContent.style.display = 'block';
+        // Store completion in sessionStorage (will show again on next visit)
+        sessionStorage.setItem('onboardingCompleted', 'true');
+      }, 500);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlider();
+      } else {
+        completeOnboarding();
       }
-    </script>
-  </body>
+    });
+
+    skipBtn.addEventListener('click', completeOnboarding);
+  </script>
+</body>
 </html>
