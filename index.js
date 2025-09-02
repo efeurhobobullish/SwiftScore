@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
 const cors = require("cors");
+const fetch = require("node-fetch");
 const cron = require("node-cron");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
