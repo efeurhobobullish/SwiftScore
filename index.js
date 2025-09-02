@@ -91,7 +91,7 @@ app.post("/api/login", async (req, res) => {
 
     const token = jwt.sign(
       { id: user._id, email: user.email },
-      config.JWT_SECRET,
+      process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
 
@@ -104,7 +104,7 @@ app.post("/api/login", async (req, res) => {
         email: user.email,
         balance: user.balance,
         role: user.role,
-        isVerified: user.isVerified, // ✅ included
+        isVerified: user.isVerified,
       },
     });
   } catch (error) {
