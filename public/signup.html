@@ -533,134 +533,115 @@
     <div class="absolute top-1/2 left-1/4 w-12 h-12 border-4 border-blue-600 border-opacity-10 rounded-full animate-spin"
          style="animation-duration: 15s" aria-hidden="true"></div>
   </div>
-
-  <script>
-    // iOS-inspired Splash Screen Animation
-    document.addEventListener('DOMContentLoaded', () => {
-      const splashScreen = document.getElementById('splashScreen');
-      const onboardingContainer = document.getElementById('onboardingContainer');
-      const mainContent = document.getElementById('mainContent');
-
-      // Hide splash screen with iOS-style fade out
-      setTimeout(() => {
-        splashScreen.style.opacity = '0';
-        splashScreen.style.transition = 'opacity 0.7s ease';
-
-        setTimeout(() => {
-          splashScreen.style.display = 'none';
-
-          // Check if onboarding was completed before
-          if (!sessionStorage.getItem('onboardingCompleted')) {
-            onboardingContainer.style.display = 'flex';
-          } else {
-            mainContent.style.display = 'block';
-          }
-        }, 500);
-      }, 2500);
-    });
-
-    // Onboarding Slider Functionality
+      <script>
+  // iOS-inspired Splash Screen Animation
+  document.addEventListener('DOMContentLoaded', () => {
+    const splashScreen = document.getElementById('splashScreen');
     const onboardingContainer = document.getElementById('onboardingContainer');
-    const onboardingSlides = document.getElementById('onboardingSlides');
-    const nextBtn = document.getElementById('nextBtn');
-    const skipBtn = document.getElementById('skipBtn');
-    const indicators = document.querySelectorAll('.slide-indicator');
     const mainContent = document.getElementById('mainContent');
 
-    let currentSlide = 0;
-    const totalSlides = document.querySelectorAll('.onboarding-slide').length;
+    setTimeout(() => {
+      splashScreen.style.opacity = '0';
+      splashScreen.style.transition = 'opacity 0.7s ease';
 
-    function updateSlider() {
-      onboardingSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
-
-      // Update indicators
-      indicators.forEach((indicator, index) => {
-        if (index === currentSlide) {
-          indicator.classList.add('active');
+      setTimeout(() => {
+        splashScreen.style.display = 'none';
+        if (!sessionStorage.getItem('onboardingCompleted')) {
+          onboardingContainer.style.display = 'flex';
         } else {
-          indicator.classList.remove('active');
+          mainContent.style.display = 'block';
         }
+      }, 500);
+    }, 2500);
+  });
+
+  // Onboarding Slider Functionality
+  const onboardingSlides = document.getElementById('onboardingSlides');
+  const nextBtn = document.getElementById('nextBtn');
+  const skipBtn = document.getElementById('skipBtn');
+  const indicators = document.querySelectorAll('.slide-indicator');
+  const onboardingContainer = document.getElementById('onboardingContainer');
+  const mainContent = document.getElementById('mainContent');
+
+  let currentSlide = 0;
+  const totalSlides = document.querySelectorAll('.onboarding-slide').length;
+
+  function updateSlider() {
+    onboardingSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+    indicators.forEach((ind, i) => ind.classList.toggle('active', i === currentSlide));
+    nextBtn.textContent = currentSlide === totalSlides - 1 ? 'Get Started' : 'Next';
+  }
+
+  function completeOnboarding() {
+    onboardingContainer.style.opacity = '0';
+    onboardingContainer.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+      onboardingContainer.style.display = 'none';
+      mainContent.style.display = 'block';
+      sessionStorage.setItem('onboardingCompleted', 'true');
+    }, 500);
+  }
+
+  nextBtn.addEventListener('click', () => {
+    if (currentSlide < totalSlides - 1) {
+      currentSlide++;
+      updateSlider();
+    } else {
+      completeOnboarding();
+    }
+  });
+  skipBtn.addEventListener('click', completeOnboarding);
+
+  // Password toggle
+  const passwordToggle = document.getElementById('passwordToggle');
+  const passwordInput = document.getElementById('password');
+  passwordToggle.addEventListener('click', () => {
+    const type = passwordInput.type === 'password' ? 'text' : 'password';
+    passwordInput.type = type;
+    passwordToggle.querySelector('i').classList.toggle('fa-eye-slash');
+    passwordToggle.querySelector('i').classList.toggle('fa-eye');
+  });
+
+  // Form Submission -> API call
+  const signupForm = document.getElementById('signupForm');
+  signupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const firstName = document.getElementById('firstName').value.trim();
+    const lastName = document.getElementById('lastName').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const terms = document.getElementById('terms').checked;
+
+    if (!terms) {
+      alert('Please agree to the Terms of Service and Privacy Policy');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ firstName, lastName, email, password })
       });
 
-      // Update button text on last slide
-      if (currentSlide === totalSlides - 1) {
-        nextBtn.textContent = 'Get Started';
-      } else {
-        nextBtn.textContent = 'Next';
-      }
-    }
+      const data = await response.json();
 
-    function completeOnboarding() {
-      onboardingContainer.style.opacity = '0';
-      onboardingContainer.style.transition = 'opacity 0.5s ease';
-
-      setTimeout(() => {
-        onboardingContainer.style.display = 'none';
-        mainContent.style.display = 'block';
-        // Store completion in sessionStorage (will show again on next visit)
-        sessionStorage.setItem('onboardingCompleted', 'true');
-      }, 500);
-    }
-
-    nextBtn.addEventListener('click', () => {
-      if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-        updateSlider();
-      } else {
-        completeOnboarding();
-      }
-    });
-
-    skipBtn.addEventListener('click', completeOnboarding);
-
-    // Password toggle functionality
-    const passwordToggle = document.getElementById('passwordToggle');
-    const passwordInput = document.getElementById('password');
-    
-    passwordToggle.addEventListener('click', () => {
-      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
-      passwordInput.setAttribute('type', type);
-      
-      // Toggle eye icon
-      const eyeIcon = passwordToggle.querySelector('i');
-      if (type === 'password') {
-        eyeIcon.classList.remove('fa-eye-slash');
-        eyeIcon.classList.add('fa-eye');
-      } else {
-        eyeIcon.classList.remove('fa-eye');
-        eyeIcon.classList.add('fa-eye-slash');
-      }
-    });
-
-    // Form submission
-    const signupForm = document.getElementById('signupForm');
-    
-    signupForm.addEventListener('submit', (e) => {
-      e.preventDefault();
-      
-      // Basic validation
-      const firstName = document.getElementById('firstName').value;
-      const lastName = document.getElementById('lastName').value;
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const terms = document.getElementById('terms').checked;
-      
-      if (!terms) {
-        alert('Please agree to the Terms of Service and Privacy Policy');
+      if (!response.ok) {
+        alert(data.message || 'Something went wrong. Please try again.');
         return;
       }
-      
-      // In a real application, you would send this data to your server
-      console.log('Signup data:', { firstName, lastName, email, password });
-      
-      // Show success message (in a real app, you would redirect or show a proper success message)
+
       alert('Account created successfully! Redirecting to login...');
-      
-      // Redirect to login page (simulate with timeout)
-      setTimeout(() => {
-        window.location.href = '/auth/login';
-      }, 1000);
-    });
+      setTimeout(() => (window.location.href = '/auth/login'), 1200);
+
+    } catch (error) {
+      console.error('Signup error:', error);
+      alert('Server error. Please try again later.');
+    }
+  });
+</script>
+
   </script>
 </body>
 </html>
