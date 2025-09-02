@@ -1,379 +1,666 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SwiftScore Predictions - Sign Up</title>
-    <link rel="icon" href="images/logo.png" type="image/png" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#101820',
-              secondary: '#FEE715',
-              accent: '#101820',
-            },
-            fontFamily: {
-              sans: ['Poppins', 'sans-serif'],
-            },
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwiftScore - Sign Up</title>
+  <link rel="icon" href="/images/logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EA',
+            secondary: '#1E40AF',
+            accent: '#60A5FA',
+            light: '#F3F4F6'
           },
-        },
-      };
-    </script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <style>
-      body {
-        background-color: #101820;
-        color: #fee715;
-        overflow-x: hidden;
-      }
-
-      .service-card {
-        transition: all 0.3s ease;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        background-color: rgba(16, 24, 32, 0.7);
-        color: #fee715;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-      }
-
-      .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(254, 231, 21, 0.15);
-        border-color: rgba(254, 231, 21, 0.4);
-      }
-
-      .floating-element {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(254, 231, 21, 0.1);
-        z-index: 0;
-      }
-
-      .form-input {
-        background-color: rgba(16, 24, 32, 0.7);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-        color: #fee715;
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-      }
-
-      .form-input:focus {
-        outline: none;
-        border-color: rgba(254, 231, 21, 0.6);
-        box-shadow: 0 0 0 3px rgba(254, 231, 21, 0.1);
-      }
-
-      .form-input::placeholder {
-        color: rgba(254, 231, 21, 0.5);
-      }
-
-      .password-toggle {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(254, 231, 21, 0.7);
-        cursor: pointer;
-      }
-
-      .spinner {
-        border: 4px solid rgba(254, 231, 21, 0.3);
-        border-radius: 50%;
-        border-top: 4px solid #fee715;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-      }
-
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
         }
       }
-    </style>
-  </head>
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    /* iOS-inspired Splash Screen Styles */
+    .splash-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #2563EA;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      color: white;
+      overflow: hidden;
+    }
 
-  <body class="min-h-screen flex flex-col relative">
-    <div
-      class="floating-element top-10 left-5 w-16 h-16 animate-bounce"
-      style="animation-duration: 6s"
-      aria-hidden="true"
-    ></div>
-    <div
-      class="floating-element bottom-20 right-10 w-24 h-24 animate-pulse"
-      style="animation-duration: 8s"
-      aria-hidden="true"
-    ></div>
-    <div
-      class="floating-element top-1/2 left-1/4 w-12 h-12 animate-spin"
-      style="animation-duration: 15s"
-      aria-hidden="true"
-    ></div>
+    .splash-content {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      position: relative;
+    }
 
-    <header class="relative z-10 pt-8 pb-4 px-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <div
-            class="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mr-3"
-          >
-            <img
-              src="./images/logo.png"
-              alt="SwiftScore Logo"
-              class="w-6 h-6 object-contain"
-            />
-          </div>
-          <h1 class="text-2xl font-bold">SwiftScore</h1>
+    .ios-logo-container {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .ios-logo-background {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: white;
+      border-radius: 24px;
+      transform: scale(0);
+      animation: scaleIn 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+    }
+
+    .ios-logo {
+      width: 80px;
+      height: 80px;
+      position: relative;
+      z-index: 2;
+      opacity: 0;
+      animation: fadeIn 0.5s ease-out 0.3s forwards;
+    }
+
+    .ios-ripple {
+      position: absolute;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      animation: ripple 2s infinite;
+    }
+
+    .ios-ripple:nth-child(1) {
+      width: 140px;
+      height: 140px;
+      animation-delay: 0s;
+    }
+
+    .ios-ripple:nth-child(2) {
+      width: 180px;
+      height: 180px;
+      animation-delay: 0.5s;
+    }
+
+    .ios-ripple:nth-child(3) {
+      width: 220px;
+      height: 220px;
+      animation-delay: 1s;
+    }
+
+    @keyframes scaleIn {
+      0% { transform: scale(0); }
+      80% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.8); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    @keyframes ripple {
+      0% { transform: scale(0.8); opacity: 1; }
+      100% { transform: scale(1.2); opacity: 0; }
+    }
+
+    .ios-app-name {
+      font-size: 28px;
+      font-weight: 600;
+      margin-top: 20px;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out 0.5s forwards;
+    }
+
+    .ios-tagline {
+      font-size: 16px;
+      font-weight: 300;
+      margin-top: 8px;
+      opacity: 0;
+      animation: fadeInUp 0.5s ease-out 0.7s forwards;
+    }
+
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+
+    .ios-loader {
+      position: absolute;
+      bottom: 80px;
+      width: 120px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .ios-loader-progress {
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100%;
+      width: 0;
+      background: white;
+      border-radius: 2px;
+      animation: loadProgress 3.5s ease-out forwards;
+    }
+
+    @keyframes loadProgress {
+      0% { width: 0; }
+      20% { width: 20%; }
+      40% { width: 45%; }
+      60% { width: 70%; }
+      80% { width: 90%; }
+      100% { width: 100%; }
+    }
+
+    /* Onboarding Styles */
+    .onboarding-container {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: white;
+      z-index: 1000;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .onboarding-slides {
+      flex: 1;
+      display: flex;
+      transition: transform 0.5s ease;
+    }
+
+    .onboarding-slide {
+      min-width: 100%;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+    }
+
+    .slide-image {
+      width: 200px;
+      height: 200px;
+      margin-bottom: 2rem;
+      animation: slideIn 0.8s ease-out;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .slide-indicators {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem;
+    }
+
+    .slide-indicator {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: #d1d5db;
+      transition: all 0.3s ease;
+    }
+
+    .slide-indicator.active {
+      background-color: #2563EA;
+      width: 16px;
+      border-radius: 4px;
+    }
+
+    .onboarding-nav {
+      padding: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .skip-btn {
+      color: #6b7280;
+      font-size: 0.875rem;
+    }
+
+    .next-btn {
+      background-color: #2563EA;
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 9999px;
+      font-weight: 500;
+    }
+
+    /* Main App Styles */
+    .main-content {
+      display: none;
+    }
+
+    .service-card {
+      transition: all 0.3s ease;
+    }
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 15px -3px rgba(37, 99, 234, 0.1);
+    }
+    
+    /* Custom styles for SwiftScore */
+    .score-badge {
+      background: linear-gradient(135deg, #2563EA 0%, #1E40AF 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .prediction-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .prediction-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .league-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+
+    /* Signup Form Styles */
+    .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      outline: none;
+      border-color: #2563EA;
+      box-shadow: 0 0 0 3px rgba(37, 99, 234, 0.1);
+    }
+    
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #374151;
+    }
+    
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+    
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col relative">
+  <div id="splashScreen" class="splash-screen">
+    <div class="splash-content">
+      <div class="ios-logo-container">
+        <div class="ios-logo-background"></div>
+        <div class="ios-logo">
+          <img src="/images/logo.png" alt="SwiftScore Logo" class="w-full h-full object-contain">
         </div>
+        <div class="ios-ripple"></div>
+        <div class="ios-ripple"></div>
+        <div class="ios-ripple"></div>
+      </div>
 
+      <h1 class="ios-app-name">SwiftScore</h1>
+      <p class="ios-tagline">AI-Powered Sports Predictions</p>
+
+      <div class="ios-loader">
+        <div class="ios-loader-progress"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="onboardingContainer" class="onboarding-container">
+    <div id="onboardingSlides" class="onboarding-slides">
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">AI-Powered Predictions</h2>
+        <p class="text-gray-600 max-w-md">Get accurate match predictions using advanced algorithms and historical data analysis.</p>
+      </div>
+
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">Real-time Updates</h2>
+        <p class="text-gray-600 max-w-md">Stay informed with live scores, team news, and last-minute changes that affect predictions.</p>
+      </div>
+
+      <div class="onboarding-slide">
+        <div class="slide-image">
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+          </svg>
+        </div>
+        <h2 class="text-2xl font-medium text-gray-800 mb-3">Multiple Sports</h2>
+        <p class="text-gray-600 max-w-md">From football to basketball, tennis to cricket - we cover all major sports leagues worldwide.</p>
+      </div>
+    </div>
+
+    <div class="slide-indicators">
+      <div class="slide-indicator active" data-slide="0"></div>
+      <div class="slide-indicator" data-slide="1"></div>
+      <div class="slide-indicator" data-slide="2"></div>
+    </div>
+
+    <div class="onboarding-nav">
+      <button id="skipBtn" class="skip-btn">Skip</button>
+      <button id="nextBtn" class="next-btn">Next</button>
+    </div>
+  </div>
+
+  <div id="mainContent" class="main-content">
+    <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-30">
+      <div class="flex items-center justify-between max-w-6xl mx-auto">
+        <div class="flex items-center">
+          <img src="images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+          <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
+        </div>
+        
         <div class="flex items-center space-x-4">
-          <a href="/" class="text-sm font-medium hover:opacity-80 transition-opacity"
-            >Home</a
-          >
-          <a href="/auth/login" class="text-sm font-medium hover:opacity-80 transition-opacity"
-            >Sign In</a
-          >
+          <a href="/auth/login" class="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+            Sign In
+          </a>
         </div>
       </div>
     </header>
 
-    <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10">
-      <div class="service-card p-8 w-full max-w-md">
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10 bg-gray-50 py-8">
+      <div class="w-full max-w-md bg-white rounded-2xl shadow-sm p-6">
         <div class="text-center mb-6">
-          <h2 class="text-2xl font-semibold">Create Your Account</h2>
-          <p class="text-sm opacity-80 mt-2">
-            Join millions predicting sports scores worldwide
-          </p>
+          <h2 class="text-2xl font-semibold text-gray-900">Create your account</h2>
+          <p class="text-sm text-gray-600 mt-1">Join SwiftScore for AI-powered sports predictions</p>
         </div>
 
         <form id="signupForm" class="space-y-4">
           <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="firstName" class="block text-sm font-medium mb-1">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                class="form-input"
-                placeholder="Enter your first name"
+            <div class="form-group">
+              <label for="firstName" class="form-label">First Name</label>
+              <input 
+                type="text" 
+                id="firstName" 
+                name="firstName" 
+                class="form-input" 
+                placeholder="John" 
                 required
-              />
+              >
             </div>
-            <div>
-              <label for="lastName" class="block text-sm font-medium mb-1">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                class="form-input"
-                placeholder="Enter your last name"
+            
+            <div class="form-group">
+              <label for="lastName" class="form-label">Last Name</label>
+              <input 
+                type="text" 
+                id="lastName" 
+                name="lastName" 
+                class="form-input" 
+                placeholder="Doe" 
                 required
-              />
+              >
             </div>
           </div>
-
-          <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-input"
-              placeholder="Enter your email"
+          
+          <div class="form-group">
+            <label for="email" class="form-label">Email Address</label>
+            <input 
+              type="email" 
+              id="email" 
+              name="email" 
+              class="form-input" 
+              placeholder="name@example.com" 
               required
-            />
+            >
           </div>
-
-          <div>
-            <label for="password" class="block text-sm font-medium mb-1">Password</label>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Password</label>
             <div class="relative">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-input pr-10"
-                placeholder="Create a password"
+              <input 
+                type="password" 
+                id="password" 
+                name="password" 
+                class="form-input pr-10" 
+                placeholder="••••••••" 
                 required
-              />
+                minlength="8"
+              >
               <span class="password-toggle" id="passwordToggle">
                 <i class="far fa-eye"></i>
               </span>
             </div>
-            <p class="text-xs opacity-70 mt-1">Must be at least 8 characters</p>
+            <p class="text-xs text-gray-500 mt-1">Must be at least 8 characters</p>
           </div>
-
-          <div>
-            <label for="confirmPassword" class="block text-sm font-medium mb-1">Confirm Password</label>
-            <div class="relative">
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                class="form-input pr-10"
-                placeholder="Confirm your password"
-                required
-              />
-              <span class="password-toggle" id="confirmPasswordToggle">
-                <i class="far fa-eye"></i>
-              </span>
-            </div>
-          </div>
-
-          <div class="pt-2">
-            <button
-              type="submit"
-              class="w-full bg-secondary text-primary font-semibold rounded-full py-3 px-6 text-center transition-all hover:opacity-90 active:opacity-100 shadow"
+          
+          <div class="flex items-center mb-4">
+            <input 
+              type="checkbox" 
+              id="terms" 
+              name="terms" 
+              class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+              required
             >
-              Create Account
-            </button>
+            <label for="terms" class="ml-2 block text-sm text-gray-700">
+              I agree to the <a href="/terms" class="text-primary hover:underline">Terms of Service</a> and <a href="/privacy" class="text-primary hover:underline">Privacy Policy</a>
+            </label>
           </div>
+          
+          <button 
+            type="submit" 
+            class="w-full bg-primary text-white font-semibold rounded-full py-3 px-6 text-center transition-all hover:bg-secondary active:bg-blue-900 shadow"
+          >
+            Create Account
+          </button>
         </form>
-
-        <div class="mt-6 pt-4 border-t border-secondary/30">
-          <p class="text-sm text-center opacity-80">
+        
+        <div class="mt-6 text-center">
+          <p class="text-sm text-gray-600">
             Already have an account?
-            <a href="/auth/login" class="font-medium hover:opacity-80 transition-opacity">
-              Sign In
-            </a>
+            <a href="/auth/login" class="text-primary font-medium hover:underline">Sign in</a>
           </p>
         </div>
       </div>
-
-      <div class="mt-6 text-center">
-        <p class="text-xs opacity-60 max-w-md">
-          By creating an account, you agree to our Terms of Service and Privacy Policy
-        </p>
-      </div>
     </main>
 
-    <div
-      id="loadingOverlay"
-      class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden backdrop-blur-sm"
-    >
-      <div class="flex flex-col items-center space-y-4">
-        <div class="spinner"></div>
-        <p class="font-medium">Creating your account...</p>
-      </div>
-    </div>
-    
-    <div id="statusMessage" class="fixed bottom-4 right-4 bg-primary text-secondary py-2 px-4 rounded-lg shadow-lg hidden transition-opacity duration-300 ease-in-out"></div>
+    <!-- Background elements -->
+    <div class="absolute top-10 left-5 w-16 h-16 bg-blue-600 bg-opacity-10 rounded-full animate-bounce"
+         style="animation-duration: 6s" aria-hidden="true"></div>
+    <div class="absolute bottom-20 right-10 w-24 h-24 bg-blue-600 bg-opacity-10 rounded-3xl animate-pulse"
+         style="animation-duration: 8s" aria-hidden="true"></div>
+    <div class="absolute top-1/2 left-1/4 w-12 h-12 border-4 border-blue-600 border-opacity-10 rounded-full animate-spin"
+         style="animation-duration: 15s" aria-hidden="true"></div>
+  </div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const passwordToggle = document.getElementById('passwordToggle');
-        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const signupForm = document.getElementById('signupForm');
-        const loadingOverlay = document.getElementById('loadingOverlay');
-        const statusMessage = document.getElementById('statusMessage');
+  <script>
+    // iOS-inspired Splash Screen Animation
+    document.addEventListener('DOMContentLoaded', () => {
+      const splashScreen = document.getElementById('splashScreen');
+      const onboardingContainer = document.getElementById('onboardingContainer');
+      const mainContent = document.getElementById('mainContent');
 
-        // Toggle password visibility
-        function setupPasswordToggle(toggleElement, inputElement) {
-          toggleElement.addEventListener('click', () => {
-            const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
-            inputElement.setAttribute('type', type);
-            
-            // Toggle eye icon
-            const icon = toggleElement.querySelector('i');
-            if (type === 'text') {
-              icon.classList.remove('fa-eye');
-              icon.classList.add('fa-eye-slash');
-            } else {
-              icon.classList.remove('fa-eye-slash');
-              icon.classList.add('fa-eye');
-            }
-          });
+      // Hide splash screen with iOS-style fade out
+      setTimeout(() => {
+        splashScreen.style.opacity = '0';
+        splashScreen.style.transition = 'opacity 0.7s ease';
+
+        setTimeout(() => {
+          splashScreen.style.display = 'none';
+
+          // Check if onboarding was completed before
+          if (!sessionStorage.getItem('onboardingCompleted')) {
+            onboardingContainer.style.display = 'flex';
+          } else {
+            mainContent.style.display = 'block';
+          }
+        }, 500);
+      }, 2500);
+    });
+
+    // Onboarding Slider Functionality
+    const onboardingContainer = document.getElementById('onboardingContainer');
+    const onboardingSlides = document.getElementById('onboardingSlides');
+    const nextBtn = document.getElementById('nextBtn');
+    const skipBtn = document.getElementById('skipBtn');
+    const indicators = document.querySelectorAll('.slide-indicator');
+    const mainContent = document.getElementById('mainContent');
+
+    let currentSlide = 0;
+    const totalSlides = document.querySelectorAll('.onboarding-slide').length;
+
+    function updateSlider() {
+      onboardingSlides.style.transform = `translateX(-${currentSlide * 100}%)`;
+
+      // Update indicators
+      indicators.forEach((indicator, index) => {
+        if (index === currentSlide) {
+          indicator.classList.add('active');
+        } else {
+          indicator.classList.remove('active');
         }
-
-        setupPasswordToggle(passwordToggle, passwordInput);
-        setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
-        
-        // Function to display a status message
-        function showStatusMessage(message, isError = false) {
-            statusMessage.textContent = message;
-            statusMessage.classList.remove('hidden', 'opacity-0', 'bg-red-600', 'text-white', 'bg-green-600', 'text-white');
-            statusMessage.classList.add('opacity-100');
-            if (isError) {
-                statusMessage.classList.add('bg-red-600', 'text-white');
-            } else {
-                statusMessage.classList.add('bg-green-600', 'text-white');
-            }
-            setTimeout(() => {
-                statusMessage.classList.remove('opacity-100');
-                statusMessage.classList.add('opacity-0');
-                setTimeout(() => statusMessage.classList.add('hidden'), 300);
-            }, 5000);
-        }
-
-        // Form validation and submission
-        signupForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          const firstName = document.getElementById('firstName').value.trim();
-          const lastName = document.getElementById('lastName').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const password = passwordInput.value;
-          const confirmPassword = confirmPasswordInput.value;
-          
-          // Client-side validation
-          if (password !== confirmPassword) {
-            showStatusMessage('Passwords do not match.', true);
-            return;
-          }
-          
-          if (password.length < 8) {
-            showStatusMessage('Password must be at least 8 characters long.', true);
-            return;
-          }
-          
-          // Show loading overlay
-          loadingOverlay.classList.remove('hidden');
-          
-          try {
-            const response = await fetch('/api/register', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ firstName, lastName, email, password }),
-            });
-            
-            const data = await response.json();
-            
-            if (response.ok) {
-              showStatusMessage(data.message, false);
-              // You can clear the form or redirect the user here
-              signupForm.reset();
-              window.location.href = '/auth/login';
-            } else {
-              showStatusMessage(data.message || 'An error occurred. Please try again.', true);
-            }
-          } catch (error) {
-            console.error('Signup error:', error);
-            showStatusMessage('Network error. Please try again.', true);
-          } finally {
-            // Hide loading overlay regardless of the outcome
-            loadingOverlay.classList.add('hidden');
-          }
-        });
       });
-    </script>
-  </body>
+
+      // Update button text on last slide
+      if (currentSlide === totalSlides - 1) {
+        nextBtn.textContent = 'Get Started';
+      } else {
+        nextBtn.textContent = 'Next';
+      }
+    }
+
+    function completeOnboarding() {
+      onboardingContainer.style.opacity = '0';
+      onboardingContainer.style.transition = 'opacity 0.5s ease';
+
+      setTimeout(() => {
+        onboardingContainer.style.display = 'none';
+        mainContent.style.display = 'block';
+        // Store completion in sessionStorage (will show again on next visit)
+        sessionStorage.setItem('onboardingCompleted', 'true');
+      }, 500);
+    }
+
+    nextBtn.addEventListener('click', () => {
+      if (currentSlide < totalSlides - 1) {
+        currentSlide++;
+        updateSlider();
+      } else {
+        completeOnboarding();
+      }
+    });
+
+    skipBtn.addEventListener('click', completeOnboarding);
+
+    // Password toggle functionality
+    const passwordToggle = document.getElementById('passwordToggle');
+    const passwordInput = document.getElementById('password');
+    
+    passwordToggle.addEventListener('click', () => {
+      const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordInput.setAttribute('type', type);
+      
+      // Toggle eye icon
+      const eyeIcon = passwordToggle.querySelector('i');
+      if (type === 'password') {
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      } else {
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      }
+    });
+
+    // Form submission
+    const signupForm = document.getElementById('signupForm');
+    
+    signupForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      // Basic validation
+      const firstName = document.getElementById('firstName').value;
+      const lastName = document.getElementById('lastName').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const terms = document.getElementById('terms').checked;
+      
+      if (!terms) {
+        alert('Please agree to the Terms of Service and Privacy Policy');
+        return;
+      }
+      
+      // In a real application, you would send this data to your server
+      console.log('Signup data:', { firstName, lastName, email, password });
+      
+      // Show success message (in a real app, you would redirect or show a proper success message)
+      alert('Account created successfully! Redirecting to login...');
+      
+      // Redirect to login page (simulate with timeout)
+      setTimeout(() => {
+        window.location.href = '/auth/login';
+      }, 1000);
+    });
+  </script>
+</body>
 </html>
