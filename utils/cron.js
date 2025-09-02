@@ -1,5 +1,4 @@
 const cron = require("node-cron");
-const fetch = require("node-fetch");
 const Match = require("../models/Match");
 
 const API_KEY = process.env.FOOTBALL_API_KEY; // put this in .env
