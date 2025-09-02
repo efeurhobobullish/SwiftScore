@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwiftScore - Predictions</title>
+  <link rel="icon" href="/images/logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EA',
+            secondary: '#1E40AF',
+            accent: '#60A5FA',
+            light: '#F3F4F6'
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    .stats-card {
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .prediction-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .prediction-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .league-badge {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .accuracy-badge {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #E5E7EB;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #2563EA 0%, #1E40AF 100%);
+    }
+    
+    .filter-btn.active {
+      background-color: #2563EA;
+      color: white;
+    }
+    
+    .prediction-detail-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+      z-index: 100;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .modal-content {
+      width: 90%;
+      max-width: 600px;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
+    <div class="container mx-auto flex items-center justify-between">
+      <div class="flex items-center">
+        <img src="images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+        <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
+      </div>
+
+      <nav class="hidden sm:flex items-center space-x-8">
+        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Dashboard</a>
+        <a href="predictions.html" class="text-primary transition-colors duration-200 font-medium">Predictions</a>
+        <a href="live-scores.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Live Scores</a>
+        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </button>
+        <div class="relative group">
+          <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-full w-8 h-8 cursor-pointer">
+          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-50">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+            <div class="border-t border-gray-100"></div>
+            <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-6 mt-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Match Predictions</h1>
+      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Browse and analyze upcoming match predictions.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate__animated animate__fadeInUp animate__delay-2s">
+      <div class="stats-card bg-white p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Total Predictions</p>
+            <h3 class="text-2xl font-bold text-gray-800">156</h3>
+          </div>
+          <div class="p-3 rounded-full bg-blue-100 text-blue-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 100%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">All predictions tracked</p>
+        </div>
+      </div>
+      
+      <div class="stats-card bg-white p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Prediction Accuracy</p>
+            <h3 class="text-2xl font-bold text-gray-800">87%</h3>
+          </div>
+          <div class="p-3 rounded-full bg-green-100 text-green-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 87%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">+2% from last week</p>
+        </div>
+      </div>
+      
+      <div class="stats-card bg-white p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Upcoming Predictions</p>
+            <h3 class="text-2xl font-bold text-gray-800">12</h3>
+          </div>
+          <div class="p-3 rounded-full bg-yellow-100 text-yellow-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 30%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Next prediction in 3 hours</p>
+        </div>
+      </div>
+      
+      <div class="stats-card bg-white p-6 rounded-lg shadow-sm">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-gray-600">Highest Confidence</p>
+            <h3 class="text-2xl font-bold text-gray-800">94%</h3>
+          </div>
+          <div class="p-3 rounded-full bg-purple-100 text-purple-600">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+            </svg>
+          </div>
+        </div>
+        <div class="mt-4">
+          <div class="progress-bar">
+            <div class="progress-fill" style="width: 94%"></div>
+          </div>
+          <p class="text-xs text-gray-500 mt-2">Man City vs Norwich</p>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mb-6 bg-white p-4 rounded-lg shadow-sm animate__animated animate__fadeInUp animate__delay-3s">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <h2 class="text-lg font-semibold text-gray-800">Filter Predictions</h2>
+        <div class="flex flex-wrap gap-2">
+          <button class="filter-btn active px-4 py-2 text-sm font-medium rounded-full bg-primary text-white" data-filter="all">
+            All
+          </button>
+          <button class="filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200" data-filter="upcoming">
+            Upcoming
+          </button>
+          <button class="filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200" data-filter="completed">
+            Completed
+          </button>
+          <button class="filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200" data-filter="correct">
+            Correct
+          </button>
+          <button class="filter-btn px-4 py-2 text-sm font-medium rounded-full bg-gray-100 text-gray-800 hover:bg-gray-200" data-filter="incorrect">
+            Incorrect
+          </button>
+        </div>
+        
+        <div class="flex items-center">
+          <div class="relative">
+            <select class="block appearance-none w-full bg-white border border-gray-300 hover:border-gray-400 px-4 py-2 pr-8 rounded shadow leading-tight focus:outline-none focus:shadow-outline text-sm">
+              <option>All Leagues</option>
+              <option>Premier League</option>
+              <option>La Liga</option>
+              <option>NBA</option>
+              <option>Champions League</option>
+              <option>Serie A</option>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+              <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z"/></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="grid grid-cols-1 gap-6 animate__animated animate__fadeInUp animate__delay-4s">
+      <!-- Prediction Card 1 -->
+      <div class="prediction-card bg-white p-6" data-status="upcoming">
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center">
+            <span class="league-badge bg-blue-100 text-blue-800 mr-2">Premier League</span>
+            <span class="text-xs font-medium text-gray-500">Today • 19:45</span>
+          </div>
+          <span class="accuracy-badge">92% Accuracy</span>
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Manchester City</h3>
+            <p class="text-xs text-gray-500">Home</p>
+          </div>
+          
+          <div class="text-center w-2/12">
+            <div class="text-xl font-bold text-gray-800">VS</div>
+            <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">-:-</div>
+          </div>
+          
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Liverpool</h3>
+            <p class="text-xs text-gray-500">Away</p>
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Predicted Winner</span>
+            <span class="text-sm font-medium text-gray-800">Manchester City</span>
+          </div>
+          
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 65%"></div>
+          </div>
+          
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>35% Draw</span>
+            <span>65% Home Win</span>
+            <span>0% Away Win</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center">
+          <span class="text-sm font-medium text-yellow-600">Upcoming Match</span>
+          <button class="view-details-btn text-xs font-medium text-blue-600 hover:text-blue-800" data-match="1">View Analysis</button>
+        </div>
+      </div>
+      
+      <!-- Prediction Card 2 -->
+      <div class="prediction-card bg-white p-6" data-status="completed" data-correct="true">
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center">
+            <span class="league-badge bg-orange-100 text-orange-800 mr-2">NBA</span>
+            <span class="text-xs font-medium text-gray-500">Yesterday • 02:30</span>
+          </div>
+          <span class="accuracy-badge">85% Accuracy</span>
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Lakers</h3>
+            <p class="text-xs text-gray-500">Home</p>
+          </div>
+          
+          <div class="text-center w-2/12">
+            <div class="text-xl font-bold text-gray-800">VS</div>
+            <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">108-112</div>
+          </div>
+          
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Warriors</h3>
+            <p class="text-xs text-gray-500">Away</p>
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Predicted Winner</span>
+            <span class="text-sm font-medium text-gray-800">Warriors</span>
+          </div>
+          
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-green-600 h-2.5 rounded-full" style="width: 85%"></div>
+          </div>
+          
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>10% Home Win</span>
+            <span>5% Draw</span>
+            <span>85% Away Win</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center">
+          <span class="text-sm font-medium text-green-600">Prediction Correct</span>
+          <button class="view-details-btn text-xs font-medium text-blue-600 hover:text-blue-800" data-match="2">View Details</button>
+        </div>
+      </div>
+      
+      <!-- Prediction Card 3 -->
+      <div class="prediction-card bg-white p-6" data-status="completed" data-correct="false">
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center">
+            <span class="league-badge bg-red-100 text-red-800 mr-2">La Liga</span>
+            <span class="text-xs font-medium text-gray-500">Sep 10 • 20:00</span>
+          </div>
+          <span class="accuracy-badge">78% Accuracy</span>
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Barcelona</h3>
+            <p class="text-xs text-gray-500">Home</p>
+          </div>
+          
+          <div class="text-center w-2/12">
+            <div class="text-xl font-bold text-gray-800">VS</div>
+            <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">1-2</div>
+          </div>
+          
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Real Madrid</h3>
+            <p class="text-xs text-gray-500">Away</p>
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Predicted Winner</span>
+            <span class="text-sm font-medium text-gray-800">Barcelona</span>
+          </div>
+          
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 78%"></div>
+          </div>
+          
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>78% Home Win</span>
+            <span>15% Draw</span>
+            <span>7% Away Win</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center">
+          <span class="text-sm font-medium text-red-600">Prediction Incorrect</span>
+          <button class="view-details-btn text-xs font-medium text-blue-600 hover:text-blue-800" data-match="3">View Analysis</button>
+        </div>
+      </div>
+      
+      <!-- Prediction Card 4 -->
+      <div class="prediction-card bg-white p-6" data-status="upcoming">
+        <div class="flex justify-between items-center mb-4">
+          <div class="flex items-center">
+            <span class="league-badge bg-purple-100 text-purple-800 mr-2">Champions League</span>
+            <span class="text-xs font-medium text-gray-500">Tomorrow • 20:00</span>
+          </div>
+          <span class="accuracy-badge">94% Accuracy</span>
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">Bayern Munich</h3>
+            <p class="text-xs text-gray-500">Home</p>
+          </div>
+          
+          <div class="text-center w-2/12">
+            <div class="text-xl font-bold text-gray-800">VS</div>
+            <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">-:-</div>
+          </div>
+          
+          <div class="text-center w-5/12">
+            <div class="flex justify-center mb-2">
+              <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+            </div>
+            <h3 class="font-semibold text-gray-800">PSG</h3>
+            <p class="text-xs text-gray-500">Away</p>
+          </div>
+        </div>
+        
+        <div class="mt-6">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-sm font-medium text-gray-600">Predicted Winner</span>
+            <span class="text-sm font-medium text-gray-800">Bayern Munich</span>
+          </div>
+          
+          <div class="w-full bg-gray-200 rounded-full h-2.5">
+            <div class="bg-blue-600 h-2.5 rounded-full" style="width: 94%"></div>
+          </div>
+          
+          <div class="flex justify-between text-xs text-gray-500 mt-1">
+            <span>94% Home Win</span>
+            <span>4% Draw</span>
+            <span>2% Away Win</span>
+          </div>
+        </div>
+        
+        <div class="mt-6 flex justify-between items-center">
+          <span class="text-sm font-medium text-yellow-600">Upcoming Match</span>
+          <button class="view-details-btn text-xs font-medium text-blue-600 hover:text-blue-800" data-match="4">View Analysis</button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8 flex justify-center animate__animated animate__fadeInUp animate__delay-5s">
+      <button class="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded-lg shadow-sm hover:bg-gray-50 font-medium">
+        Load More Predictions
+      </button>
+    </div>
+  </main>
+  
+  <!-- Prediction Detail Modal -->
+  <div class="prediction-detail-modal" id="predictionModal">
+    <div class="modal-content bg-white rounded-lg shadow-xl">
+      <div class="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
+        <h3 class="text-lg font-semibold text-gray-800">Prediction Details</h3>
+        <button class="close-modal text-gray-400 hover:text-gray-600">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+          </svg>
+        </button>
+      </div>
+      <div class="p-6" id="modalContent">
+        <!-- Content will be loaded dynamically -->
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Filter functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const filterButtons = document.querySelectorAll('.filter-btn');
+      const predictionCards = document.querySelectorAll('.prediction-card');
+      
+      filterButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const filter = this.getAttribute('data-filter');
+          
+          // Update active button
+          filterButtons.forEach(btn => {
+            btn.classList.remove('active', 'bg-primary', 'text-white');
+            btn.classList.add('bg-gray-100', 'text-gray-800');
+          });
+          this.classList.add('active', 'bg-primary', 'text-white');
+          this.classList.remove('bg-gray-100', 'text-gray-800');
+          
+          // Filter cards
+          predictionCards.forEach(card => {
+            if (filter === 'all') {
+              card.style.display = 'block';
+            } else if (filter === 'upcoming') {
+              if (card.getAttribute('data-status') === 'upcoming') {
+                card.style.display = 'block';
+              } else {
+                card.style.display = 'none';
+              }
+            } else if (filter === 'completed') {
+              if (card.getAttribute('data-status') === 'completed') {
+                card.style.display = 'block';
+              } else {
+                card.style.display = 'none';
+              }
+            } else if (filter === 'correct') {
+              if (card.getAttribute('data-correct') === 'true') {
+                card.style.display = 'block';
+              } else {
+                card.style.display = 'none';
+              }
+            } else if (filter === 'incorrect') {
+              if (card.getAttribute('data-correct') === 'false') {
+                card.style.display = 'block';
+              } else {
+                card.style.display = 'none';
+              }
+            }
+          });
+        });
+      });
+      
+      // Modal functionality
+      const modal = document.getElementById('predictionModal');
+      const viewButtons = document.querySelectorAll('.view-details-btn');
+      const closeModal = document.querySelector('.close-modal');
+      const modalContent = document.getElementById('modalContent');
+      
+      viewButtons.forEach(button => {
+        button.addEventListener('click', function() {
+          const matchId = this.getAttribute('data-match');
+          // In a real app, you would fetch data based on matchId
+          // For demo purposes, we'll just show some sample content
+          modalContent.innerHTML = `
+            <div class="text-center mb-6">
+              <div class="flex justify-center items-center space-x-8 mb-4">
+                <div>
+                  <img src="https://via.placeholder.com/60x60" alt="Team Logo" class="mx-auto mb-2">
+                  <h4 class="font-semibold">Team A</h4>
+                </div>
+                <div class="text-2xl font-bold">VS</div>
+                <div>
+                  <img src="https://via.placeholder.com/60x60" alt="Team Logo" class="mx-auto mb-2">
+                  <h4 class="font-semibold">Team B</h4>
+                </div>
+              </div>
+              <p class="text-gray-600">Premier League • Sep 15, 2023 • 19:45</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+              <div>
+                <h4 class="font-medium text-gray-800 mb-3">Prediction Analysis</h4>
+                <div class="space-y-3">
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Home Win</span>
+                      <span>65%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-blue-600 h-2 rounded-full" style="width: 65%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Draw</span>
+                      <span>25%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-gray-400 h-2 rounded-full" style="width: 25%"></div>
+                    </div>
+                  </div>
+                  <div>
+                    <div class="flex justify-between text-sm mb-1">
+                      <span>Away Win</span>
+                      <span>10%</span>
+                    </div>
+                    <div class="w-full bg-gray-200 rounded-full h-2">
+                      <div class="bg-red-600 h-2 rounded-full" style="width: 10%"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <div>
+                <h4 class="font-medium text-gray-800 mb-3">Key Factors</h4>
+                <ul class="space-y-2 text-sm">
+                  <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Team A has won 8 of their last 10 home games</span>
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Team B has lost 3 of their last 5 away games</span>
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-red-500 mr-2">✗</span>
+                    <span>Team A's key player is injured</span>
+                  </li>
+                  <li class="flex items-start">
+                    <span class="text-green-500 mr-2">✓</span>
+                    <span>Team A has historical advantage in head-to-head</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            
+            <div class="bg-blue-50 p-4 rounded-lg">
+              <h4 class="font-medium text-blue-800 mb-2">Prediction Confidence: 92%</h4>
+              <p class="text-sm text-blue-700">Our algorithm indicates a strong likelihood of a home win based on recent form and historical data.</p>
+            </div>
+          `;
+          modal.style.display = 'flex';
+        });
+      });
+      
+      closeModal.addEventListener('click', function() {
+        modal.style.display = 'none';
+      });
+      
+      window.addEventListener('click', function(event) {
+        if (
