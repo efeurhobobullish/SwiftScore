@@ -153,42 +153,69 @@
     </div>
   </div>
 
-  <script>
-    document.getElementById('loginForm').addEventListener('submit', function(e) {
-      e.preventDefault();
-      
-      // Get form values
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
-      const remember = document.getElementById('remember').checked;
-      
-      // Basic validation
-      if (!email || !password) {
-        alert('Please fill in all fields');
-        return;
-      }
-      
-      // Email validation
-      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-      if (!emailRegex.test(email)) {
-        alert('Please enter a valid email address');
-        return;
-      }
-      
-      // In a real application, you would send this data to your server
-      console.log('Login attempt:', { email, password, remember });
-      
-      // Simulate API call
-      const loginBtn = document.querySelector('.login-btn');
+<script>
+  document.getElementById('loginForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value.trim();
+    const remember = document.getElementById('remember').checked;
+    const loginBtn = document.querySelector('.login-btn');
+
+    // Basic validation
+    if (!email || !password) {
+      alert('Please fill in all fields');
+      return;
+    }
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+
+    try {
+      // Show loading
       loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
       loginBtn.disabled = true;
-      
-      setTimeout(() => {
-        // This is just a simulation - in a real app, you would handle the server response
-        alert('Login functionality would connect to your backend API. Redirecting to dashboard...');
-        window.location.href = '/dashboard';
-      }, 1500);
-    });
-  </script>
+
+      // Call backend API
+      const res = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email, password })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        alert(data.message || 'Login failed');
+        loginBtn.innerHTML = 'Sign In';
+        loginBtn.disabled = false;
+        return;
+      }
+
+      // ✅ Store JWT (and maybe user info)
+      if (remember) {
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+      } else {
+        sessionStorage.setItem('token', data.token);
+        sessionStorage.setItem('user', JSON.stringify(data.user));
+      }
+
+      // Redirect
+      window.location.href = '/dashboard';
+    } catch (error) {
+      console.error('Login error:', error);
+      alert('Something went wrong. Please try again.');
+      loginBtn.innerHTML = 'Sign In';
+      loginBtn.disabled = false;
+    }
+  });
+</script>
 </body>
 </html>
