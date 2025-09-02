@@ -123,22 +123,13 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
         </button>
-        <div class="relative group">
-          <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-full w-8 h-8 cursor-pointer">
-          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-50">
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-            <div class="border-t border-gray-100"></div>
-            <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100">Logout</a>
-          </div>
-        </div>
       </div>
     </div>
   </header>
 
   <main class="container mx-auto p-6 mt-8">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Welcome back, Alex!</h1>
+      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Welcome back, <span id="userName">User</span>!</h1>
       <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Here's what's happening with your predictions today.</p>
     </div>
     
@@ -433,24 +424,20 @@
         method: "GET",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": `Bearer ${localStorage.getItem("token") || ""}` // adjust if token storage differs
+          "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
         }
       });
 
-      if (!res.ok) throw new Error("Failed to load dashboard data");
+      if (!res.ok) {
+        throw new Error("Failed to load dashboard data");
+      }
       const data = await res.json();
 
-      // Update UI with backend data (no balance)
-      document.getElementById("welcomeMessage").textContent =
-        `Welcome back, ${data.firstName || "User"}!`;
-      document.getElementById("userName").textContent =
-        `${data.firstName || ""} ${data.lastName || ""}`;
-      document.getElementById("userRole").textContent =
-        `Role: ${data.role || "User"}${data.isVerified ? " ✅" : ""}`;
+      document.getElementById("userName").textContent = data.firstName || "User";
+
     } catch (err) {
       console.error("Dashboard error:", err.message);
-      document.getElementById("welcomeMessage").textContent =
-        "Error loading dashboard.";
+      document.getElementById("userName").textContent = "User"; // Fallback to "User" on error
     }
   }
 
