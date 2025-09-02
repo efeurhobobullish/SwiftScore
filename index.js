@@ -22,10 +22,19 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Root route
-app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "index.html"));
-});
+// =======================
+// Route to Serve HTML Files
+// =======================
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, 'public', 'index.html')));
+app.get('/auth/signup', (req, res) => res.sendFile(path.join(__dirname, 'public', 'signup.html')));
+app.get('/auth/login', (req, res) => res.sendFile(path.join(__dirname, 'public', 'login.html')));
+app.get('/auth/forgot-password', (req, res) => res.sendFile(path.join(__dirname, 'public', 'forgot.html')));
+app.get('/reset-password', (req, res) => res.sendFile(path.join(__dirname, 'public', 'reset-password.html')));
+
+app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public', 'dashboard.html')));
+app.get('/dashboard/profile', (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
+app.get('/dashboard/predictions', (req, res) => res.sendFile(path.join(__dirname, 'public', 'settings.html')));
+app.get('/dashboard/matches', (req, res) => res.sendFile(path.join(__dirname, 'public', 'swiftgen.html')));
 
 // =========================
 // User Registration (Auto Verify)
