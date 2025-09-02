@@ -4,8 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>SwiftScore - Sports Predictions & Analytics</title>
-  <!-- Favicon -->
-  <link rel="icon" href="/images/logo.svg" type="image/svg">
+  <link rel="icon" href="/images/logo.png" type="image/png">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -312,7 +311,6 @@
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen flex flex-col relative">
-  <!-- iOS-inspired Splash Screen -->
   <div id="splashScreen" class="splash-screen">
     <div class="splash-content">
       <div class="ios-logo-container">
@@ -334,10 +332,8 @@
     </div>
   </div>
 
-  <!-- Onboarding Slider -->
   <div id="onboardingContainer" class="onboarding-container">
     <div id="onboardingSlides" class="onboarding-slides">
-      <!-- Slide 1 -->
       <div class="onboarding-slide">
         <div class="slide-image">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
@@ -348,7 +344,6 @@
         <p class="text-gray-600 max-w-md">Get accurate match predictions using advanced algorithms and historical data analysis.</p>
       </div>
 
-      <!-- Slide 2 -->
       <div class="onboarding-slide">
         <div class="slide-image">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
@@ -359,7 +354,6 @@
         <p class="text-gray-600 max-w-md">Stay informed with live scores, team news, and last-minute changes that affect predictions.</p>
       </div>
 
-      <!-- Slide 3 -->
       <div class="onboarding-slide">
         <div class="slide-image">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="#2563EA" stroke-width="1.5">
@@ -383,280 +377,119 @@
     </div>
   </div>
 
-  <!-- Main App Content -->
   <div id="mainContent" class="main-content">
-    <!-- Header -->
     <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-30">
       <div class="flex items-center justify-between max-w-6xl mx-auto">
         <div class="flex items-center">
-          <img src="/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+          <img src="images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
           <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
         </div>
         
-        <nav class="hidden md:flex items-center space-x-6">
-          <a href="#" class="text-gray-700 hover:text-primary font-medium">Home</a>
-          <a href="#" class="text-gray-700 hover:text-primary font-medium">Predictions</a>
-          <a href="#" class="text-gray-700 hover:text-primary font-medium">Leagues</a>
-          <a href="#" class="text-gray-700 hover:text-primary font-medium">Stats</a>
-        </nav>
-        
         <div class="flex items-center space-x-4">
-          <button class="md:hidden text-gray-600">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          <button class="p-2 text-gray-600 hover:text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
-          <div class="hidden md:flex items-center space-x-2">
-            <a href="/auth/login" class="text-primary font-medium">Sign In</a>
-            <a href="/auth/signup" class="bg-primary text-white px-4 py-2 rounded-full font-medium hover:bg-secondary transition">Sign Up</a>
-          </div>
+          <button class="p-2 text-gray-600 hover:text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+            </svg>
+          </button>
         </div>
       </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="bg-gradient-to-r from-primary to-secondary text-white py-12 px-6">
-      <div class="max-w-6xl mx-auto text-center">
-        <h2 class="text-3xl md:text-4xl font-bold mb-4">AI-Powered Sports Predictions</h2>
-        <p class="text-lg md:text-xl mb-8 max-w-3xl mx-auto">Get accurate match predictions with our advanced algorithms covering all major sports leagues worldwide.</p>
-        <a href="/auth/signup" class="bg-white text-primary px-6 py-3 rounded-full font-semibold inline-block hover:bg-gray-100 transition">Get Started Now</a>
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10 bg-gray-50">
+      <div class="text-center mb-8">
+        <h2 class="text-3xl font-semibold leading-tight mb-3 text-gray-900">
+          AI-Powered <span class="text-blue-500">Sports Predictions</span>
+        </h2>
+        <p class="text-sm font-normal text-gray-600">
+          Accurate predictions for football, basketball, tennis and more
+        </p>
       </div>
-    </section>
 
-    <!-- Featured Predictions -->
-    <section class="py-12 px-6">
-      <div class="max-w-6xl mx-auto">
-        <div class="flex items-center justify-between mb-8">
-          <h2 class="text-2xl font-bold text-gray-800">Today's Featured Predictions</h2>
-          <a href="#" class="text-primary font-medium flex items-center">
-            View All
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      <!-- Sports Services Grid -->
+      <div class="grid grid-cols-2 gap-4 mb-8 w-full max-w-md">
+        <div class="service-card bg-white rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 mx-auto mb-3 bg-blue-50 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-500">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
-          </a>
+          </div>
+          <h3 class="font-semibold text-sm text-gray-800">Live Scores</h3>
+          <p class="text-xs text-gray-500 mt-1">Real-time updates</p>
         </div>
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <!-- Prediction Card 1 -->
-          <div class="prediction-card bg-white rounded-xl p-5">
-            <div class="league-badge">Premier League</div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-sm text-gray-500">Today, 15:00</div>
-              <div class="score-badge">85% Accuracy</div>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Arsenal</div>
-              </div>
-              
-              <div class="text-center mx-4">
-                <div class="text-xs text-gray-500">VS</div>
-                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">2-1</div>
-              </div>
-              
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Chelsea</div>
-              </div>
-            </div>
-            
-            <div class="bg-gray-50 rounded-lg p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1">Prediction</div>
-              <div class="font-semibold text-primary">Home Win</div>
-            </div>
-          </div>
-          
-          <!-- Prediction Card 2 -->
-          <div class="prediction-card bg-white rounded-xl p-5">
-            <div class="league-badge">La Liga</div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-sm text-gray-500">Today, 18:30</div>
-              <div class="score-badge">78% Accuracy</div>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Barcelona</div>
-              </div>
-              
-              <div class="text-center mx-4">
-                <div class="text-xs text-gray-500">VS</div>
-                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">2-2</div>
-              </div>
-              
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Real Madrid</div>
-              </div>
-            </div>
-            
-            <div class="bg-gray-50 rounded-lg p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1">Prediction</div>
-              <div class="font-semibold text-primary">Draw</div>
-            </div>
-          </div>
-          
-          <!-- Prediction Card 3 -->
-          <div class="prediction-card bg-white rounded-xl p-5">
-            <div class="league-badge">NBA</div>
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-sm text-gray-500">Today, 20:00</div>
-              <div class="score-badge">82% Accuracy</div>
-            </div>
-            
-            <div class="flex items-center justify-between mb-4">
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Lakers</div>
-              </div>
-              
-              <div class="text-center mx-4">
-                <div class="text-xs text-gray-500">VS</div>
-                <div class="bg-primary text-white text-xs font-bold px-2 py-1 rounded mt-1">108-102</div>
-              </div>
-              
-              <div class="text-center">
-                <div class="team-logo mx-auto bg-gray-100 rounded-full p-2 mb-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
-                <div class="font-medium text-sm">Bulls</div>
-              </div>
-            </div>
-            
-            <div class="bg-gray-50 rounded-lg p-3 text-center">
-              <div class="text-xs text-gray-500 mb-1">Prediction</div>
-              <div class="font-semibold text-primary">Home Win</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Features Section -->
-    <section class="py-12 px-6 bg-white">
-      <div class="max-w-6xl mx-auto">
-        <h2 class="text-2xl font-bold text-center text-gray-800 mb-12">Why Choose SwiftScore?</h2>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">AI-Powered Analysis</h3>
-            <p class="text-gray-600">Our algorithms analyze thousands of data points to deliver the most accurate predictions.</p>
+        <div class="service-card bg-white rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 mx-auto mb-3 bg-blue-50 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-500">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z" />
+            </svg>
           </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">Real-time Updates</h3>
-            <p class="text-gray-600">Get instant notifications about team news, injuries, and last-minute changes.</p>
-          </div>
-          
-          <div class="text-center">
-            <div class="w-16 h-16 mx-auto mb-4 bg-blue-100 rounded-full flex items-center justify-center">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-              </svg>
-            </div>
-            <h3 class="text-xl font-semibold mb-2">Detailed Statistics</h3>
-            <p class="text-gray-600">Access comprehensive stats, trends, and historical data for informed decisions.</p>
-          </div>
+          <h3 class="font-semibold text-sm text-gray-800">Predictions</h3>
+          <p class="text-xs text-gray-500 mt-1">AI-powered analysis</p>
         </div>
-      </div>
-    </section>
 
-    <!-- CTA Section -->
-    <section class="py-16 px-6 bg-primary">
-      <div class="max-w-4xl mx-auto text-center text-white">
-        <h2 class="text-3xl font-bold mb-6">Ready to Get Accurate Predictions?</h2>
-        <p class="text-lg mb-8">Join thousands of sports enthusiasts who trust SwiftScore for their predictions.</p>
-        <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-          <a href="/auth/signup" class="bg-white text-primary font-semibold py-3 px-8 rounded-full hover:bg-gray-100 transition">Sign Up Now</a>
-          <a href="#" class="border-2 border-white text-white font-semibold py-3 px-8 rounded-full hover:bg-white hover:text-primary transition">View Demo</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="bg-gray-800 text-white py-12 px-6">
-      <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
-        <div>
-          <div class="flex items-center mb-4">
-            <img src="/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
-            <h3 class="text-xl font-bold">SwiftScore</h3>
+        <div class="service-card bg-white rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 mx-auto mb-3 bg-blue-50 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-500">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z" />
+            </svg>
           </div>
-          <p class="text-gray-400">AI-powered sports predictions and analytics for enthusiasts and professionals.</p>
+          <h3 class="font-semibold text-sm text-gray-800">Multiple Sports</h3>
+          <p class="text-xs text-gray-500 mt-1">All major leagues</p>
         </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Quick Links</h4>
-          <ul class="space-y-2">
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Home</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Predictions</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Leagues</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Blog</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Sports</h4>
-          <ul class="space-y-2">
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Football</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Basketball</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Tennis</a></li>
-            <li><a href="#" class="text-gray-400 hover:text-white transition">Cricket</a></li>
-          </ul>
-        </div>
-        
-        <div>
-          <h4 class="text-lg font-semibold mb-4">Contact Us</h4>
-          <ul class="space-y-2">
-            <li class="text-gray-400">support@swiftscore.com</li>
-            <li class="text-gray-400">+1 (234) 567-8900</li>
-            <li class="flex space-x-4 pt-2">
-              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook-f"></i></a>
-              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-twitter"></i></a>
-              <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-instagram"></i></a>
-            </li>
-          </ul>
+
+        <div class="service-card bg-white rounded-2xl p-5 text-center shadow-sm hover:shadow-md transition-shadow">
+          <div class="w-12 h-12 mx-auto mb-3 bg-blue-50 rounded-full flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-6 h-6 text-blue-500">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <h3 class="font-semibold text-sm text-gray-800">Accuracy</h3>
+          <p class="text-xs text-gray-500 mt-1">Proven results</p>
         </div>
       </div>
-      
-      <div class="max-w-6xl mx-auto border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-        <p>&copy; 2023 SwiftScore. All rights reserved.</p>
+
+      <!-- CTA Buttons -->
+      <div class="space-y-4 w-full max-w-md">
+        <a href="/auth/signup" class="block w-full bg-blue-500 text-white font-semibold rounded-full py-3 px-6 text-center transition-all hover:bg-blue-600 active:bg-blue-700 shadow">
+          Get Started Now
+        </a>
+        <a href="/auth/login" class="block text-blue-500 text-sm font-medium text-center hover:text-blue-600 transition-colors">
+          Already have an account? Sign In
+        </a>
       </div>
-    </footer>
+
+      <!-- Trust Indicators -->
+      <div class="mt-8 pt-6 border-t border-gray-200 w-full max-w-md">
+        <div class="flex justify-center space-x-8 text-sm text-gray-600">
+          <div class="text-center">
+            <div class="font-bold text-gray-900">95%</div>
+            <div class="text-xs">Accuracy</div>
+          </div>
+          <div class="text-center">
+            <div class="font-bold text-gray-900">24/7</div>
+            <div class="text-xs">Support</div>
+          </div>
+          <div class="text-center">
+            <div class="font-bold text-gray-900">10+</div>
+            <div class="text-xs">Sports</div>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <!-- Background elements -->
+    <div class="absolute top-10 left-5 w-16 h-16 bg-blue-600 bg-opacity-10 rounded-full animate-bounce"
+         style="animation-duration: 6s" aria-hidden="true"></div>
+    <div class="absolute bottom-20 right-10 w-24 h-24 bg-blue-600 bg-opacity-10 rounded-3xl animate-pulse"
+         style="animation-duration: 8s" aria-hidden="true"></div>
+    <div class="absolute top-1/2 left-1/4 w-12 h-12 border-4 border-blue-600 border-opacity-10 rounded-full animate-spin"
+         style="animation-duration: 15s" aria-hidden="true"></div>
   </div>
 
   <script>
