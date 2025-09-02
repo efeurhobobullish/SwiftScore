@@ -37,4 +37,4 @@ const fetchMatches = async () => {
 };
 
 // Run every 5 seconds
-cron.schedule("*/5 * * * * *", fetchMatches);
+cron.schedule("*/9 * * * * *", fetchMatches);
