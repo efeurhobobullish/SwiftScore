@@ -6,15 +6,21 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
 const User = require("./models/User.js");
+const Match = require("./models/Match.js");
 const authMiddleware = require("./middleware/auth.js");
 
 require("dotenv").config();
 
+// Connect to database
+connectDB();
+
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Connect to database
-connectDB();
+// =======================
+// Start Cron Job
+// =======================
+require("./utils/cron");
 
 // Middleware
 app.use(cors());
@@ -138,6 +144,20 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
   }
 });
 
+
+
+// =======================
+// Matches Routes
+// =======================
+
+app.get("/api/matches", async (req, res) => {
+  try {
+    const matches = await Match.find().sort({ date: 1 });
+    res.json(matches);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
 // =========================
 // Start Server
 // =========================
