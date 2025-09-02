@@ -1,17 +1,23 @@
 const cron = require("node-cron");
+const fetch = require("node-fetch");
 const Match = require("../models/Match");
+require("dotenv").config();
 
-const API_KEY = process.env.FOOTBALL_API_KEY; // put this in .env
-const API_URL = "https://v3.football.api-sports.io/fixtures?live=all";
+const API_URL = "https://api-football-v1.p.rapidapi.com/v3/fixtures?live=all";
+const API_HEADERS = {
+  "x-rapidapi-host": "api-football-v1.p.rapidapi.com",
+  "x-rapidapi-key": process.env.RAPIDAPI_KEY, // store in .env
+};
 
 const fetchMatches = async () => {
   try {
-    const res = await fetch(API_URL, {
-      headers: { "x-apisports-key": API_KEY },
-    });
+    const res = await fetch(API_URL, { headers: API_HEADERS });
     const data = await res.json();
 
-    if (!data.response) return;
+    if (!data.response) {
+      console.log("⚠️ No matches found");
+      return;
+    }
 
     for (let m of data.response) {
       await Match.findOneAndUpdate(
@@ -30,11 +36,11 @@ const fetchMatches = async () => {
       );
     }
 
-    console.log("✅ Matches updated");
+    console.log("✅ Matches updated at", new Date().toLocaleTimeString());
   } catch (err) {
     console.error("❌ Error fetching matches:", err.message);
   }
 };
 
 // Run every 5 seconds
-cron.schedule("*/9 * * * * *", fetchMatches);
+cron.schedule("*/5 * * * * *", fetchMatches);
