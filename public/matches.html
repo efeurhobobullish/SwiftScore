@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwiftScore - Matches</title>
+  <link rel="icon" href="/images/logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EA',
+            secondary: '#1E40AF',
+            accent: '#60A5FA',
+            light: '#F3F4F6'
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    .dashboard-grid {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .stats-card {
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .match-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .match-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .league-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .status-badge {
+      color: white;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #E5E7EB;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #2563EA 0%, #1E40AF 100%);
+    }
+    
+    .filter-btn {
+      transition: all 0.2s ease;
+    }
+    
+    .filter-btn.active {
+      background-color: #2563EA;
+      color: white;
+    }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
+    <div class="container mx-auto flex items-center justify-between">
+      <div class="flex items-center">
+        <img src="images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+        <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
+      </div>
+
+      <nav class="hidden sm:flex items-center space-x-8">
+        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
+        <a href="matches.html" class="text-primary transition-colors duration-200">Matches</a>
+        <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
+        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
+      </nav>
+
+      <div class="flex items-center space-x-4">
+        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+        </button>
+        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
+          </svg>
+        </button>
+        <div class="relative group">
+          <img src="https://via.placeholder.com/40" alt="User Avatar" class="rounded-full w-8 h-8 cursor-pointer">
+          <div class="absolute right-0 mt-2 w-48 bg-white border border-gray-100 rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-opacity duration-200 z-50">
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+            <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+            <div class="border-t border-gray-100"></div>
+            <a href="#" class="block px-4 py-2 text-sm text-red-500 hover:bg-gray-100">Logout</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container mx-auto p-6 mt-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Upcoming Matches</h1>
+      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Browse and filter through upcoming matches to make predictions.</p>
+    </div>
+    
+    <!-- Filters Section -->
+    <div class="bg-white rounded-lg shadow-sm p-4 mb-6 animate__animated animate__fadeInUp animate__delay-2s">
+      <div class="flex flex-wrap items-center gap-4">
+        <div>
+          <h3 class="text-sm font-medium text-gray-700 mb-1">Sport</h3>
+          <div class="flex space-x-2">
+            <button class="filter-btn active px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-primary">All</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Football</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Basketball</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Tennis</button>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-medium text-gray-700 mb-1">League</h3>
+          <div class="flex space-x-2">
+            <button class="filter-btn active px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-primary">All</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Premier League</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">La Liga</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">NBA</button>
+          </div>
+        </div>
+        
+        <div>
+          <h3 class="text-sm font-medium text-gray-700 mb-1">Time</h3>
+          <div class="flex space-x-2">
+            <button class="filter-btn active px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-primary">All</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Today</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Tomorrow</button>
+            <button class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">This Week</button>
+          </div>
+        </div>
+        
+        <div class="ml-auto">
+          <button class="flex items-center text-sm text-gray-600 hover:text-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            More Filters
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Matches Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Match Card 1 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-3s">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">Premier League • Today • 19:45</span>
+            <span class="status-badge bg-green-500">LIVE</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Manchester City</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">2-1</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Liverpool</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">65' In Progress</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">View Details</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Match Card 2 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-4s">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">La Liga • Today • 21:00</span>
+            <span class="status-badge bg-blue-500">UPCOMING</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Barcelona</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Real Madrid</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">Starts in 3h 15m</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Match Card 3 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-5s">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">NBA • Tomorrow • 02:30</span>
+            <span class="status-badge bg-blue-500">UPCOMING</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Lakers</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Warriors</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">Starts in 18h 45m</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Match Card 4 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">Champions League • Sep 15 • 20:00</span>
+            <span class="status-badge bg-blue-500">UPCOMING</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Bayern Munich</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">PSG</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">Starts in 2d 4h</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Match Card 5 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">Premier League • Sep 16 • 16:00</span>
+            <span class="status-badge bg-blue-500">UPCOMING</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Chelsea</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Arsenal</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">Starts in 3d 2h</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Match Card 6 -->
+      <div class="match-card bg-white animate__animated animate__fadeInUp">
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">Serie A • Sep 17 • 19:45</span>
+            <span class="status-badge bg-blue-500">UPCOMING</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Inter Milan</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">Juventus</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">Starts in 4d 5h</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Pagination -->
+    <div class="flex justify-center mt-8 animate__animated animate__fadeInUp">
+      <nav class="flex items-center space-x-2">
+        <a href="#" class="px-3 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg
