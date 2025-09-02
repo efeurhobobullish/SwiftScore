@@ -11,7 +11,200 @@
         theme: {
           extend: {
             colors: {
-              primary: '#101820',
+              primary: '#101820',<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>SwiftScore - Login</title>
+  <link rel="icon" href="/images/logo.png" type="image/png">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: '#2563EA',
+            secondary: '#1E40AF',
+            accent: '#60A5FA',
+            light: '#F3F4F6'
+          },
+          fontFamily: {
+            sans: ['Poppins', 'sans-serif'],
+          },
+        }
+      }
+    }
+  </script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+  <style>
+    body {
+      background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .login-card {
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+      overflow: hidden;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .form-input {
+      transition: all 0.3s ease;
+    }
+    
+    .form-input:focus {
+      box-shadow: 0 0 0 3px rgba(37, 99, 234, 0.1);
+    }
+    
+    .login-btn {
+      transition: all 0.3s ease;
+    }
+    
+    .login-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(37, 99, 234, 0.2);
+    }
+    
+    .login-btn:active {
+      transform: translateY(0);
+    }
+  </style>
+</head>
+<body class="font-sans">
+  <div class="login-card">
+    <!-- Header with logo -->
+    <div class="bg-primary p-6 text-center">
+      <div class="flex items-center justify-center mb-4">
+        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-10 mr-2">
+        <h1 class="text-2xl font-bold text-white">SwiftScore</h1>
+      </div>
+      <p class="text-blue-100">Sign in to access AI-powered sports predictions</p>
+    </div>
+    
+    <!-- Login form -->
+    <div class="px-8 py-6">
+      <form id="loginForm" class="space-y-5">
+        <div>
+          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="far fa-envelope text-gray-400"></i>
+            </div>
+            <input 
+              type="email" 
+              id="email" 
+              name="email"
+              class="form-input py-3 px-4 block w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+              placeholder="your@email.com"
+              required
+            >
+          </div>
+        </div>
+        
+        <div>
+          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+          <div class="relative">
+            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+              <i class="fas fa-lock text-gray-400"></i>
+            </div>
+            <input 
+              type="password" 
+              id="password" 
+              name="password"
+              class="form-input py-3 px-4 block w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
+              placeholder="••••••••"
+              required
+            >
+          </div>
+        </div>
+        
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <input 
+              type="checkbox" 
+              id="remember"
+              name="remember"
+              class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+            >
+            <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
+          </div>
+          
+          <a href="/auth/forgot-password" class="text-sm text-primary hover:text-secondary">Forgot password?</a>
+        </div>
+        
+        <button 
+          type="submit" 
+          class="login-btn w-full py-3 px-4 rounded-md bg-primary text-white font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+        >
+          Sign In
+        </button>
+      </form>
+      
+      <div class="mt-6 text-center">
+        <p class="text-sm text-gray-600">
+          Don't have an account? 
+          <a href="/auth/signup" class="font-medium text-primary hover:text-secondary">Sign up now</a>
+        </p>
+      </div>
+    </div>
+    
+    <!-- Footer -->
+    <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
+      <p class="text-xs text-center text-gray-500">
+        By signing in, you agree to our 
+        <a href="/terms" class="text-primary hover:text-secondary">Terms of Service</a> and 
+        <a href="/privacy" class="text-primary hover:text-secondary">Privacy Policy</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      // Get form values
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const remember = document.getElementById('remember').checked;
+      
+      // Basic validation
+      if (!email || !password) {
+        alert('Please fill in all fields');
+        return;
+      }
+      
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return;
+      }
+      
+      // In a real application, you would send this data to your server
+      console.log('Login attempt:', { email, password, remember });
+      
+      // Simulate API call
+      const loginBtn = document.querySelector('.login-btn');
+      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+      loginBtn.disabled = true;
+      
+      setTimeout(() => {
+        // This is just a simulation - in a real app, you would handle the server response
+        alert('Login functionality would connect to your backend API. Redirecting to dashboard...');
+        window.location.href = '/dashboard';
+      }, 1500);
+    });
+  </script>
+</body>
+</html>
               secondary: '#FEE715',
               accent: '#101820',
             },
