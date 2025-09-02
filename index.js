@@ -33,8 +33,8 @@ app.get('/reset-password', (req, res) => res.sendFile(path.join(__dirname, 'publ
 
 app.get('/dashboard', (req, res) => res.sendFile(path.join(__dirname, 'public', 'dashboard.html')));
 app.get('/dashboard/profile', (req, res) => res.sendFile(path.join(__dirname, 'public', 'profile.html')));
-app.get('/dashboard/predictions', (req, res) => res.sendFile(path.join(__dirname, 'public', 'settings.html')));
-app.get('/dashboard/matches', (req, res) => res.sendFile(path.join(__dirname, 'public', 'swiftgen.html')));
+app.get('/dashboard/predictions', (req, res) => res.sendFile(path.join(__dirname, 'public', 'predictions.html')));
+app.get('/dashboard/matches', (req, res) => res.sendFile(path.join(__dirname, 'public', 'matches.html')));
 
 // =========================
 // User Registration (Auto Verify)
