@@ -102,6 +102,28 @@
       background-color: #2563EA;
       color: white;
     }
+
+    .loader {
+      border: 4px solid #f3f3f3;
+      border-radius: 50%;
+      border-top: 4px solid #3498db;
+      width: 40px;
+      height: 40px;
+      -webkit-animation: spin 2s linear infinite; /* Safari */
+      animation: spin 2s linear infinite;
+      margin: 0 auto;
+    }
+    
+    /* Safari */
+    @-webkit-keyframes spin {
+      0% { -webkit-transform: rotate(0deg); }
+      100% { -webkit-transform: rotate(360deg); }
+    }
+    
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body class="bg-gray-50">
@@ -150,7 +172,6 @@
       <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Browse and filter through upcoming matches to make predictions.</p>
     </div>
     
-    <!-- Filters Section -->
     <div class="bg-white rounded-lg shadow-sm p-4 mb-6 animate__animated animate__fadeInUp animate__delay-2s">
       <div class="flex flex-wrap items-center gap-4">
         <div>
@@ -194,239 +215,14 @@
       </div>
     </div>
     
-    <!-- Matches Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <!-- Match Card 1 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-3s">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">Premier League • Today • 19:45</span>
-            <span class="status-badge bg-green-500">LIVE</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Manchester City</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-blue-100 text-blue-600 rounded-full mt-1">2-1</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Liverpool</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">65' In Progress</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">View Details</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Match Card 2 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-4s">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">La Liga • Today • 21:00</span>
-            <span class="status-badge bg-blue-500">UPCOMING</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Barcelona</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Real Madrid</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">Starts in 3h 15m</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Match Card 3 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp animate__delay-5s">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">NBA • Tomorrow • 02:30</span>
-            <span class="status-badge bg-blue-500">UPCOMING</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Lakers</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Warriors</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">Starts in 18h 45m</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Match Card 4 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">Champions League • Sep 15 • 20:00</span>
-            <span class="status-badge bg-blue-500">UPCOMING</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Bayern Munich</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">PSG</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">Starts in 2d 4h</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Match Card 5 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">Premier League • Sep 16 • 16:00</span>
-            <span class="status-badge bg-blue-500">UPCOMING</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Chelsea</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Arsenal</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">Starts in 3d 2h</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Match Card 6 -->
-      <div class="match-card bg-white animate__animated animate__fadeInUp">
-        <div class="p-6">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">Serie A • Sep 17 • 19:45</span>
-            <span class="status-badge bg-blue-500">UPCOMING</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Inter Milan</h3>
-              <p class="text-xs text-gray-500">Home</p>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-xl font-bold text-gray-800">VS</div>
-              <div class="text-xs font-medium px-2 py-1 bg-gray-100 text-gray-600 rounded-full mt-1">-:-</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <div class="flex justify-center mb-2">
-                <img src="https://via.placeholder.com/40x40" alt="Team Logo" class="team-logo">
-              </div>
-              <h3 class="font-semibold text-gray-800">Juventus</h3>
-              <p class="text-xs text-gray-500">Away</p>
-            </div>
-          </div>
-          
-          <div class="mt-6 flex justify-between items-center">
-            <span class="text-sm font-medium text-gray-600">Starts in 4d 5h</span>
-            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">Predict</button>
-          </div>
-        </div>
+    <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
+        <div class="loader"></div>
+        <p class="mt-4 text-gray-600">Loading matches...</p>
       </div>
     </div>
     
-    <!-- Pagination -->
-    <div class="flex justify-center mt-8 animate__animated animate__fadeInUp">
+    <div id="pagination" class="flex justify-center mt-8 animate__animated animate__fadeInUp hidden">
       <nav class="flex items-center space-x-2">
         <a href="#" class="px-3 py-1 rounded-md bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-primary">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -463,6 +259,137 @@
         this.classList.remove('bg-gray-100', 'text-gray-700');
       });
     });
+
+    // --- Dynamic Match Loading ---
+    const matchesGrid = document.getElementById('matches-grid');
+    const loadingSpinner = document.getElementById('loading-spinner');
+    
+    // Utility function to format the date and time
+    function formatMatchTime(dateString) {
+      const now = new Date();
+      const matchDate = new Date(dateString);
+      const diffInDays = Math.floor((matchDate - now) / (1000 * 60 * 60 * 24));
+      const diffInHours = Math.floor((matchDate - now) / (1000 * 60 * 60));
+      const diffInMinutes = Math.floor((matchDate - now) / (1000 * 60));
+      
+      let dateText = '';
+      if (diffInDays === 0) {
+        dateText = 'Today';
+      } else if (diffInDays === 1) {
+        dateText = 'Tomorrow';
+      } else if (diffInDays > 1) {
+        dateText = `in ${diffInDays}d`;
+      } else if (diffInDays < 0) {
+        dateText = `Finished`;
+      }
+
+      if (diffInMinutes > 0 && diffInMinutes < 60) {
+        dateText = `in ${diffInMinutes}m`;
+      }
+      
+      const timeText = matchDate.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+      
+      return `${dateText}`;
+    }
+
+    // Function to get the status badge color
+    function getStatusBadge(status) {
+        switch(status.toLowerCase()) {
+            case 'live':
+                return { text: 'LIVE', color: 'bg-green-500' };
+            case 'upcoming':
+                return { text: 'UPCOMING', color: 'bg-blue-500' };
+            case 'finished':
+                return { text: 'FINISHED', color: 'bg-gray-400' };
+            default:
+                return { text: status.toUpperCase(), color: 'bg-gray-400' };
+        }
+    }
+    
+    // Function to create a match card element
+    function createMatchCard(match) {
+      const badge = getStatusBadge(match.status);
+      
+      const matchCard = document.createElement('div');
+      matchCard.className = 'match-card bg-white animate__animated animate__fadeInUp';
+      
+      const homeScore = match.status === 'finished' || match.status === 'live' ? match.homeTeam.score : '-';
+      const awayScore = match.status === 'finished' || match.status === 'live' ? match.awayTeam.score : '-';
+      const scoreColor = match.status === 'live' || match.status === 'finished' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600';
+      const actionText = match.status === 'upcoming' ? 'Predict' : 'View Details';
+      
+      matchCard.innerHTML = `
+        <div class="p-6">
+          <div class="flex justify-between items-center mb-4">
+            <span class="text-xs font-medium text-gray-500">${match.league} • ${formatMatchTime(match.date)} • ${new Date(match.date).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })}</span>
+            <span class="status-badge ${badge.color}">${badge.text}</span>
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="${match.homeTeam.logo}" alt="${match.homeTeam.name} Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">${match.homeTeam.name}</h3>
+              <p class="text-xs text-gray-500">Home</p>
+            </div>
+            
+            <div class="text-center w-2/12">
+              <div class="text-xl font-bold text-gray-800">VS</div>
+              <div class="text-xs font-medium px-2 py-1 ${scoreColor} rounded-full mt-1">${homeScore}-${awayScore}</div>
+            </div>
+            
+            <div class="text-center w-5/12">
+              <div class="flex justify-center mb-2">
+                <img src="${match.awayTeam.logo}" alt="${match.awayTeam.name} Logo" class="team-logo">
+              </div>
+              <h3 class="font-semibold text-gray-800">${match.awayTeam.name}</h3>
+              <p class="text-xs text-gray-500">Away</p>
+            </div>
+          </div>
+          
+          <div class="mt-6 flex justify-between items-center">
+            <span class="text-sm font-medium text-gray-600">${match.status === 'live' ? `${match.currentTime}' In Progress` : `Starts in ${formatMatchTime(match.date)}`}</span>
+            <button class="text-xs font-medium text-blue-600 hover:text-blue-800">${actionText}</button>
+          </div>
+        </div>
+      `;
+      
+      return matchCard;
+    }
+    
+    // Function to fetch and render matches
+    async function fetchMatches() {
+      matchesGrid.innerHTML = '';
+      matchesGrid.appendChild(loadingSpinner);
+      
+      try {
+        const response = await fetch('/api/matches');
+        if (!response.ok) {
+          throw new Error('Failed to fetch matches');
+        }
+        
+        const matches = await response.json();
+        
+        matchesGrid.innerHTML = ''; // Clear the loading spinner
+        
+        if (matches.length > 0) {
+          matches.forEach(match => {
+            const matchCard = createMatchCard(match);
+            matchesGrid.appendChild(matchCard);
+          });
+        } else {
+          matchesGrid.innerHTML = '<p class="text-center text-gray-500 col-span-1 md:col-span-2 lg:col-span-3">No matches found.</p>';
+        }
+        
+      } catch (error) {
+        console.error('Error fetching matches:', error);
+        matchesGrid.innerHTML = '<p class="text-center text-red-500 col-span-1 md:col-span-2 lg:col-span-3">Failed to load matches. Please try again later.</p>';
+      }
+    }
+    
+    // Initial fetch of matches when the page loads
+    document.addEventListener('DOMContentLoaded', fetchMatches);
   </script>
 </body>
 </html>
