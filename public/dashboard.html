@@ -426,5 +426,35 @@
       </div>
     </div>
   </main>
+  <script>
+  async function loadDashboard() {
+    try {
+      const res = await fetch("/api/dashboard", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${localStorage.getItem("token") || ""}` // adjust if token storage differs
+        }
+      });
+
+      if (!res.ok) throw new Error("Failed to load dashboard data");
+      const data = await res.json();
+
+      // Update UI with backend data (no balance)
+      document.getElementById("welcomeMessage").textContent =
+        `Welcome back, ${data.firstName || "User"}!`;
+      document.getElementById("userName").textContent =
+        `${data.firstName || ""} ${data.lastName || ""}`;
+      document.getElementById("userRole").textContent =
+        `Role: ${data.role || "User"}${data.isVerified ? " ✅" : ""}`;
+    } catch (err) {
+      console.error("Dashboard error:", err.message);
+      document.getElementById("welcomeMessage").textContent =
+        "Error loading dashboard.";
+    }
+  }
+
+  document.addEventListener("DOMContentLoaded", loadDashboard);
+</script>
 </body>
 </html>
