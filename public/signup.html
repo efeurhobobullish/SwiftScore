@@ -1,356 +1,379 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SwiftScore Predictions - Sign Up</title>
-    <link rel="icon" href="images/logo.png" type="image/png" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              primary: '#101820',
-              secondary: '#FEE715',
-              accent: '#101820',
-            },
-            fontFamily: {
-              sans: ['Poppins', 'sans-serif'],
-            },
-          },
-        },
-      };
-    </script>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
-    />
-    <style>
-      body {
-        background-color: #101820;
-        color: #fee715;
-        overflow-x: hidden;
-      }
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SwiftScore Predictions - Sign Up</title>
+    <link rel="icon" href="images/logo.png" type="image/png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: '#101820',
+              secondary: '#FEE715',
+              accent: '#101820',
+            },
+            fontFamily: {
+              sans: ['Poppins', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
+    <style>
+      body {
+        background-color: #101820;
+        color: #fee715;
+        overflow-x: hidden;
+      }
 
-      .service-card {
-        transition: all 0.3s ease;
-        border-radius: 16px;
-        overflow: hidden;
-        position: relative;
-        background-color: rgba(16, 24, 32, 0.7);
-        color: #fee715;
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-      }
+      .service-card {
+        transition: all 0.3s ease;
+        border-radius: 16px;
+        overflow: hidden;
+        position: relative;
+        background-color: rgba(16, 24, 32, 0.7);
+        color: #fee715;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(254, 231, 21, 0.2);
+      }
 
-      .service-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 25px -5px rgba(254, 231, 21, 0.15);
-        border-color: rgba(254, 231, 21, 0.4);
-      }
+      .service-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 25px -5px rgba(254, 231, 21, 0.15);
+        border-color: rgba(254, 231, 21, 0.4);
+      }
 
-      .floating-element {
-        position: absolute;
-        border-radius: 50%;
-        background: rgba(254, 231, 21, 0.1);
-        z-index: 0;
-      }
+      .floating-element {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(254, 231, 21, 0.1);
+        z-index: 0;
+      }
 
-      .form-input {
-        background-color: rgba(16, 24, 32, 0.7);
-        border: 1px solid rgba(254, 231, 21, 0.2);
-        color: #fee715;
-        border-radius: 12px;
-        padding: 0.75rem 1rem;
-        width: 100%;
-        transition: all 0.3s ease;
-      }
+      .form-input {
+        background-color: rgba(16, 24, 32, 0.7);
+        border: 1px solid rgba(254, 231, 21, 0.2);
+        color: #fee715;
+        border-radius: 12px;
+        padding: 0.75rem 1rem;
+        width: 100%;
+        transition: all 0.3s ease;
+      }
 
-      .form-input:focus {
-        outline: none;
-        border-color: rgba(254, 231, 21, 0.6);
-        box-shadow: 0 0 0 3px rgba(254, 231, 21, 0.1);
-      }
+      .form-input:focus {
+        outline: none;
+        border-color: rgba(254, 231, 21, 0.6);
+        box-shadow: 0 0 0 3px rgba(254, 231, 21, 0.1);
+      }
 
-      .form-input::placeholder {
-        color: rgba(254, 231, 21, 0.5);
-      }
+      .form-input::placeholder {
+        color: rgba(254, 231, 21, 0.5);
+      }
 
-      .password-toggle {
-        position: absolute;
-        right: 1rem;
-        top: 50%;
-        transform: translateY(-50%);
-        color: rgba(254, 231, 21, 0.7);
-        cursor: pointer;
-      }
+      .password-toggle {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        color: rgba(254, 231, 21, 0.7);
+        cursor: pointer;
+      }
 
-      .spinner {
-        border: 4px solid rgba(254, 231, 21, 0.3);
-        border-radius: 50%;
-        border-top: 4px solid #fee715;
-        width: 50px;
-        height: 50px;
-        animation: spin 1s linear infinite;
-      }
+      .spinner {
+        border: 4px solid rgba(254, 231, 21, 0.3);
+        border-radius: 50%;
+        border-top: 4px solid #fee715;
+        width: 50px;
+        height: 50px;
+        animation: spin 1s linear infinite;
+      }
 
-      @keyframes spin {
-        0% {
-          transform: rotate(0deg);
-        }
-        100% {
-          transform: rotate(360deg);
-        }
-      }
-    </style>
-  </head>
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
+        }
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
 
-  <body class="min-h-screen flex flex-col relative">
-    <div
-      class="floating-element top-10 left-5 w-16 h-16 animate-bounce"
-      style="animation-duration: 6s"
-      aria-hidden="true"
-    ></div>
-    <div
-      class="floating-element bottom-20 right-10 w-24 h-24 animate-pulse"
-      style="animation-duration: 8s"
-      aria-hidden="true"
-    ></div>
-    <div
-      class="floating-element top-1/2 left-1/4 w-12 h-12 animate-spin"
-      style="animation-duration: 15s"
-      aria-hidden="true"
-    ></div>
+  <body class="min-h-screen flex flex-col relative">
+    <div
+      class="floating-element top-10 left-5 w-16 h-16 animate-bounce"
+      style="animation-duration: 6s"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="floating-element bottom-20 right-10 w-24 h-24 animate-pulse"
+      style="animation-duration: 8s"
+      aria-hidden="true"
+    ></div>
+    <div
+      class="floating-element top-1/2 left-1/4 w-12 h-12 animate-spin"
+      style="animation-duration: 15s"
+      aria-hidden="true"
+    ></div>
 
-    <header class="relative z-10 pt-8 pb-4 px-6">
-      <div class="flex items-center justify-between">
-        <div class="flex items-center">
-          <div
-            class="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mr-3"
-          >
-            <img
-              src="images/logo.png"
-              alt="SwiftScore Logo"
-              class="w-6 h-6 object-contain"
-            />
-          </div>
-          <h1 class="text-2xl font-bold">SwiftScore</h1>
-        </div>
+    <header class="relative z-10 pt-8 pb-4 px-6">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center">
+          <div
+            class="w-10 h-10 bg-secondary rounded-xl flex items-center justify-center mr-3"
+          >
+            <img
+              src="images/logo.png"
+              alt="SwiftScore Logo"
+              class="w-6 h-6 object-contain"
+            />
+          </div>
+          <h1 class="text-2xl font-bold">SwiftScore</h1>
+        </div>
 
-        <div class="flex items-center space-x-4">
-          <a href="/" class="text-sm font-medium hover:opacity-80 transition-opacity"
-            >Home</a
-          >
-          <a href="/auth/login" class="text-sm font-medium hover:opacity-80 transition-opacity"
-            >Sign In</a
-          >
-        </div>
-      </div>
-    </header>
+        <div class="flex items-center space-x-4">
+          <a href="/" class="text-sm font-medium hover:opacity-80 transition-opacity"
+            >Home</a
+          >
+          <a href="/auth/login" class="text-sm font-medium hover:opacity-80 transition-opacity"
+            >Sign In</a
+          >
+        </div>
+      </div>
+    </header>
 
-    <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10">
-      <div class="service-card p-8 w-full max-w-md">
-        <div class="text-center mb-6">
-          <h2 class="text-2xl font-semibold">Create Your Account</h2>
-          <p class="text-sm opacity-80 mt-2">
-            Join millions predicting sports scores worldwide
-          </p>
-        </div>
+    <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10">
+      <div class="service-card p-8 w-full max-w-md">
+        <div class="text-center mb-6">
+          <h2 class="text-2xl font-semibold">Create Your Account</h2>
+          <p class="text-sm opacity-80 mt-2">
+            Join millions predicting sports scores worldwide
+          </p>
+        </div>
 
-        <form id="signupForm" class="space-y-4">
-          <div class="grid grid-cols-2 gap-4">
-            <div>
-              <label for="firstName" class="block text-sm font-medium mb-1">First Name</label>
-              <input
-                type="text"
-                id="firstName"
-                name="firstName"
-                class="form-input"
-                placeholder="Enter your first name"
-                required
-              />
-            </div>
-            <div>
-              <label for="lastName" class="block text-sm font-medium mb-1">Last Name</label>
-              <input
-                type="text"
-                id="lastName"
-                name="lastName"
-                class="form-input"
-                placeholder="Enter your last name"
-                required
-              />
-            </div>
-          </div>
+        <form id="signupForm" class="space-y-4">
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label for="firstName" class="block text-sm font-medium mb-1">First Name</label>
+              <input
+                type="text"
+                id="firstName"
+                name="firstName"
+                class="form-input"
+                placeholder="Enter your first name"
+                required
+              />
+            </div>
+            <div>
+              <label for="lastName" class="block text-sm font-medium mb-1">Last Name</label>
+              <input
+                type="text"
+                id="lastName"
+                name="lastName"
+                class="form-input"
+                placeholder="Enter your last name"
+                required
+              />
+            </div>
+          </div>
 
-          <div>
-            <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              class="form-input"
-              placeholder="Enter your email"
-              required
-            />
-          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium mb-1">Email Address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              class="form-input"
+              placeholder="Enter your email"
+              required
+            />
+          </div>
 
-          <div>
-            <label for="password" class="block text-sm font-medium mb-1">Password</label>
-            <div class="relative">
-              <input
-                type="password"
-                id="password"
-                name="password"
-                class="form-input pr-10"
-                placeholder="Create a password"
-                required
-              />
-              <span class="password-toggle" id="passwordToggle">
-                <i class="far fa-eye"></i>
-              </span>
-            </div>
-            <p class="text-xs opacity-70 mt-1">Must be at least 8 characters</p>
-          </div>
+          <div>
+            <label for="password" class="block text-sm font-medium mb-1">Password</label>
+            <div class="relative">
+              <input
+                type="password"
+                id="password"
+                name="password"
+                class="form-input pr-10"
+                placeholder="Create a password"
+                required
+              />
+              <span class="password-toggle" id="passwordToggle">
+                <i class="far fa-eye"></i>
+              </span>
+            </div>
+            <p class="text-xs opacity-70 mt-1">Must be at least 8 characters</p>
+          </div>
 
-          <div>
-            <label for="confirmPassword" class="block text-sm font-medium mb-1">Confirm Password</label>
-            <div class="relative">
-              <input
-                type="password"
-                id="confirmPassword"
-                name="confirmPassword"
-                class="form-input pr-10"
-                placeholder="Confirm your password"
-                required
-              />
-              <span class="password-toggle" id="confirmPasswordToggle">
-                <i class="far fa-eye"></i>
-              </span>
-            </div>
-          </div>
+          <div>
+            <label for="confirmPassword" class="block text-sm font-medium mb-1">Confirm Password</label>
+            <div class="relative">
+              <input
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                class="form-input pr-10"
+                placeholder="Confirm your password"
+                required
+              />
+              <span class="password-toggle" id="confirmPasswordToggle">
+                <i class="far fa-eye"></i>
+              </span>
+            </div>
+          </div>
 
-          <div class="pt-2">
-            <button
-              type="submit"
-              class="w-full bg-secondary text-primary font-semibold rounded-full py-3 px-6 text-center transition-all hover:opacity-90 active:opacity-100 shadow"
-            >
-              Create Account
-            </button>
-          </div>
-        </form>
+          <div class="pt-2">
+            <button
+              type="submit"
+              class="w-full bg-secondary text-primary font-semibold rounded-full py-3 px-6 text-center transition-all hover:opacity-90 active:opacity-100 shadow"
+            >
+              Create Account
+            </button>
+          </div>
+        </form>
 
-        <div class="mt-6 pt-4 border-t border-secondary/30">
-          <p class="text-sm text-center opacity-80">
-            Already have an account?
-            <a href="/auth/login" class="font-medium hover:opacity-80 transition-opacity">
-              Sign In
-            </a>
-          </p>
-        </div>
-      </div>
+        <div class="mt-6 pt-4 border-t border-secondary/30">
+          <p class="text-sm text-center opacity-80">
+            Already have an account?
+            <a href="/auth/login" class="font-medium hover:opacity-80 transition-opacity">
+              Sign In
+            </a>
+          </p>
+        </div>
+      </div>
 
-      <div class="mt-6 text-center">
-        <p class="text-xs opacity-60 max-w-md">
-          By creating an account, you agree to our Terms of Service and Privacy Policy
-        </p>
-      </div>
-    </main>
+      <div class="mt-6 text-center">
+        <p class="text-xs opacity-60 max-w-md">
+          By creating an account, you agree to our Terms of Service and Privacy Policy
+        </p>
+      </div>
+    </main>
 
-    <div
-      id="loadingOverlay"
-      class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden backdrop-blur-sm"
-    >
-      <div class="flex flex-col items-center space-y-4">
-        <div class="spinner"></div>
-        <p class="font-medium">Creating your account...</p>
-      </div>
-    </div>
+    <div
+      id="loadingOverlay"
+      class="fixed inset-0 bg-primary bg-opacity-90 flex items-center justify-center z-50 hidden backdrop-blur-sm"
+    >
+      <div class="flex flex-col items-center space-y-4">
+        <div class="spinner"></div>
+        <p class="font-medium">Creating your account...</p>
+      </div>
+    </div>
+    
+    <div id="statusMessage" class="fixed bottom-4 right-4 bg-primary text-secondary py-2 px-4 rounded-lg shadow-lg hidden transition-opacity duration-300 ease-in-out"></div>
 
-    <script>
-      document.addEventListener('DOMContentLoaded', () => {
-        const passwordToggle = document.getElementById('passwordToggle');
-        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
-        const passwordInput = document.getElementById('password');
-        const confirmPasswordInput = document.getElementById('confirmPassword');
-        const signupForm = document.getElementById('signupForm');
-        const loadingOverlay = document.getElementById('loadingOverlay');
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const passwordToggle = document.getElementById('passwordToggle');
+        const confirmPasswordToggle = document.getElementById('confirmPasswordToggle');
+        const passwordInput = document.getElementById('password');
+        const confirmPasswordInput = document.getElementById('confirmPassword');
+        const signupForm = document.getElementById('signupForm');
+        const loadingOverlay = document.getElementById('loadingOverlay');
+        const statusMessage = document.getElementById('statusMessage');
 
-        // Toggle password visibility
-        function setupPasswordToggle(toggleElement, inputElement) {
-          toggleElement.addEventListener('click', () => {
-            const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
-            inputElement.setAttribute('type', type);
-            
-            // Toggle eye icon
-            const icon = toggleElement.querySelector('i');
-            if (type === 'text') {
-              icon.classList.remove('fa-eye');
-              icon.classList.add('fa-eye-slash');
-            } else {
-              icon.classList.remove('fa-eye-slash');
-              icon.classList.add('fa-eye');
-            }
-          });
-        }
+        // Toggle password visibility
+        function setupPasswordToggle(toggleElement, inputElement) {
+          toggleElement.addEventListener('click', () => {
+            const type = inputElement.getAttribute('type') === 'password' ? 'text' : 'password';
+            inputElement.setAttribute('type', type);
+            
+            // Toggle eye icon
+            const icon = toggleElement.querySelector('i');
+            if (type === 'text') {
+              icon.classList.remove('fa-eye');
+              icon.classList.add('fa-eye-slash');
+            } else {
+              icon.classList.remove('fa-eye-slash');
+              icon.classList.add('fa-eye');
+            }
+          });
+        }
 
-        setupPasswordToggle(passwordToggle, passwordInput);
-        setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
+        setupPasswordToggle(passwordToggle, passwordInput);
+        setupPasswordToggle(confirmPasswordToggle, confirmPasswordInput);
+        
+        // Function to display a status message
+        function showStatusMessage(message, isError = false) {
+            statusMessage.textContent = message;
+            statusMessage.classList.remove('hidden', 'opacity-0', 'bg-red-600', 'text-white', 'bg-green-600', 'text-white');
+            statusMessage.classList.add('opacity-100');
+            if (isError) {
+                statusMessage.classList.add('bg-red-600', 'text-white');
+            } else {
+                statusMessage.classList.add('bg-green-600', 'text-white');
+            }
+            setTimeout(() => {
+                statusMessage.classList.remove('opacity-100');
+                statusMessage.classList.add('opacity-0');
+                setTimeout(() => statusMessage.classList.add('hidden'), 300);
+            }, 5000);
+        }
 
-        // Form validation and submission
-        signupForm.addEventListener('submit', async (e) => {
-          e.preventDefault();
-          
-          const firstName = document.getElementById('firstName').value.trim();
-          const lastName = document.getElementById('lastName').value.trim();
-          const email = document.getElementById('email').value.trim();
-          const password = passwordInput.value;
-          const confirmPassword = confirmPasswordInput.value;
-          
-          // Basic validation
-          if (password !== confirmPassword) {
-            alert('Passwords do not match');
-            return;
-          }
-          
-          if (password.length < 8) {
-            alert('Password must be at least 8 characters long');
-            return;
-          }
-          
-          // Show loading overlay
-          loadingOverlay.classList.remove('hidden');
-          
-          try {
-            const response = await fetch('/api/register', {
-              method: 'POST',
-              headers: {
-                'Content-Type': 'application/json',
-              },
-              body: JSON.stringify({ firstName, lastName, email, password }),
-            });
-          
-            const data = await response.json();
-          
-            if (response.ok) {
-              alert(data.message);
-              window.location.href = '/auth/login';
-            } else {
-              alert(data.message || 'An error occurred during registration.');
-            }
-          } catch (error) {
-            console.error('Error:', error);
-            alert('An error occurred. Please try again later.');
-          } finally {
-            loadingOverlay.classList.add('hidden');
-          }
-        });
-      });
-    </script>
-  </body>
+        // Form validation and submission
+        signupForm.addEventListener('submit', async (e) => {
+          e.preventDefault();
+          
+          const firstName = document.getElementById('firstName').value.trim();
+          const lastName = document.getElementById('lastName').value.trim();
+          const email = document.getElementById('email').value.trim();
+          const password = passwordInput.value;
+          const confirmPassword = confirmPasswordInput.value;
+          
+          // Client-side validation
+          if (password !== confirmPassword) {
+            showStatusMessage('Passwords do not match.', true);
+            return;
+          }
+          
+          if (password.length < 8) {
+            showStatusMessage('Password must be at least 8 characters long.', true);
+            return;
+          }
+          
+          // Show loading overlay
+          loadingOverlay.classList.remove('hidden');
+          
+          try {
+            const response = await fetch('/api/register', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({ firstName, lastName, email, password }),
+            });
+            
+            const data = await response.json();
+            
+            if (response.ok) {
+              showStatusMessage(data.message, false);
+              // You can clear the form or redirect the user here
+              signupForm.reset();
+              window.location.href = '/auth/login';
+            } else {
+              showStatusMessage(data.message || 'An error occurred. Please try again.', true);
+            }
+          } catch (error) {
+            console.error('Signup error:', error);
+            showStatusMessage('Network error. Please try again.', true);
+          } finally {
+            // Hide loading overlay regardless of the outcome
+            loadingOverlay.classList.add('hidden');
+          }
+        });
+      });
+    </script>
+  </body>
 </html>
