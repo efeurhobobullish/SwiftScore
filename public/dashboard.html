@@ -24,7 +24,6 @@
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     .dashboard-grid {
@@ -115,11 +114,6 @@
       <div class="flex items-center space-x-4">
         <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-          </svg>
-        </button>
-        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
         </button>
@@ -129,11 +123,11 @@
 
   <main class="container mx-auto p-6 mt-8">
     <div class="mb-8">
-      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Welcome back, <span id="userName">User</span>!</h1>
-      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Here's what's happening with your predictions today.</p>
+      <h1 class="text-3xl font-bold text-gray-800">Welcome back, <span id="userName">User</span>!</h1>
+      <p class="text-gray-600 mt-2">Here's what's happening with your predictions today.</p>
     </div>
     
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 animate__animated animate__fadeInUp animate__delay-2s">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
       <div class="stats-card bg-white p-6 rounded-lg shadow-sm">
         <div class="flex items-center justify-between">
           <div>
@@ -217,7 +211,7 @@
     
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
       <div class="lg:col-span-2">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-3s">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
           <div class="px-6 py-4 border-b border-gray-100">
             <h2 class="text-lg font-semibold text-gray-800">Recent Predictions</h2>
           </div>
@@ -335,7 +329,7 @@
       </div>
       
       <div class="space-y-6">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-4s">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
           <div class="px-6 py-4 border-b border-gray-100">
             <h2 class="text-lg font-semibold text-gray-800">Upcoming Matches</h2>
           </div>
@@ -382,7 +376,7 @@
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-5s">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden">
           <div class="px-6 py-4 border-b border-gray-100">
             <h2 class="text-lg font-semibold text-gray-800">Performance</h2>
           </div>
