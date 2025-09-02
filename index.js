@@ -150,7 +150,7 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // Matches Routes
 // =======================
 
-app.get("/api/matches", async (req, res) => {
+app.get("/api/matches", authMiddleware, async (req, res) => {
   try {
     const matches = await Match.find().sort({ date: 1 });
     res.json(matches);
