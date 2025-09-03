@@ -1,276 +1,70 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SwiftScore - Matches</title>
-  <link rel="icon" href="/images/logo.png" type="image/png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SwiftScore - Leagues</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2563EA',
-            secondary: '#1E40AF',
-            accent: '#60A5FA',
-            light: '#F3F4F6'
-          },
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif'],
-          },
-        }
-      }
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <style>
-    .match-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 4px 15px rgba(37, 99, 234, 0.1);
-    }
-    .team-logo { width: 32px; height: 32px; object-fit: contain; }
-    .status-badge { color: white; border-radius: 20px; padding: 4px 12px; font-size: 0.7rem; font-weight: 600; text-transform: uppercase; }
-    .filter-btn { transition: all 0.2s ease-in-out; }
-    .filter-btn.active {
-      background-color: #2563EA;
-      color: white;
-      box-shadow: 0 2px 8px rgba(37, 99, 234, 0.3);
-    }
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 4px solid #2563EA;
-      width: 40px;
-      height: 40px;
-      animation: spin 1.5s linear infinite;
-      margin: 40px auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-  </style>
 </head>
-<body class="bg-gray-100 font-sans">
+<body class="bg-gray-100 min-h-screen flex flex-col">
 
-  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
-    <div class="container mx-auto flex items-center justify-between">
-      <div class="flex items-center">
-        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
-        <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
-      </div>
-      <nav class="hidden sm:flex items-center space-x-8">
-        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
-        <a href="matches.html" class="text-primary font-bold border-b-2 border-primary pb-1">Matches</a>
-        <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
-        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
-      </nav>
-      <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-      </div>
+  <!-- Header -->
+  <header class="bg-blue-600 text-white py-4 shadow-md">
+    <div class="container mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">⚽ SwiftScore - Leagues</h1>
+      <a href="/dashboard" class="text-sm hover:underline">Dashboard</a>
     </div>
   </header>
 
-  <main class="container mx-auto p-4 sm:p-6 mt-8">
-    <div class="mb-6">
-      <h1 id="page-title" class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">All Matches</h1>
-      <p class="text-gray-600 mt-1 animate__animated animate__fadeInDown animate__delay-1s">Browse live, upcoming, and finished matches.</p>
-    </div>
+  <!-- Main Content -->
+  <main class="container mx-auto px-4 py-6 flex-1">
+    <h2 class="text-lg font-semibold mb-4">Available Leagues</h2>
+    
+    <!-- Loader -->
+    <div id="loader" class="text-center text-gray-600">Loading leagues...</div>
 
-    <div class="bg-white rounded-lg shadow p-4 mb-6 sticky top-[74px] z-30 animate__animated animate__fadeInUp">
-      <div class="flex items-center gap-4">
-        <div>
-          <h3 class="text-sm font-medium text-gray-700 mb-2">Filter by Status</h3>
-          <div id="status-filters" class="flex flex-wrap gap-2">
-            <button data-filter="all" class="filter-btn active px-4 py-1.5 rounded-full text-xs font-semibold bg-primary text-white">All</button>
-            <button data-filter="live" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">Live</button>
-            <button data-filter="upcoming" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">Upcoming</button>
-            <button data-filter="finished" class="filter-btn px-4 py-1.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-700">Finished</button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div id="matches-container" class="animate__animated animate__fadeInUp animate__delay-2s">
-      </div>
+    <!-- Grid -->
+    <div id="leaguesGrid" class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"></div>
   </main>
 
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const matchesContainer = document.getElementById('matches-container');
-    const statusFilters = document.getElementById('status-filters');
-    const pageTitle = document.getElementById('page-title');
+  <!-- Footer -->
+  <footer class="bg-white text-gray-500 text-sm py-4 border-t text-center">
+    &copy; 2025 SwiftScore. All rights reserved.
+  </footer>
 
-    // --- State Management ---
-    let allMatches = { live: [], upcoming: [], finished: [] };
-    let currentFilter = 'all'; // 'all', 'live', 'upcoming', 'finished'
+  <script>
+    async function fetchLeagues() {
+      const loader = document.getElementById("loader");
+      const grid = document.getElementById("leaguesGrid");
+      try {
+        const res = await fetch("/api/leagues");
+        if (!res.ok) throw new Error("Failed to fetch leagues");
+        const leagues = await res.json();
 
-    // --- Helper Functions ---
+        loader.style.display = "none"; // hide loader
 
-    /**
-     * Creates the HTML for a single match card.
-     * @param {object} match - The match data object.
-     * @returns {string} HTML string for the match card.
-     */
-    const createMatchCardHTML = (match) => {
-        const { homeLogo, homeTeam, awayLogo, awayTeam, homeScore, awayScore, status, date } = match;
+        // Render leagues
+        leagues.forEach(l => {
+          const card = document.createElement("div");
+          card.className = "bg-white rounded-xl shadow p-4 flex flex-col items-center hover:shadow-lg transition";
 
-        const getStatusBadge = (status) => {
-            const s = status.toUpperCase();
-            if (['LIVE', 'HT', 'BREAK'].includes(s)) {
-                return `<span class="status-badge bg-red-500">${s}</span>`;
-            }
-            if (['FT', 'FT_PEN', 'AET'].includes(s)) {
-                return `<span class="status-badge bg-gray-700">Finished</span>`;
-            }
-            if (['NS'].includes(s)) {
-                return `<span class="status-badge bg-blue-500">Upcoming</span>`;
-            }
-            // For other statuses like POSTP., CANC., etc.
-            return `<span class="status-badge bg-yellow-500">${s}</span>`;
-        };
-
-        const formattedTime = new Date(date).toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
-        const scoreDisplay = status.toUpperCase() === 'NS'
-            ? `<div class="font-semibold text-gray-700 text-sm">${formattedTime}</div>`
-            : `<div class="font-bold text-gray-800 text-lg tracking-wider">${homeScore ?? '-'} : ${awayScore ?? '-'}</div>`;
-
-        return `
-            <div class="match-card flex items-center justify-between p-3 bg-white rounded-lg shadow-sm transition-all duration-200">
-                <div class="flex-1 flex items-center justify-end gap-3 pr-2">
-                    <span class="hidden sm:inline text-gray-800 font-medium text-right text-sm">${homeTeam}</span>
-                    <img src="${homeLogo}" alt="${homeTeam}" class="team-logo">
-                </div>
-                <div class="w-24 text-center">
-                    ${scoreDisplay}
-                </div>
-                <div class="flex-1 flex items-center gap-3 pl-2">
-                    <img src="${awayLogo}" alt="${awayTeam}" class="team-logo">
-                    <span class="hidden sm:inline text-gray-800 font-medium text-left text-sm">${awayTeam}</span>
-                </div>
-                <div class="w-28 flex justify-center">
-                    ${getStatusBadge(status)}
-                </div>
+          card.innerHTML = `
+            <img src="${l.leagueLogo || '/images/logo.png'}" alt="${l.leagueName}" class="h-16 object-contain mb-3">
+            <h3 class="text-md font-semibold text-gray-800 text-center">${l.leagueName}</h3>
+            <div class="flex items-center gap-2 mt-2">
+              <img src="${l.countryLogo || '/images/logo.png'}" alt="${l.country}" class="h-5">
+              <span class="text-sm text-gray-600">${l.country}</span>
             </div>
-        `;
-    };
-
-    /**
-     * Renders matches to the DOM based on the current filter, grouped by league.
-     */
-    const renderMatches = () => {
-        let matchesToRender = [];
-        if (currentFilter === 'all') {
-            // Display live first, then upcoming, then finished
-            matchesToRender = [...allMatches.live, ...allMatches.upcoming, ...allMatches.finished];
-        } else {
-            matchesToRender = allMatches[currentFilter] || [];
-        }
-
-        if (matchesToRender.length === 0) {
-            matchesContainer.innerHTML = `<p class="text-center text-gray-500 py-10">No ${currentFilter} matches found at the moment.</p>`;
-            return;
-        }
-
-        const groupedByLeague = matchesToRender.reduce((acc, match) => {
-            const leagueName = match.leagueName || 'Other Leagues';
-            if (!acc[leagueName]) {
-                acc[leagueName] = { logo: match.leagueLogo, country: match.leagueCountry, matches: [] };
-            }
-            acc[leagueName].matches.push(match);
-            return acc;
-        }, {});
-
-        const sortedLeagues = Object.entries(groupedByLeague).sort((a, b) => a[0].localeCompare(b[0]));
-
-        let html = sortedLeagues.map(([leagueName, data]) => {
-            const leagueHeader = `
-                <div class="flex items-center gap-3 mb-3 p-2 bg-gray-50 rounded-md">
-                    <img src="${data.logo}" alt="${leagueName}" class="w-7 h-7 object-contain" onerror="this.style.display='none'">
-                    <div>
-                        <h3 class="font-bold text-gray-800">${leagueName}</h3>
-                        <p class="text-xs text-gray-500">${data.country || ''}</p>
-                    </div>
-                </div>
-            `;
-            const matchesHtml = data.matches.map(createMatchCardHTML).join('');
-            return `<div class="mb-6 bg-gray-200/50 p-3 rounded-lg">${leagueHeader}<div class="space-y-2">${matchesHtml}</div></div>`;
-        }).join('');
-
-        matchesContainer.innerHTML = html;
-    };
-
-    /**
-     * Fetches all match data from the backend and triggers a re-render.
-     */
-    const fetchAndRenderMatches = async () => {
-        try {
-            // Only show loader on the very first load
-            if (!allMatches.live.length && !allMatches.upcoming.length && !allMatches.finished.length) {
-                matchesContainer.innerHTML = '<div class="loader"></div>';
-            }
-
-            const res = await fetch('/api/matches');
-            if (!res.ok) throw new Error(`API request failed with status ${res.status}`);
-
-            const data = await res.json();
-            allMatches = {
-                live: data.live || [],
-                upcoming: data.upcoming || [],
-                finished: data.finished || [],
-            };
-
-            renderMatches(); // Render with the new data, respecting the current filter
-        } catch (err) {
-            console.error('Error fetching matches:', err);
-            matchesContainer.innerHTML = '<p class="text-center text-red-500 py-10">Failed to load matches. Please try again later.</p>';
-        }
-    };
-
-    /**
-     * Sets up click event listeners for the filter buttons.
-     */
-    const setupFilterListeners = () => {
-        const buttons = statusFilters.querySelectorAll('button');
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                const newFilter = button.dataset.filter;
-                if (newFilter === currentFilter) return;
-
-                currentFilter = newFilter;
-
-                // Update button styles
-                buttons.forEach(btn => {
-                    btn.classList.remove('active', 'bg-primary', 'text-white', 'shadow-md');
-                    btn.classList.add('bg-gray-100', 'text-gray-700');
-                });
-                button.classList.add('active', 'bg-primary', 'text-white', 'shadow-md');
-                button.classList.remove('bg-gray-100', 'text-gray-700');
-
-                // Update page title
-                pageTitle.textContent = `${newFilter.charAt(0).toUpperCase() + newFilter.slice(1)} Matches`;
-
-                renderMatches();
-            });
+          `;
+          grid.appendChild(card);
         });
-    };
+      } catch (err) {
+        loader.textContent = "❌ Error loading leagues.";
+        console.error("Error:", err);
+      }
+    }
 
-    // --- Initialization ---
-    const initializePage = async () => {
-        setupFilterListeners();
-        await fetchAndRenderMatches(); // Initial data fetch
-        setInterval(fetchAndRenderMatches, 30000); // Refresh data every 30 seconds
-    };
-
-    initializePage();
-});
-</script>
-
+    fetchLeagues();
+  </script>
 </body>
 </html>
