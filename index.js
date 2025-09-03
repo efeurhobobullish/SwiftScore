@@ -22,24 +22,21 @@ const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.SPORTMONKS_API_KEY;
 
 
-// 🔧 Normalizer: convert SportMonks fixture into clean object
+// Normalizer stays same
 function normalizeMatch(m) {
   return {
-    matchId: m.id,
-    leagueId: m.league?.id,
-    leagueName: m.league?.name,
-    leagueLogo: m.league?.image_path,
-    leagueCountry: m.league?.country?.name,
-    homeTeam: m.participants?.[0]?.name,
-    homeLogo: m.participants?.[0]?.image_path,
-    awayTeam: m.participants?.[1]?.name,
-    awayLogo: m.participants?.[1]?.image_path,
-    homeScore: m.scores?.[0]?.score?.goals ?? null,
-    awayScore: m.scores?.[1]?.score?.goals ?? null,
-    status: m.state?.name || "NS",
+    id: m.id,
+    league: m.league?.name,
     date: m.starting_at,
+    homeTeam: m.participants?.find(p => p.meta.location === "home")?.name,
+    awayTeam: m.participants?.find(p => p.meta.location === "away")?.name,
+    homeLogo: m.participants?.find(p => p.meta.location === "home")?.image_path,
+    awayLogo: m.participants?.find(p => p.meta.location === "away")?.image_path,
+    status: m.state?.name || "Unknown",
+    scores: m.scores || {},
   };
 }
+
 
 
 // Middleware
@@ -169,79 +166,28 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // =======================
 // Matches Routes
 // =======================
-
-// 🟢 Live Matches
-app.get("/api/matches/live", async (req, res) => {
-  try {
-    const { data } = await axios.get(
-      `https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`
-    );
-    res.json((data.data || []).map(normalizeMatch));
-  } catch (err) {
-    console.error("❌ Error fetching live matches:", err.message);
-    res.status(500).json({ error: "Failed to fetch live matches" });
-  }
-});
-
-
-// 🔴 Finished Matches
-app.get("/api/matches/finished", async (req, res) => {
-  try {
-    const { data } = await axios.get(
-      `https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`
-    );
-    res.json((data.data || []).map(normalizeMatch));
-  } catch (err) {
-    console.error("❌ Error fetching finished matches:", err.message);
-    res.status(500).json({ error: "Failed to fetch finished matches" });
-  }
-});
-
-// 🟡 Upcoming Matches (next 7 days)
-app.get("/api/matches/upcoming", async (req, res) => {
-  try {
-    const from = req.query.from || "2025-09-02";
-    const to = req.query.to || "2025-09-09";
-
-    const { data } = await axios.get(
-      `https://api.sportmonks.com/v3/football/fixtures/between/${from}/${to}`,
-      {
-        params: {
-          api_token: API_KEY,
-          include: "participants;league;scores",
-        },
-      }
-    );
-
-    res.json((data.data || []).map(normalizeMatch));
-  } catch (err) {
-    console.error("❌ Error fetching upcoming matches:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to fetch upcoming matches" });
-  }
-});
-
-// 🟣 All Matches
+//🟣 All Matches (live, finished, upcoming)
 app.get("/api/matches", async (req, res) => {
   try {
     const from = req.query.from || "2025-09-02";
     const to = req.query.to || "2025-09-09";
 
-    const [liveRes, upcomingRes, finishedRes] = await Promise.all([
+    const [liveRes, finishedRes, upcomingRes] = await Promise.all([
       axios.get(`https://api.sportmonks.com/v3/football/fixtures/live`, {
-        params: { api_token: API_KEY, include: "participants;league;scores" },
-      }),
-      axios.get(`https://api.sportmonks.com/v3/football/fixtures/between/${from}/${to}`, {
-        params: { api_token: API_KEY, include: "participants;league;scores" },
+        params: { api_token: API_KEY, include: "participants;league;scores;state" },
       }),
       axios.get(`https://api.sportmonks.com/v3/football/fixtures/ended`, {
-        params: { api_token: API_KEY, include: "participants;league;scores" },
+        params: { api_token: API_KEY, include: "participants;league;scores;state" },
+      }),
+      axios.get(`https://api.sportmonks.com/v3/football/fixtures/between/${from}/${to}`, {
+        params: { api_token: API_KEY, include: "participants;league;scores;state" },
       }),
     ]);
 
     res.json({
       live: (liveRes.data.data || []).map(normalizeMatch),
-      upcoming: (upcomingRes.data.data || []).map(normalizeMatch),
       finished: (finishedRes.data.data || []).map(normalizeMatch),
+      upcoming: (upcomingRes.data.data || []).map(normalizeMatch),
     });
   } catch (err) {
     console.error("❌ Error fetching all matches:", err.response?.data || err.message);
