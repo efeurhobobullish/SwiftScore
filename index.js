@@ -5,6 +5,7 @@ const cors = require("cors");
 const fetch = require("node-fetch");
 const cron = require("node-cron");
 const jwt = require("jsonwebtoken");
+const axios = require("axios");
 const dotenv = require("dotenv");
 const connectDB = require("./config/db.js");
 const User = require("./models/User.js");
@@ -175,27 +176,23 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // 🟢 Live Matches
 app.get("/api/matches/live", async (req, res) => {
   try {
-    const response = await fetch(
+    const { data } = await axios.get(
       `https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`
     );
-    const data = await response.json();
-    const matches = (data.data || []).map(normalizeMatch);
-    res.json(matches);
+    res.json((data.data || []).map(normalizeMatch));
   } catch (err) {
     console.error("❌ Error fetching live matches:", err.message);
     res.status(500).json({ error: "Failed to fetch live matches" });
   }
 });
 
-// 🟡 Upcoming Matches (next 7 days as example)
+// 🟡 Upcoming Matches (next 7 days)
 app.get("/api/matches/upcoming", async (req, res) => {
   try {
-    const response = await fetch(
+    const { data } = await axios.get(
       `https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-09?api_token=${API_KEY}`
     );
-    const data = await response.json();
-    const matches = (data.data || []).map(normalizeMatch);
-    res.json(matches);
+    res.json((data.data || []).map(normalizeMatch));
   } catch (err) {
     console.error("❌ Error fetching upcoming matches:", err.message);
     res.status(500).json({ error: "Failed to fetch upcoming matches" });
@@ -205,35 +202,29 @@ app.get("/api/matches/upcoming", async (req, res) => {
 // 🔴 Finished Matches
 app.get("/api/matches/finished", async (req, res) => {
   try {
-    const response = await fetch(
+    const { data } = await axios.get(
       `https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`
     );
-    const data = await response.json();
-    const matches = (data.data || []).map(normalizeMatch);
-    res.json(matches);
+    res.json((data.data || []).map(normalizeMatch));
   } catch (err) {
     console.error("❌ Error fetching finished matches:", err.message);
     res.status(500).json({ error: "Failed to fetch finished matches" });
   }
 });
 
-// 🟣 All Matches (grouped)
+// 🟣 All Matches
 app.get("/api/matches", async (req, res) => {
   try {
     const [liveRes, upcomingRes, finishedRes] = await Promise.all([
-      fetch(`https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`),
-      fetch(`https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-09?api_token=${API_KEY}`),
-      fetch(`https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`),
+      axios.get(`https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`),
+      axios.get(`https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-09?api_token=${API_KEY}`),
+      axios.get(`https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`),
     ]);
 
-    const liveData = await liveRes.json();
-    const upcomingData = await upcomingRes.json();
-    const finishedData = await finishedRes.json();
-
     res.json({
-      live: (liveData.data || []).map(normalizeMatch),
-      upcoming: (upcomingData.data || []).map(normalizeMatch),
-      finished: (finishedData.data || []).map(normalizeMatch),
+      live: (liveRes.data.data || []).map(normalizeMatch),
+      upcoming: (upcomingRes.data.data || []).map(normalizeMatch),
+      finished: (finishedRes.data.data || []).map(normalizeMatch),
     });
   } catch (err) {
     console.error("❌ Error fetching all matches:", err.message);
