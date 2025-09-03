@@ -19,23 +19,8 @@ connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const API_KEY = process.env.SPORTMONKS_API_KEY;
-
-
-// Normalizer stays same
-function normalizeMatch(m) {
-  return {
-    id: m.id,
-    league: m.league?.name,
-    date: m.starting_at,
-    homeTeam: m.participants?.find(p => p.meta.location === "home")?.name,
-    awayTeam: m.participants?.find(p => p.meta.location === "away")?.name,
-    homeLogo: m.participants?.find(p => p.meta.location === "home")?.image_path,
-    awayLogo: m.participants?.find(p => p.meta.location === "away")?.image_path,
-    status: m.state?.name || "Unknown",
-    scores: m.scores || {},
-  };
-}
+const { SOCCERSAPI_USER, SOCCERSAPI_TOKEN } = process.env;
+const BASE_URL = "https://api.soccersapi.com/v2.2";
 
 
 
@@ -166,34 +151,31 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // =======================
 // Matches Routes
 // =======================
-//🟣 All Matches (live, finished, upcoming)
-app.get("/api/matches", async (req, res) => {
+// Example: Fetch all leagues
+app.get("/api/leagues", async (req, res) => {
   try {
-    const from = req.query.from || "2025-09-02";
-    const to = req.query.to || "2025-09-09";
-
-    const [liveRes, finishedRes, upcomingRes] = await Promise.all([
-      axios.get(`https://api.sportmonks.com/v3/football/fixtures/live`, {
-        params: { api_token: API_KEY, include: "participants;league;scores;state" },
-      }),
-      axios.get(`https://api.sportmonks.com/v3/football/fixtures/ended`, {
-        params: { api_token: API_KEY, include: "participants;league;scores;state" },
-      }),
-      axios.get(`https://api.sportmonks.com/v3/football/fixtures/between/${from}/${to}`, {
-        params: { api_token: API_KEY, include: "participants;league;scores;state" },
-      }),
-    ]);
-
-    res.json({
-      live: (liveRes.data.data || []).map(normalizeMatch),
-      finished: (finishedRes.data.data || []).map(normalizeMatch),
-      upcoming: (upcomingRes.data.data || []).map(normalizeMatch),
+    const { data } = await axios.get(`${BASE_URL}/leagues/`, {
+      params: {
+        user: SOCCERSAPI_USER,
+        token: SOCCERSAPI_TOKEN,
+        t: "list"
+      }
     });
+    const leagues = (data.data || []).map(l => ({
+      leagueId: l.league_id,
+      leagueName: l.league_name,
+      country: l.country,
+      countryLogo: l.country_logo,
+      leagueLogo: l.league_logo
+    }));
+    res.json(leagues);
   } catch (err) {
-    console.error("❌ Error fetching all matches:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to fetch matches" });
+    console.error("Error fetching leagues:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to fetch leagues" });
   }
 });
+
+
 // =========================
 // Start Server
 // =========================
