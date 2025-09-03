@@ -1,7 +1,6 @@
 const cron = require("node-cron");
-const fetch = require("node-fetch");
+const fetch = require("node-fetch");  // ✅ add this
 const Match = require("../models/Match");
-require("dotenv").config();
 
 const API_KEY = process.env.SPORTMONKS_API_KEY;
 const API_URL = `https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`;
@@ -11,50 +10,35 @@ const fetchMatches = async () => {
     const res = await fetch(API_URL);
     const data = await res.json();
 
-    if (!data.data) {
-      console.log("⚠️ No matches found");
-      return;
-    }
+    if (!data.data) return;
 
     for (let m of data.data) {
-      const home = m.participants?.[0];
-      const away = m.participants?.[1];
-      const league = m.league;
-
       await Match.findOneAndUpdate(
         { matchId: m.id.toString() },
         {
           matchId: m.id.toString(),
-
-          // League
-          leagueId: league?.id?.toString() || null,
-          leagueName: league?.name || "Unknown League",
-          leagueLogo: league?.image_path || null,
-          leagueCountry: league?.country?.name || "Unknown Country",
-
-          // Teams
-          homeTeam: home?.name || "Home",
-          awayTeam: away?.name || "Away",
-          homeLogo: home?.image_path || null,
-          awayLogo: away?.image_path || null,
-
-          // Scores
-          homeScore: m.scores?.localteam_score ?? 0,
-          awayScore: m.scores?.visitorteam_score ?? 0,
-
-          // Match status & time
-          status: m.state?.state || "NS",
+          leagueId: m.league.id,
+          leagueName: m.league.name,
+          leagueLogo: m.league.image_path,
+          leagueCountry: m.league.country?.name,
+          homeTeam: m.participants[0]?.name,
+          homeLogo: m.participants[0]?.image_path,
+          awayTeam: m.participants[1]?.name,
+          awayLogo: m.participants[1]?.image_path,
+          homeScore: m.scores?.[0]?.score?.goals ?? null,
+          awayScore: m.scores?.[1]?.score?.goals ?? null,
+          status: m.state?.name || "NS",
           date: m.starting_at,
         },
         { upsert: true, new: true }
       );
     }
 
-    console.log("✅ Matches updated at", new Date().toLocaleTimeString());
+    console.log("✅ Matches updated");
   } catch (err) {
     console.error("❌ Error fetching matches:", err.message);
   }
 };
 
-// Run every 5 seconds
-cron.schedule("*/5 * * * * *", fetchMatches);
+// Run every 9 seconds
+cron.schedule("*/9 * * * * *", fetchMatches);
