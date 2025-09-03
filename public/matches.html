@@ -98,171 +98,130 @@
       </div>
     </div>
     
-    <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
-        <div class="loader"></div>
-        <p class="mt-4 text-gray-600">Loading matches...</p>
-      </div>
-    </div>
+    <!-- Matches Section -->
+<div class="card p-6 mt-8 animate__animated animate__fadeInUp">
+  <h2 class="text-xl font-bold text-gray-800 mb-4">Latest Matches</h2>
+  <div id="matches-container" class="space-y-4">
+    <p class="text-gray-500">Loading matches...</p>
+  </div>
+</div>
+
     
     <div id="pagination" class="flex justify-center mt-8 hidden"></div>
   </main>
 
   <script>
-    const matchesGrid = document.getElementById('matches-grid');
-    const loadingSpinner = document.getElementById('loading-spinner');
-    const statusFiltersContainer = document.getElementById('status-filters');
-    const pageTitle = document.getElementById('page-title');
-
-    // ✅ FIXED: Updated function to handle API status codes (NS, FT, LIVE)
-    function getStatusBadge(status) {
-      switch(status) {
-        case 'LIVE':
-          return { text: 'LIVE', color: 'bg-red-500 animate-pulse' };
-        case 'NS':
-          return { text: 'UPCOMING', color: 'bg-blue-500' };
-        case 'FT':
-          return { text: 'FINISHED', color: 'bg-gray-500' };
-        default:
-          return { text: status.toUpperCase(), color: 'bg-gray-400' };
-      }
-    }
+  document.addEventListener('DOMContentLoaded', () => {
+    // ---------------- Existing user profile script ----------------
+    const loadingMessage = document.getElementById('loading-message');
+    const errorMessage = document.getElementById('error-message');
+    const userInfoContainer = document.getElementById('user-info-container');
     
-    // ✅ FIXED: Improved date formatting for clarity
-    function formatMatchTime(dateString) {
-      const matchDate = new Date(dateString);
-      const today = new Date();
-      const tomorrow = new Date(today);
-      tomorrow.setDate(tomorrow.getDate() + 1);
+    const firstNameInput = document.getElementById('first-name');
+    const lastNameInput = document.getElementById('last-name');
+    const emailInput = document.getElementById('email');
+    const roleInput = document.getElementById('role');
+    const createdAtInput = document.getElementById('created-at');
+    const verifiedInput = document.getElementById('is-verified');
 
-      const options = { hour: '2-digit', minute: '2-digit', hour12: false };
-      const timeText = matchDate.toLocaleTimeString('en-GB', options);
-
-      if (matchDate.toDateString() === today.toDateString()) {
-        return `Today at ${timeText}`;
-      } else if (matchDate.toDateString() === tomorrow.toDateString()) {
-        return `Tomorrow at ${timeText}`;
-      } else {
-        return `${matchDate.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })} at ${timeText}`;
+    const fetchUserData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        window.location.href = '/auth/login';
+        return;
       }
-    }
-
-    // ✅ FIXED: Updated card creation logic to handle API status codes correctly
-    function createMatchCard(match) {
-      const badge = getStatusBadge(match.status);
-      const matchCard = document.createElement('div');
-      matchCard.className = 'match-card bg-white rounded-lg shadow-sm animate__animated animate__fadeInUp';
-
-      const homeScore = (match.status === 'FT' || match.status === 'LIVE') ? match.homeTeam.score : '-';
-      const awayScore = (match.status === 'FT' || match.status === 'LIVE') ? match.awayTeam.score : '-';
-      const scoreColor = (match.status === 'FT' || match.status === 'LIVE') ? 'bg-blue-100 text-blue-800' : 'bg-gray-100 text-gray-600';
-      
-      let actionText = 'View Details';
-      if (match.status === 'NS') actionText = 'Make Prediction';
-
-      let bottomStatusText = '';
-      if (match.status === 'LIVE') {
-          bottomStatusText = `Live - ${match.currentTime || 'In Progress'}`;
-      } else if (match.status === 'NS') {
-          bottomStatusText = `Kicks off soon`;
-      } else if (match.status === 'FT') {
-          bottomStatusText = 'Match Finished';
-      }
-      
-      matchCard.innerHTML = `
-        <div class="p-5">
-          <div class="flex justify-between items-center mb-4">
-            <span class="text-xs font-medium text-gray-500">${match.league}</span>
-            <span class="status-badge ${badge.color}">${badge.text}</span>
-          </div>
-          
-          <div class="flex items-center justify-between">
-            <div class="text-center w-5/12">
-              <img src="${match.homeTeam.logo}" alt="${match.homeTeam.name} Logo" class="team-logo mx-auto mb-2">
-              <h3 class="font-semibold text-gray-800 text-sm">${match.homeTeam.name}</h3>
-            </div>
-            
-            <div class="text-center w-2/12">
-              <div class="text-2xl font-bold px-2 py-1 ${scoreColor} rounded-lg">${homeScore} - ${awayScore}</div>
-            </div>
-            
-            <div class="text-center w-5/12">
-              <img src="${match.awayTeam.logo}" alt="${match.awayTeam.name} Logo" class="team-logo mx-auto mb-2">
-              <h3 class="font-semibold text-gray-800 text-sm">${match.awayTeam.name}</h3>
-            </div>
-          </div>
-
-          <div class="border-t border-gray-100 mt-4 pt-3 flex justify-between items-center">
-             <span class="text-xs font-medium text-gray-500">${formatMatchTime(match.date)}</span>
-             <button class="text-xs font-bold text-primary hover:underline">${actionText}</button>
-          </div>
-        </div>
-      `;
-      return matchCard;
-    }
-    
-    // ✅ FIXED: Main function now takes a filter to determine which API to call
-    async function fetchMatches(filter = 'all') {
-      matchesGrid.innerHTML = '';
-      matchesGrid.appendChild(loadingSpinner);
-      loadingSpinner.style.display = 'block';
-
-      // Update the page title based on the filter
-      pageTitle.textContent = `${filter.charAt(0).toUpperCase() + filter.slice(1)} Matches`;
-
-      let apiUrl = '/api/matches';
-      if (filter !== 'all') {
-        apiUrl = `/api/matches/${filter}`;
-      }
-      
       try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        const matches = await response.json();
-        
-        loadingSpinner.style.display = 'none'; // Hide spinner
-        matchesGrid.innerHTML = ''; // Clear grid
-        
-        if (matches.length > 0) {
-          matches.forEach(match => {
-            const matchCard = createMatchCard(match);
-            matchesGrid.appendChild(matchCard);
-          });
-        } else {
-          matchesGrid.innerHTML = `<p class="text-center text-gray-500 col-span-full">No ${filter} matches found.</p>`;
-        }
-        
-      } catch (error) {
-        console.error('Error fetching matches:', error);
-        loadingSpinner.style.display = 'none';
-        matchesGrid.innerHTML = `<p class="text-center text-red-500 col-span-full">Failed to load matches. Please try again later.</p>`;
-      }
-    }
+        loadingMessage.textContent = 'Loading user data...';
+        loadingMessage.classList.remove('hidden');
+        errorMessage.classList.add('hidden');
+        userInfoContainer.classList.add('hidden');
 
-    // ✅ ADDED: Event listener for the new status filter buttons
-    statusFiltersContainer.addEventListener('click', (e) => {
-        if (e.target.tagName === 'BUTTON') {
-            // Update active button style
-            statusFiltersContainer.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active', 'bg-primary', 'text-white');
-                btn.classList.add('bg-gray-100', 'text-gray-700');
-            });
-            e.target.classList.add('active', 'bg-primary', 'text-white');
-            e.target.classList.remove('bg-gray-100', 'text-gray-700');
-            
-            // Fetch matches based on the data-filter attribute
-            const filter = e.target.dataset.filter;
-            fetchMatches(filter);
+        const response = await fetch('/api/dashboard', {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to fetch user data');
+
+        const data = await response.json();
+        
+        firstNameInput.value = data.firstName || '';
+        lastNameInput.value = data.lastName || '';
+        emailInput.value = data.email || '';
+        roleInput.value = data.role || '';
+        createdAtInput.value = data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '';
+        verifiedInput.checked = !!data.isVerified;
+
+        loadingMessage.classList.add('hidden');
+        userInfoContainer.classList.remove('hidden');
+
+      } catch (error) {
+        console.error('API call failed:', error);
+        loadingMessage.classList.add('hidden');
+        errorMessage.classList.remove('hidden');
+      }
+    };
+
+    fetchUserData();
+
+    document.querySelectorAll('.profile-tab').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+
+    // ---------------- New Matches Script ----------------
+    const matchesContainer = document.getElementById('matches-container');
+
+    const fetchMatches = async () => {
+      try {
+        const res = await fetch('/api/matches');
+        if (!res.ok) throw new Error('Failed to fetch matches');
+        const matches = await res.json();
+
+        if (!matches.length) {
+          matchesContainer.innerHTML = '<p class="text-gray-500">No matches found.</p>';
+          return;
         }
-    });
-    
-    // Initial fetch of 'all' matches when the page loads
-    document.addEventListener('DOMContentLoaded', () => {
-        fetchMatches('all');
-    });
-  </script>
+
+        matchesContainer.innerHTML = matches.map(m => `
+          <div class="flex items-center justify-between p-4 bg-gray-50 rounded-lg shadow-sm">
+            <div class="flex items-center space-x-3">
+              <img src="${m.leagueLogo}" alt="${m.leagueName}" class="w-6 h-6">
+              <span class="text-sm font-semibold text-gray-700">${m.leagueName}</span>
+            </div>
+            <div class="flex items-center space-x-4">
+              <div class="flex items-center space-x-2">
+                <img src="${m.homeLogo}" alt="${m.homeTeam}" class="w-6 h-6">
+                <span class="text-gray-800 font-medium">${m.homeTeam}</span>
+              </div>
+              <span class="text-gray-700 font-bold">${m.homeScore ?? '-'} : ${m.awayScore ?? '-'}</span>
+              <div class="flex items-center space-x-2">
+                <span class="text-gray-800 font-medium">${m.awayTeam}</span>
+                <img src="${m.awayLogo}" alt="${m.awayTeam}" class="w-6 h-6">
+              </div>
+            </div>
+            <div class="text-xs text-gray-500">${new Date(m.date).toLocaleString()}</div>
+            <span class="px-2 py-1 text-xs rounded-full ${m.status === 'LIVE' ? 'bg-red-100 text-red-600' : 'bg-gray-100 text-gray-600'}">
+              ${m.status}
+            </span>
+          </div>
+        `).join('');
+      } catch (err) {
+        console.error('Error fetching matches:', err);
+        matchesContainer.innerHTML = '<p class="text-red-500">Failed to load matches.</p>';
+      }
+    };
+
+    fetchMatches();
+    setInterval(fetchMatches, 15000); // refresh every 15s
+  });
+</script>
+
 </body>
 </html>
