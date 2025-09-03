@@ -40,10 +40,7 @@ function normalizeMatch(m) {
     date: m.starting_at,
   };
 }
-// =======================
-// Start Cron Job
-// =======================
-require("./utils/cron");
+
 
 // Middleware
 app.use(cors());
