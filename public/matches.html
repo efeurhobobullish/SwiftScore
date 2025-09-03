@@ -3,69 +3,107 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>SwiftScore - Leagues</title>
+  <title>SwiftScore - Matches</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 min-h-screen flex flex-col">
+<body class="bg-gray-100 text-gray-800 font-sans">
+  <div class="container mx-auto py-8 px-4">
+    <h1 class="text-3xl font-bold text-center mb-6">⚽ SwiftScore Matches</h1>
 
-  <!-- Header -->
-  <header class="bg-blue-600 text-white py-4 shadow-md">
-    <div class="container mx-auto px-4 flex justify-between items-center">
-      <h1 class="text-xl font-bold">⚽ SwiftScore - Leagues</h1>
-      <a href="/dashboard" class="text-sm hover:underline">Dashboard</a>
+    <div id="matches-container" class="space-y-10">
+      <section>
+        <h2 class="text-2xl font-semibold mb-4 text-green-600">🔴 Live Matches</h2>
+        <div id="live-matches" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold mb-4 text-blue-600">📅 Upcoming Matches</h2>
+        <div id="upcoming-matches" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
+
+      <section>
+        <h2 class="text-2xl font-semibold mb-4 text-gray-700">✅ Finished Matches</h2>
+        <div id="finished-matches" class="grid gap-4 md:grid-cols-2 lg:grid-cols-3"></div>
+      </section>
     </div>
-  </header>
-
-  <!-- Main Content -->
-  <main class="container mx-auto px-4 py-6 flex-1">
-    <h2 class="text-lg font-semibold mb-4">Available Leagues</h2>
-    
-    <!-- Loader -->
-    <div id="loader" class="text-center text-gray-600">Loading leagues...</div>
-
-    <!-- Grid -->
-    <div id="leaguesGrid" class="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4"></div>
-  </main>
-
-  <!-- Footer -->
-  <footer class="bg-white text-gray-500 text-sm py-4 border-t text-center">
-    &copy; 2025 SwiftScore. All rights reserved.
-  </footer>
+  </div>
 
   <script>
-    async function fetchLeagues() {
-      const loader = document.getElementById("loader");
-      const grid = document.getElementById("leaguesGrid");
-      try {
-        const res = await fetch("/api/leagues"); // your backend route
-        if (!res.ok) throw new Error("Failed to fetch leagues");
-        const result = await res.json();
+    const BASE_URL = "https://api.soccersapi.com/v2.2";
+    const USER = "efeurhobobullish";   // ⚠️ Replace with your SoccerAPI username
+    const TOKEN = "8f4e23c2bd542715f1a0175f8e626884&t"; // ⚠️ Replace with your SoccerAPI token
 
-        const leagues = result.data || []; // SoccerSAPI returns { data: [...] }
+    async function fetchAPI(endpoint, params = {}) {
+      const url = new URL(`${BASE_URL}/${endpoint}`);
+      params.user = USER;
+      params.token = TOKEN;
 
-        loader.style.display = "none"; // hide loader
+      Object.keys(params).forEach(key => url.searchParams.append(key, params[key]));
 
-        leagues.forEach(l => {
-          const card = document.createElement("div");
-          card.className = "bg-white rounded-xl shadow p-4 flex flex-col items-center hover:shadow-lg transition";
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Failed: ${res.status}`);
+      const data = await res.json();
+      return data.data || data; // SoccerAPI sometimes wraps in "data"
+    }
 
-          card.innerHTML = `
-            <img src="${l.image_path}" alt="${l.name}" class="h-16 object-contain mb-3">
-            <h3 class="text-md font-semibold text-gray-800 text-center">${l.name}</h3>
-            <div class="flex items-center gap-2 mt-2">
-              <img src="${l.country.image_path}" alt="${l.country.name}" class="h-5">
-              <span class="text-sm text-gray-600">${l.country.name}</span>
+    function renderMatches(containerId, matches, type) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+
+      if (!matches || matches.length === 0) {
+        container.innerHTML = `<p class="text-gray-500">No ${type} matches found.</p>`;
+        return;
+      }
+
+      matches.forEach(m => {
+        const card = document.createElement("div");
+        card.className = "bg-white shadow-md rounded-xl p-4 flex flex-col items-center text-center";
+
+        card.innerHTML = `
+          <p class="text-sm text-gray-500 mb-2">${m.league?.name || "Unknown League"}</p>
+          <div class="flex items-center justify-center space-x-4">
+            <div class="flex flex-col items-center">
+              <img src="${m.home?.logo || '/images/logo.png'}" class="w-10 h-10 mb-1" />
+              <span class="font-semibold">${m.home?.name || "Home"}</span>
             </div>
-          `;
-          grid.appendChild(card);
-        });
+            <span class="font-bold text-lg">vs</span>
+            <div class="flex flex-col items-center">
+              <img src="${m.away?.logo || '/images/logo.png'}" class="w-10 h-10 mb-1" />
+              <span class="font-semibold">${m.away?.name || "Away"}</span>
+            </div>
+          </div>
+          <p class="mt-3 text-gray-600 text-sm">${new Date(m.date || m.match_start).toLocaleString()}</p>
+          ${
+            m.status === "finished" || m.status === "Finished"
+              ? `<p class="mt-2 font-bold text-red-600">Final: ${m.home_score} - ${m.away_score}</p>`
+              : m.status === "live" || m.status === "Live"
+              ? `<p class="mt-2 font-bold text-green-600">Live: ${m.home_score} - ${m.away_score}</p>`
+              : `<p class="mt-2 text-gray-500">${m.status || "Scheduled"}</p>`
+          }
+        `;
+
+        container.appendChild(card);
+      });
+    }
+
+    async function loadMatches() {
+      try {
+        const [live, upcoming, finished] = await Promise.all([
+          fetchAPI("livescores/"),
+          fetchAPI("fixtures/", { t: "upcoming" }),
+          fetchAPI("fixtures/", { t: "finished" }),
+        ]);
+
+        renderMatches("live-matches", live, "Live");
+        renderMatches("upcoming-matches", upcoming, "Upcoming");
+        renderMatches("finished-matches", finished, "Finished");
       } catch (err) {
-        loader.textContent = "❌ Error loading leagues.";
-        console.error("Error:", err);
+        console.error("Error loading matches:", err);
       }
     }
 
-    fetchLeagues();
+    loadMatches();
+    setInterval(loadMatches, 30000); // refresh every 30s
   </script>
 </body>
 </html>
