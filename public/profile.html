@@ -25,12 +25,10 @@
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
     .profile-tab {
       transition: all 0.3s ease;
     }
-    
     .profile-tab.active {
       border-bottom: 3px solid #2563EA;
       color: #2563EA;
@@ -42,7 +40,6 @@
   <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
     <div class="container mx-auto flex items-center justify-between">
       <div class="flex items-center">
-        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
         <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
       </div>
 
@@ -50,38 +47,20 @@
         <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
         <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
         <a href="live-scores.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Live Scores</a>
-        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
       </nav>
-
-      <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-      </div>
     </div>
   </header>
 
   <main class="container mx-auto p-6 mt-8">
     <div class="mb-8">
       <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Your Profile</h1>
-      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Manage your account settings and preferences.</p>
+      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">View your account details and information.</p>
     </div>
     
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <!-- Left Column -->
       <div class="lg:col-span-1">
         <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp">
-          <div class="p-6 border-b border-gray-100">
-            <div class="flex flex-col items-center">
-              <div class="rounded-full w-24 h-24 mb-4 bg-gray-200 flex items-center justify-center text-4xl text-gray-500 font-bold">
-                  JS
-              </div>
-              <h2 class="text-xl font-bold text-gray-800">John Smith</h2>
-              <p class="text-gray-600">Pro Member</p>
-            </div>
-          </div>
-          
           <div class="p-4">
             <div class="flex flex-col space-y-2">
               <a href="#" class="profile-tab active py-2 px-4 text-gray-700 font-medium flex items-center">
@@ -97,134 +76,62 @@
                 </svg>
                 Preferences
               </a>
-              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
-                </svg>
-                Billing
-              </a>
-              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-                Security
-              </a>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-2s">
-          <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800">Account Stats</h2>
-          </div>
-          <div class="p-6">
-            <div class="flex items-center justify-center mb-4">
-              <div class="w-32 h-32 rounded-full border-8 border-blue-100 flex items-center justify-center">
-                <div class="text-center">
-                  <span class="text-2xl font-bold text-gray-800">87%</span>
-                  <p class="text-xs text-gray-500">Accuracy</p>
-                </div>
-              </div>
-            </div>
-            
-            <div class="space-y-3 mt-6">
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-600">Total Predictions</span>
-                <span class="text-sm font-medium text-gray-800">60</span>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-600">Correct Predictions</span>
-                <span class="text-sm font-medium text-gray-800">42</span>
-              </div>
             </div>
           </div>
         </div>
       </div>
       
+      <!-- Right Column -->
       <div class="lg:col-span-2">
         <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-1s">
-          <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800">Personal Information</h2>
-            <p class="text-sm text-gray-600">Update your personal details here.</p>
+          <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
+            <div>
+              <h2 class="text-lg font-semibold text-gray-800">Account Information</h2>
+              <p class="text-sm text-gray-600">This data is fetched from your backend API.</p>
+            </div>
           </div>
           
           <div class="p-6">
-            <form class="space-y-6">
+            <div id="loading-message" class="text-center text-gray-500 py-8">
+              Checking for a login token...
+            </div>
+            <div id="error-message" class="hidden text-center text-red-500 py-8">
+              Error fetching data. Please log in or try again.
+            </div>
+            
+            <div id="user-info-container" class="hidden space-y-6">
               <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1" for="first-name">First Name</label>
-                  <input id="first-name" type="text" value="John" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  <input id="first-name" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none">
                 </div>
-                
                 <div>
                   <label class="block text-sm font-medium text-gray-700 mb-1" for="last-name">Last Name</label>
-                  <input id="last-name" type="text" value="Smith" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                  <input id="last-name" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none">
                 </div>
               </div>
               
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email Address</label>
-                <input id="email" type="email" value="john.smith@example.com" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+                <input id="email" type="email" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none">
               </div>
-              
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="username">Username</label>
-                <input id="username" type="text" value="johns" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-              </div>
-              
-              <div class="pt-4">
-                <button type="submit" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-secondary transition-colors duration-200">Save Changes</button>
-                <button type="button" class="ml-4 px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-colors duration-200">Cancel</button>
-              </div>
-            </form>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-2s">
-          <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800">Notification Preferences</h2>
-            <p class="text-sm text-gray-600">Manage how you receive notifications.</p>
-          </div>
-          
-          <div class="p-6">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <h3 class="text-sm font-medium text-gray-800">Email Notifications</h3>
-                  <p class="text-xs text-gray-600">Receive emails about your predictions and account activity</p>
+                  <label class="block text-sm font-medium text-gray-700 mb-1" for="role">Role</label>
+                  <input id="role" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none">
                 </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" class="sr-only peer" checked>
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              
-              <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-sm font-medium text-gray-800">Push Notifications</h3>
-                  <p class="text-xs text-gray-600">Get alerts for match start times and results</p>
+                  <label class="block text-sm font-medium text-gray-700 mb-1" for="created-at">Created At</label>
+                  <input id="created-at" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none">
                 </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" class="sr-only peer" checked>
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
               </div>
-              
-              <div class="flex items-center justify-between">
-                <div>
-                  <h3 class="text-sm font-medium text-gray-800">Prediction Reminders</h3>
-                  <p class="text-xs text-gray-600">Get reminded to make predictions for upcoming matches</p>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" class="sr-only peer" checked>
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
+
+              <div class="flex items-center space-x-2">
+                <input id="is-verified" type="checkbox" disabled class="rounded-sm text-primary focus:ring-primary h-4 w-4">
+                <label for="is-verified" class="text-sm font-medium text-gray-700">Verified Account</label>
               </div>
-            </div>
-            
-            <div class="pt-6">
-              <button type="button" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-secondary transition-colors duration-200">Save Preferences</button>
+
             </div>
           </div>
         </div>
@@ -233,12 +140,67 @@
   </main>
   
   <script>
-    // Simple tab switching functionality
-    document.querySelectorAll('.profile-tab').forEach(tab => {
-      tab.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-        this.classList.add('active');
+    document.addEventListener('DOMContentLoaded', () => {
+      const loadingMessage = document.getElementById('loading-message');
+      const errorMessage = document.getElementById('error-message');
+      const userInfoContainer = document.getElementById('user-info-container');
+      
+      const firstNameInput = document.getElementById('first-name');
+      const lastNameInput = document.getElementById('last-name');
+      const emailInput = document.getElementById('email');
+      const roleInput = document.getElementById('role');
+      const createdAtInput = document.getElementById('created-at');
+      const verifiedInput = document.getElementById('is-verified');
+
+      const fetchUserData = async () => {
+        const token = localStorage.getItem('token');
+        if (!token) {
+          window.location.href = '/auth/login';
+          return;
+        }
+        try {
+          loadingMessage.textContent = 'Loading user data...';
+          loadingMessage.classList.remove('hidden');
+          errorMessage.classList.add('hidden');
+          userInfoContainer.classList.add('hidden');
+
+          const response = await fetch('/api/dashboard', {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'application/json'
+            }
+          });
+
+          if (!response.ok) throw new Error('Failed to fetch user data');
+
+          const data = await response.json();
+          
+          firstNameInput.value = data.firstName || '';
+          lastNameInput.value = data.lastName || '';
+          emailInput.value = data.email || '';
+          roleInput.value = data.role || '';
+          createdAtInput.value = data.createdAt ? new Date(data.createdAt).toLocaleDateString() : '';
+          verifiedInput.checked = !!data.isVerified;
+
+          loadingMessage.classList.add('hidden');
+          userInfoContainer.classList.remove('hidden');
+
+        } catch (error) {
+          console.error('API call failed:', error);
+          loadingMessage.classList.add('hidden');
+          errorMessage.classList.remove('hidden');
+        }
+      };
+      
+      fetchUserData();
+
+      document.querySelectorAll('.profile-tab').forEach(tab => {
+        tab.addEventListener('click', function(e) {
+          e.preventDefault();
+          document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+          this.classList.add('active');
+        });
       });
     });
   </script>
