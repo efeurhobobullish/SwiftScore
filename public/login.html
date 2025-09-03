@@ -26,110 +26,124 @@
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
-    body {
-      background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    
-    .login-card {
-      background: white;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
-      overflow: hidden;
-      width: 100%;
-      max-width: 400px;
-    }
-    
+    /* Login Form Styles */
     .form-input {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid #d1d5db;
+      border-radius: 0.5rem;
+      font-size: 1rem;
       transition: all 0.3s ease;
     }
     
     .form-input:focus {
+      outline: none;
+      border-color: #2563EA;
       box-shadow: 0 0 0 3px rgba(37, 99, 234, 0.1);
     }
     
-    .login-btn {
-      transition: all 0.3s ease;
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: #374151;
     }
     
-    .login-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(37, 99, 234, 0.2);
+    .form-group {
+      margin-bottom: 1.25rem;
     }
     
-    .login-btn:active {
-      transform: translateY(0);
+    .password-toggle {
+      position: absolute;
+      right: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      color: #6b7280;
+    }
+    
+    .forgot-password {
+      color: #2563EA;
+      font-size: 0.875rem;
+      text-decoration: none;
+    }
+    
+    .forgot-password:hover {
+      text-decoration: underline;
     }
   </style>
 </head>
-<body class="font-sans">
-  <div class="login-card">
-    <!-- Header with logo -->
-    <div class="bg-primary p-6 text-center">
-      <div class="flex items-center justify-center mb-4">
-        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-10 mr-2">
-        <h1 class="text-2xl font-bold text-white">SwiftScore</h1>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-30">
+    <div class="flex items-center justify-between max-w-6xl mx-auto">
+      <div class="flex items-center">
+        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+        <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
       </div>
-      <p class="text-blue-100">Sign in to access AI-powered sports predictions</p>
+      
+      <div class="flex items-center space-x-4">
+        <a href="/auth/signup" class="text-sm font-medium text-gray-600 hover:text-primary transition-colors">
+          Sign Up
+        </a>
+      </div>
     </div>
-    
-    <!-- Login form -->
-    <div class="px-8 py-6">
-      <form id="loginForm" class="space-y-5">
-        <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
-          <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i class="far fa-envelope text-gray-400"></i>
-            </div>
-            <input 
-              type="email" 
-              id="email" 
-              name="email"
-              class="form-input py-3 px-4 block w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
-              placeholder="your@email.com"
-              required
-            >
-          </div>
+  </header>
+
+  <main class="flex-grow flex flex-col justify-center items-center px-6 pb-12 z-10 bg-gray-50 py-8">
+    <div class="w-full max-w-md bg-white rounded-2xl shadow-sm p-6">
+      <div class="text-center mb-6">
+        <h2 class="text-2xl font-semibold text-gray-900">Welcome back</h2>
+        <p class="text-sm text-gray-600 mt-1">Sign in to access your AI-powered sports predictions</p>
+      </div>
+
+      <form id="loginForm" class="space-y-4">
+        <div class="form-group">
+          <label for="email" class="form-label">Email Address</label>
+          <input 
+            type="email" 
+            id="email" 
+            name="email" 
+            class="form-input" 
+            placeholder="name@gmail.com" 
+            required
+          >
         </div>
         
-        <div>
-          <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+        <div class="form-group">
+          <label for="password" class="form-label">Password</label>
           <div class="relative">
-            <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <i class="fas fa-lock text-gray-400"></i>
-            </div>
             <input 
               type="password" 
               id="password" 
-              name="password"
-              class="form-input py-3 px-4 block w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent" 
-              placeholder="••••••••"
+              name="password" 
+              class="form-input pr-10" 
+              placeholder="••••••••" 
               required
             >
+            <span class="password-toggle" id="passwordToggle">
+              <i class="far fa-eye"></i>
+            </span>
+          </div>
+          <div class="mt-2 text-right">
+            <a href="/auth/forgot-password" class="forgot-password">Forgot password?</a>
           </div>
         </div>
         
-        <div class="flex items-center justify-between">
-          <div class="flex items-center">
-            <input 
-              type="checkbox" 
-              id="remember"
-              name="remember"
-              class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
-            >
-            <label for="remember" class="ml-2 block text-sm text-gray-700">Remember me</label>
-          </div>
-          
-          <a href="/auth/forgot-password" class="text-sm text-primary hover:text-secondary">Forgot password?</a>
+        <div class="flex items-center mb-4">
+          <input 
+            type="checkbox" 
+            id="remember" 
+            name="remember" 
+            class="h-4 w-4 text-primary focus:ring-primary border-gray-300 rounded"
+          >
+          <label for="remember" class="ml-2 block text-sm text-gray-700">
+            Remember me
+          </label>
         </div>
         
         <button 
           type="submit" 
-          class="login-btn w-full py-3 px-4 rounded-md bg-primary text-white font-semibold focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
+          class="w-full bg-primary text-white font-semibold rounded-full py-3 px-6 text-center transition-all hover:bg-secondary active:bg-blue-900 shadow login-btn"
         >
           Sign In
         </button>
@@ -137,85 +151,90 @@
       
       <div class="mt-6 text-center">
         <p class="text-sm text-gray-600">
-          Don't have an account? 
-          <a href="/auth/signup" class="font-medium text-primary hover:text-secondary">Sign up now</a>
+          Don't have an account?
+          <a href="/auth/signup" class="text-primary font-medium hover:underline">Sign up</a>
         </p>
       </div>
     </div>
-    
-    <!-- Footer -->
-    <div class="bg-gray-50 px-8 py-4 border-t border-gray-200">
-      <p class="text-xs text-center text-gray-500">
-        By signing in, you agree to our 
-        <a href="/terms" class="text-primary hover:text-secondary">Terms of Service</a> and 
-        <a href="/privacy" class="text-primary hover:text-secondary">Privacy Policy</a>
-      </p>
-    </div>
-  </div>
+  </main>
 
-<script>
-  document.getElementById('loginForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
+  <script>
+    // Password visibility toggle
+    const passwordToggle = document.getElementById('passwordToggle');
+    const passwordInput = document.getElementById('password');
 
-    const email = document.getElementById('email').value.trim();
-    const password = document.getElementById('password').value.trim();
-    const remember = document.getElementById('remember').checked;
-    const loginBtn = document.querySelector('.login-btn');
+    passwordToggle.addEventListener('click', () => {
+        const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+        passwordInput.setAttribute('type', type);
+        passwordToggle.querySelector('i').classList.toggle('fa-eye');
+        passwordToggle.querySelector('i').classList.toggle('fa-eye-slash');
+    });
 
-    // Basic validation
-    if (!email || !password) {
-      alert('Please fill in all fields');
-      return;
-    }
+    // Form submission logic
+    document.getElementById('loginForm').addEventListener('submit', async function(e) {
+      e.preventDefault();
 
-    // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      alert('Please enter a valid email address');
-      return;
-    }
+      const email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value.trim();
+      const remember = document.getElementById('remember').checked;
+      const loginBtn = document.querySelector('.login-btn');
 
-    try {
-      // Show loading
-      loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
-      loginBtn.disabled = true;
-
-      // Call backend API
-      const res = await fetch('/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ email, password })
-      });
-
-      const data = await res.json();
-
-      if (!res.ok) {
-        alert(data.message || 'Login failed');
-        loginBtn.innerHTML = 'Sign In';
-        loginBtn.disabled = false;
+      // Basic validation
+      if (!email || !password) {
+        alert('Please fill in all fields');
         return;
       }
 
-      // ✅ Store JWT (and maybe user info)
-      if (remember) {
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('user', JSON.stringify(data.user));
-      } else {
-        sessionStorage.setItem('token', data.token);
-        sessionStorage.setItem('user', JSON.stringify(data.user));
+      // Email validation
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(email)) {
+        alert('Please enter a valid email address');
+        return;
       }
 
-      // Redirect
-      window.location.href = '/dashboard';
-    } catch (error) {
-      console.error('Login error:', error);
-      alert('Something went wrong. Please try again.');
-      loginBtn.innerHTML = 'Sign In';
-      loginBtn.disabled = false;
-    }
-  });
-</script>
+      try {
+        // Show loading
+        loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Signing in...';
+        loginBtn.disabled = true;
+
+        // Call backend API
+        const res = await fetch('/api/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ email, password })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+          alert(data.message || 'Login failed');
+          loginBtn.innerHTML = 'Sign In';
+          loginBtn.disabled = false;
+          return;
+        }
+
+        // ✅ Store JWT (and maybe user info)
+        if (remember) {
+          localStorage.setItem('token', data.token);
+          localStorage.setItem('user', JSON.stringify(data.user));
+        } else {
+          sessionStorage.setItem('token', data.token);
+          sessionStorage.setItem('user', JSON.stringify(data.user));
+        }
+
+        // Redirect
+        alert('Login successful! Redirecting to dashboard...');
+        setTimeout(() => (window.location.href = '/dashboard'), 1200);
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        alert('Something went wrong. Please try again.');
+        loginBtn.innerHTML = 'Sign In';
+        loginBtn.disabled = false;
+      }
+    });
+  </script>
 </body>
 </html>
