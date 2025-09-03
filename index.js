@@ -20,6 +20,25 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.SPORTMONKS_API_KEY;
 
+
+// 🔧 Normalizer: convert SportMonks fixture into clean object
+function normalizeMatch(m) {
+  return {
+    matchId: m.id,
+    leagueId: m.league?.id,
+    leagueName: m.league?.name,
+    leagueLogo: m.league?.image_path,
+    leagueCountry: m.league?.country?.name,
+    homeTeam: m.participants?.[0]?.name,
+    homeLogo: m.participants?.[0]?.image_path,
+    awayTeam: m.participants?.[1]?.name,
+    awayLogo: m.participants?.[1]?.image_path,
+    homeScore: m.scores?.[0]?.score?.goals ?? null,
+    awayScore: m.scores?.[1]?.score?.goals ?? null,
+    status: m.state?.name || "NS",
+    date: m.starting_at,
+  };
+}
 // =======================
 // Start Cron Job
 // =======================
@@ -153,73 +172,74 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // Matches Routes
 // =======================
 
-
-// 🟢 Get live matches
+// 🟢 Live Matches
 app.get("/api/matches/live", async (req, res) => {
   try {
     const response = await fetch(
       `https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`
     );
     const data = await response.json();
-    res.json(data.data || []);
+    const matches = (data.data || []).map(normalizeMatch);
+    res.json(matches);
   } catch (err) {
     console.error("❌ Error fetching live matches:", err.message);
     res.status(500).json({ error: "Failed to fetch live matches" });
   }
 });
 
-// 🟡 Get upcoming matches
+// 🟡 Upcoming Matches (next 7 days as example)
 app.get("/api/matches/upcoming", async (req, res) => {
   try {
     const response = await fetch(
-      `https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-10?api_token=${API_KEY}`
+      `https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-09?api_token=${API_KEY}`
     );
     const data = await response.json();
-    res.json(data.data || []);
+    const matches = (data.data || []).map(normalizeMatch);
+    res.json(matches);
   } catch (err) {
     console.error("❌ Error fetching upcoming matches:", err.message);
     res.status(500).json({ error: "Failed to fetch upcoming matches" });
   }
 });
 
-// 🔴 Get finished matches
+// 🔴 Finished Matches
 app.get("/api/matches/finished", async (req, res) => {
   try {
     const response = await fetch(
       `https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`
     );
     const data = await response.json();
-    res.json(data.data || []);
+    const matches = (data.data || []).map(normalizeMatch);
+    res.json(matches);
   } catch (err) {
     console.error("❌ Error fetching finished matches:", err.message);
     res.status(500).json({ error: "Failed to fetch finished matches" });
   }
 });
 
-// 🟣 Get all matches (live + upcoming + finished merged)
+// 🟣 All Matches (grouped)
 app.get("/api/matches", async (req, res) => {
   try {
     const [liveRes, upcomingRes, finishedRes] = await Promise.all([
       fetch(`https://api.sportmonks.com/v3/football/fixtures/live?api_token=${API_KEY}`),
-      fetch(`https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-10?api_token=${API_KEY}`),
+      fetch(`https://api.sportmonks.com/v3/football/fixtures/between/2025-09-02/2025-09-09?api_token=${API_KEY}`),
       fetch(`https://api.sportmonks.com/v3/football/fixtures/ended?api_token=${API_KEY}`),
     ]);
 
-    const live = await liveRes.json();
-    const upcoming = await upcomingRes.json();
-    const finished = await finishedRes.json();
+    const liveData = await liveRes.json();
+    const upcomingData = await upcomingRes.json();
+    const finishedData = await finishedRes.json();
 
     res.json({
-      live: live.data || [],
-      upcoming: upcoming.data || [],
-      finished: finished.data || [],
+      live: (liveData.data || []).map(normalizeMatch),
+      upcoming: (upcomingData.data || []).map(normalizeMatch),
+      finished: (finishedData.data || []).map(normalizeMatch),
     });
   } catch (err) {
     console.error("❌ Error fetching all matches:", err.message);
     res.status(500).json({ error: "Failed to fetch matches" });
   }
 });
-
 // =========================
 // Start Server
 // =========================
