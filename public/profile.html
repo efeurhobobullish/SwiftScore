@@ -269,70 +269,64 @@
           </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 animate__animated animate__fadeInUp animate__delay-2s card-hover">
-            <div class="flex items-center mb-4">
-              <div class="p-2 rounded-md bg-primary bg-opacity-10 text-primary mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h3 class="font-semibold text-gray-800">Account Security</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-4">Secure your account with two-factor authentication for added protection.</p>
-            <button class="text-sm text-primary hover:text-secondary transition-colors duration-200 font-medium flex items-center">
-              Enable 2FA
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+   <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-3s">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-800">Connected Accounts</h2>
+            <p class="text-sm text-gray-600">Manage your social media connections.</p>
           </div>
           
-          <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 animate__animated animate__fadeInUp animate__delay-2s card-hover">
-            <div class="flex items-center mb-4">
-              <div class="p-2 rounded-md bg-warning bg-opacity-10 text-warning mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          <div class="p-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">Facebook</h3>
+                    <p class="text-xs text-gray-600">Connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-red-100 text-red-600 text-sm font-medium rounded-md hover:bg-red-200 transition-colors duration-200">Disconnect</button>
               </div>
-              <h3 class="font-semibold text-gray-800">Prediction History</h3>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z"/>
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">Twitter</h3>
+                    <p class="text-xs text-gray-600">Not connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">GitHub</h3>
+                    <p class="text-xs text-gray-600">Not connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
+              </div>
             </div>
-            <p class="text-sm text-gray-600 mb-4">Review your past predictions and track your performance over time.</p>
-            <button class="text-sm text-primary hover:text-secondary transition-colors duration-200 font-medium flex items-center">
-              View History
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
     </div>
   </main>
-  
-  <footer class="bg-slate-900 text-white py-8 mt-12">
-    <div class="container mx-auto px-6">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="flex items-center mb-4 md:mb-0">
-          <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-bold">SwiftScore</h2>
-        </div>
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 mt-6 pt-6 text-sm text-gray-400 text-center">
-        <p>© 2023 SwiftScore. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
   
   <script>
     document.addEventListener('DOMContentLoaded', () => {
