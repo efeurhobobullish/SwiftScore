@@ -14,406 +14,390 @@
             primary: '#2563EA',
             secondary: '#1E40AF',
             accent: '#60A5FA',
-            light: '#F3F4F6',
-            dark: '#1F2937',
-            success: '#10B981',
-            warning: '#F59E0B'
+            light: '#F3F4F6'
           },
           fontFamily: {
             sans: ['Poppins', 'sans-serif'],
           },
-          animation: {
-            'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            'float': 'float 6s ease-in-out infinite',
-          },
-          keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0)' },
-              '50%': { transform: 'translateY(-10px)' },
-            }
-          }
         }
       }
     }
   </script>
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
-    .profile-tab {
+    .dashboard-grid {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    
+    .stats-card {
       transition: all 0.3s ease;
-      border-radius: 8px;
-    }
-    .profile-tab.active {
-      background-color: rgba(37, 99, 234, 0.1);
-      color: #2563EA;
-    }
-    .profile-tab:hover:not(.active) {
-      background-color: #F3F4F6;
-    }
-    .card-hover {
-      transition: transform 0.3s ease, box-shadow 0.3s ease;
-    }
-    .card-hover:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
-    }
-    .gradient-bg {
-      background: linear-gradient(120deg, #2563EA 0%, #1E40AF 100%);
-    }
-    .stat-card {
-      position: relative;
+      border-radius: 12px;
       overflow: hidden;
     }
-    .stat-card::before {
-      content: '';
-      position: absolute;
-      top: -50%;
-      right: -50%;
-      width: 100%;
-      height: 100%;
-      background: rgba(255, 255, 255, 0.1);
-      transform: rotate(15deg);
-      z-index: 1;
+    
+    .stats-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
     }
-    .soccer-field-pattern {
-      background-image: radial-gradient(circle, #1F2937 1px, transparent 1px);
-      background-size: 20px 20px;
-      background-position: 0 0;
-      opacity: 0.05;
+    
+    .prediction-card {
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s ease;
+    }
+    
+    .prediction-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+    }
+    
+    .team-logo {
+      width: 40px;
+      height: 40px;
+      object-fit: contain;
+    }
+    
+    .league-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 0.7rem;
+      font-weight: 600;
+    }
+    
+    .accuracy-badge {
+      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
+      color: white;
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+    
+    .progress-bar {
+      height: 8px;
+      border-radius: 4px;
+      background-color: #E5E7EB;
+      overflow: hidden;
+    }
+    
+    .progress-fill {
+      height: 100%;
+      border-radius: 4px;
+      background: linear-gradient(90deg, #2563EA 0%, #1E40AF 100%);
+    }
+    
+    .profile-tab {
+      transition: all 0.3s ease;
+    }
+    
+    .profile-tab.active {
+      border-bottom: 3px solid #2563EA;
+      color: #2563EA;
     }
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen flex flex-col">
+<body class="bg-gray-50">
 
   <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
     <div class="container mx-auto flex items-center justify-between">
       <div class="flex items-center">
-        <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center mr-2">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-            <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-            <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-          </svg>
-        </div>
+        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
         <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
       </div>
 
       <nav class="hidden sm:flex items-center space-x-8">
-        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
-          </svg>
-          Dashboard
-        </a>
-        <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-          </svg>
-          Predictions
-        </a>
-        <a href="live-scores.html" class="text-gray-600 hover:text-primary transition-colors duration-200 flex items-center">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
-          </svg>
-          Live Scores
-        </a>
+        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
+        <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
+        <a href="live-scores.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Live Scores</a>
+        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
       </nav>
-    <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200 relative">
+
+      <div class="flex items-center space-x-4">
+        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
           </svg>
-          <span class="absolute top-0 right-0 block h-2 w-2 rounded-full bg-red-500"></span>
         </button>
-        
-        <div class="relative">
-          <button class="flex items-center focus:outline-none">
-            <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white font-medium">
-              <span id="user-avatar">U</span>
-            </div>
-          </button>
-        </div>
       </div>
     </div>
   </header>
 
-  <main class="container mx-auto p-6 mt-8 flex-grow">
-    <div class="mb-8 flex items-center justify-between">
-      <div>
-        <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Your Profile</h1>
-        <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Manage your account details and preferences</p>
-      </div>
-      <div class="animate__animated animate__fadeInDown animate__delay-2s">
-        <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-          <span id="profile-avatar">U</span>
-        </div>
-      </div>
+  <main class="container mx-auto p-6 mt-8">
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Your Profile</h1>
+      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Manage your account settings and preferences.</p>
     </div>
     
-    <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <!-- Left Column -->
-      <div class="lg:col-span-1 flex flex-col space-y-6">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp card-hover">
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div class="lg:col-span-1">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp">
+          <div class="p-6 border-b border-gray-100">
+            <div class="flex flex-col items-center">
+              <div class="rounded-full w-24 h-24 mb-4 bg-gray-200 flex items-center justify-center text-4xl text-gray-500 font-bold">
+                  JS
+              </div>
+              <h2 class="text-xl font-bold text-gray-800">John Smith</h2>
+              <p class="text-gray-600">Pro Member</p>
+              <div class="mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
+                Verified Predictor
+              </div>
+            </div>
+          </div>
+          
           <div class="p-4">
             <div class="flex flex-col space-y-2">
-              <a href="#" class="profile-tab active py-3 px-4 text-gray-700 font-medium flex items-center">
+              <a href="#" class="profile-tab active py-2 px-4 text-gray-700 font-medium flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
                 </svg>
                 Personal Information
               </a>
-              <a href="#" class="profile-tab py-3 px-4 text-gray-700 font-medium flex items-center">
+              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                 </svg>
                 Preferences
               </a>
-              <a href="#" class="profile-tab py-3 px-4 text-gray-700 font-medium flex items-center">
+              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+                </svg>
+                Billing & Subscription
+              </a>
+              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 Security
               </a>
+              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                </svg>
+                Prediction History
+              </a>
             </div>
           </div>
         </div>
         
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden p-4 animate__animated animate__fadeInUp animate__delay-1s card-hover">
-          <h3 class="font-semibold text-gray-800 mb-3">Your Stats</h3>
-          <div class="space-y-4">
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-600">Predictions Made</span>
-              <span class="font-medium text-primary">42</span>
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-2s">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-800">Account Stats</h2>
+          </div>
+          <div class="p-6">
+            <div class="flex items-center justify-center mb-4">
+              <div class="w-32 h-32 rounded-full border-8 border-blue-100 flex items-center justify-center">
+                <div class="text-center">
+                  <span class="text-2xl font-bold text-gray-800">87%</span>
+                  <p class="text-xs text-gray-500">Accuracy</p>
+                </div>
+              </div>
             </div>
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-600">Accuracy Rate</span>
-              <span class="font-medium text-success">78%</span>
-            </div>
-            <div class="flex items-center justify-between">
-              <span class="text-sm text-gray-600">Member Since</span>
-              <span id="member-since" class="font-medium text-gray-800">Loading...</span>
+            
+            <div class="space-y-3 mt-6">
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-600">Member Since</span>
+                <span class="text-sm font-medium text-gray-800">Jan 2023</span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-600">Total Predictions</span>
+                <span class="text-sm font-medium text-gray-800">60</span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-600">Correct Predictions</span>
+                <span class="text-sm font-medium text-gray-800">42</span>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <span class="text-sm font-medium text-gray-600">Favorite Sport</span>
+                <span class="text-sm font-medium text-gray-800">Football</span>
+              </div>
             </div>
           </div>
         </div>
       </div>
       
-      <!-- Right Column -->
-      <div class="lg:col-span-3">
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-1s card-hover relative">
-          <div class="soccer-field-pattern absolute inset-0 z-0"></div>
-          <div class="relative z-10">
-            <div class="px-6 py-4 border-b border-gray-100 flex justify-between items-center">
-              <div>
-                <h2 class="text-lg font-semibold text-gray-800">Account Information</h2>
-                <p class="text-sm text-gray-600">Your personal details and account information</p>
-              </div>
-              <button class="text-primary hover:text-secondary transition-colors duration-200 flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                </svg>
-                Edit
-              </button>
-            </div>
-            
-            <div class="p-6">
-              <div id="loading-message" class="text-center text-gray-500 py-8">
-                <div class="animate-pulse-slow inline-block mr-2">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
-                  </svg>
-                </div>
-                Checking for a login token...
-              </div>
-              <div id="error-message" class="hidden text-center text-red-500 py-8">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 mx-auto text-red-400 mb-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <p>Error fetching data. Please log in or try again.</p>
-                <button class="mt-4 px-4 py-2 bg-primary text-white rounded-md hover:bg-secondary transition-colors duration-200">
-                  Try Again
-                </button>
-              </div>
-              
-              <div id="user-info-container" class="hidden space-y-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" for="first-name">First Name</label>
-                    <input id="first-name" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none transition-colors duration-200">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" for="last-name">Last Name</label>
-                    <input id="last-name" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none transition-colors duration-200">
-                  </div>
+      <div class="lg:col-span-2">
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-1s">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-800">Personal Information</h2>
+            <p class="text-sm text-gray-600">Update your personal details here.</p>
+          </div>
+          
+          <div class="p-6">
+            <form class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-1" for="first-name">First Name</label>
+                  <input id="first-name" type="text" value="John" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                 </div>
                 
                 <div>
-                  <label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email Address</label>
-                  <input id="email" type="email" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none transition-colors duration-200">
+                  <label class="block text-sm font-medium text-gray-700 mb-1" for="last-name">Last Name</label>
+                  <input id="last-name" type="text" value="Smith" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
                 </div>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" for="role">Role</label>
-                    <input id="role" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none transition-colors duration-200">
-                  </div>
-                  <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-1" for="created-at">Created At</label>
-                    <input id="created-at" type="text" disabled class="w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-md focus:outline-none transition-colors duration-200">
-                  </div>
-                </div>
-
-                <div class="flex items-center space-x-2 p-3 bg-gray-50 rounded-md">
-                  <input id="is-verified" type="checkbox" disabled class="rounded-sm text-primary focus:ring-primary h-4 w-4">
-                  <label for="is-verified" class="text-sm font-medium text-gray-700">Verified Account</label>
-                  <span class="ml-auto text-xs px-2 py-1 rounded-full bg-success bg-opacity-10 text-success">Verified</span>
-                </div>
-
               </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="email">Email Address</label>
+                <input id="email" type="email" value="john.smith@example.com" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="username">Username</label>
+                <input id="username" type="text" value="johns" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-1" for="bio">Bio</label>
+                <textarea id="bio" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">Sports analyst and prediction enthusiast with a passion for football statistics.</textarea>
+              </div>
+              
+              <div class="pt-4">
+                <button type="submit" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-secondary transition-colors duration-200">Save Changes</button>
+                <button type="button" class="ml-4 px-6 py-2 bg-white border border-gray-300 text-gray-700 font-medium rounded-md hover:bg-gray-50 transition-colors duration-200">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+        
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-2s">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-800">Notification Preferences</h2>
+            <p class="text-sm text-gray-600">Manage how you receive notifications.</p>
+          </div>
+          
+          <div class="p-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-800">Email Notifications</h3>
+                  <p class="text-xs text-gray-600">Receive emails about your predictions and account activity</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-800">Push Notifications</h3>
+                  <p class="text-xs text-gray-600">Get alerts for match start times and results</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-800">SMS Alerts</h3>
+                  <p class="text-xs text-gray-600">Receive text messages for important updates</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer">
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-sm font-medium text-gray-800">Prediction Reminders</h3>
+                  <p class="text-xs text-gray-600">Get reminded to make predictions for upcoming matches</p>
+                </div>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" class="sr-only peer" checked>
+                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
+                </label>
+              </div>
+            </div>
+            
+            <div class="pt-6">
+              <button type="button" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-secondary transition-colors duration-200">Save Preferences</button>
             </div>
           </div>
         </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-          <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 animate__animated animate__fadeInUp animate__delay-2s card-hover">
-            <div class="flex items-center mb-4">
-              <div class="p-2 rounded-md bg-primary bg-opacity-10 text-primary mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-                </svg>
-              </div>
-              <h3 class="font-semibold text-gray-800">Account Security</h3>
-            </div>
-            <p class="text-sm text-gray-600 mb-4">Secure your account with two-factor authentication for added protection.</p>
-            <button class="text-sm text-primary hover:text-secondary transition-colors duration-200 font-medium flex items-center">
-              Enable 2FA
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
+        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-3s">
+          <div class="px-6 py-4 border-b border-gray-100">
+            <h2 class="text-lg font-semibold text-gray-800">Connected Accounts</h2>
+            <p class="text-sm text-gray-600">Manage your social media connections.</p>
           </div>
           
-          <div class="bg-white rounded-lg shadow-sm overflow-hidden p-6 animate__animated animate__fadeInUp animate__delay-2s card-hover">
-            <div class="flex items-center mb-4">
-              <div class="p-2 rounded-md bg-warning bg-opacity-10 text-warning mr-3">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
+          <div class="p-6">
+            <div class="space-y-4">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">Facebook</h3>
+                    <p class="text-xs text-gray-600">Connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-red-100 text-red-600 text-sm font-medium rounded-md hover:bg-red-200 transition-colors duration-200">Disconnect</button>
               </div>
-              <h3 class="font-semibold text-gray-800">Prediction History</h3>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z"/>
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">Twitter</h3>
+                    <p class="text-xs text-gray-600">Not connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
+              </div>
+              
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                  </div>
+                  <div class="ml-4">
+                    <h3 class="text-sm font-medium text-gray-800">GitHub</h3>
+                    <p class="text-xs text-gray-600">Not connected</p>
+                  </div>
+                </div>
+                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
+              </div>
             </div>
-            <p class="text-sm text-gray-600 mb-4">Review your past predictions and track your performance over time.</p>
-            <button class="text-sm text-primary hover:text-secondary transition-colors duration-200 font-medium flex items-center">
-              View History
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-              </svg>
-            </button>
           </div>
         </div>
       </div>
     </div>
   </main>
   
-  <footer class="bg-dark text-white py-8 mt-12">
-    <div class="container mx-auto px-6">
-      <div class="flex flex-col md:flex-row justify-between items-center">
-        <div class="flex items-center mb-4 md:mb-0">
-          <div class="w-8 h-8 rounded-full gradient-bg flex items-center justify-center mr-2">
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-white" viewBox="0 0 20 20" fill="currentColor">
-              <path d="M10 12a2 2 0 100-4 2 2 0 000 4z" />
-              <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd" />
-            </svg>
-          </div>
-          <h2 class="text-xl font-bold">SwiftScore</h2>
-        </div>
-        <div class="flex space-x-6">
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Privacy Policy</a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Terms of Service</a>
-          <a href="#" class="text-gray-400 hover:text-white transition-colors duration-200">Contact</a>
-        </div>
-      </div>
-      <div class="border-t border-gray-800 mt-6 pt-6 text-sm text-gray-400 text-center">
-        <p>© 2023 SwiftScore. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-  
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const loadingMessage = document.getElementById('loading-message');
-      const errorMessage = document.getElementById('error-message');
-      const userInfoContainer = document.getElementById('user-info-container');
-      const userAvatar = document.getElementById('user-avatar');
-      const profileAvatar = document.getElementById('profile-avatar');
-      const memberSince = document.getElementById('member-since');
-      
-      const firstNameInput = document.getElementById('first-name');
-      const lastNameInput = document.getElementById('last-name');
-      const emailInput = document.getElementById('email');
-      const roleInput = document.getElementById('role');
-      const createdAtInput = document.getElementById('created-at');
-      const verifiedInput = document.getElementById('is-verified');
-
-      const fetchUserData = async () => {
-        const token = localStorage.getItem('token');
-        if (!token) {
-          window.location.href = '/auth/login';
-          return;
-        }
-        try {
-          loadingMessage.textContent = 'Loading user data...';
-          loadingMessage.classList.remove('hidden');
-          errorMessage.classList.add('hidden');
-          userInfoContainer.classList.add('hidden');
-
-          const response = await fetch('/api/dashboard', {
-            method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`,
-              'Content-Type': 'application/json'
-            }
-          });
-
-          if (!response.ok) throw new Error('Failed to fetch user data');
-
-          const data = await response.json();
-          
-          firstNameInput.value = data.firstName || '';
-          lastNameInput.value = data.lastName || '';
-          emailInput.value = data.email || '';
-          roleInput.value = data.role || '';
-          
-          const createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
-          createdAtInput.value = createdAt.toLocaleDateString();
-          memberSince.textContent = createdAt.toLocaleDateString();
-          
-          // Set avatar initials
-          const initials = (data.firstName?.charAt(0) || '') + (data.lastName?.charAt(0) || '');
-          if (initials) {
-            userAvatar.textContent = initials;
-            profileAvatar.textContent = initials;
-          }
-          
-          verifiedInput.checked = !!data.isVerified;
-
-          loadingMessage.classList.add('hidden');
-          userInfoContainer.classList.remove('hidden');
-
-        } catch (error) {
-          console.error('API call failed:', error);
-          loadingMessage.classList.add('hidden');
-          errorMessage.classList.remove('hidden');
-        }
-      };
-      
-      fetchUserData();
-
-      document.querySelectorAll('.profile-tab').forEach(tab => {
-        tab.addEventListener('click', function(e) {
-          e.preventDefault();
-          document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
-          this.classList.add('active');
-        });
+    // Simple tab switching functionality
+    document.querySelectorAll('.profile-tab').forEach(tab => {
+      tab.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+        this.classList.add('active');
       });
     });
   </script>
