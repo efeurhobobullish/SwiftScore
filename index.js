@@ -19,8 +19,26 @@ connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const { SOCCERSAPI_USER, SOCCERSAPI_TOKEN } = process.env;
 const BASE_URL = "https://api.soccersapi.com/v2.2";
+const { USER, TOKEN } = process.env;
+
+const authParams = { user: USER, token: TOKEN };
+
+// Normalize data for frontend
+function normalizeMatch(m) {
+  return {
+    matchId: m.match_id,
+    league: m.league?.name || m.league || "Unknown League",
+    homeTeam: m.home?.name || m.home,
+    awayTeam: m.away?.name || m.away,
+    homeLogo: m.home?.logo || m.home_logo || "/images/logo.png",
+    awayLogo: m.away?.logo || m.away_logo || "/images/logo.png",
+    homeScore: m.home_score || 0,
+    awayScore: m.away_score || 0,
+    status: m.status,
+    date: m.date,
+  };
+}
 
 
 
@@ -152,26 +170,25 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // Matches Routes
 // =======================
 // Example: Fetch all leagues
-app.get("/api/leagues", async (req, res) => {
+app.get("/api/matches", async (req, res) => {
   try {
-    const { data } = await axios.get(`${BASE_URL}/leagues/`, {
-      params: {
-        user: SOCCERSAPI_USER,
-        token: SOCCERSAPI_TOKEN,
-        t: "list"
-      }
+    const [liveRes, upcomingRes, finishedRes] = await Promise.all([
+      axios.get(`${BASE_URL}/livescores/`, { params: authParams }),
+      axios.get(`${BASE_URL}/fixtures/`, { params: { ...authParams, t: "upcoming" } }),
+      axios.get(`${BASE_URL}/fixtures/`, { params: { ...authParams, t: "finished" } }),
+    ]);
+
+    const getData = (res) =>
+      res.data?.data || res.data?.matches || res.data || [];
+
+    res.json({
+      live: getData(liveRes).map(normalizeMatch),
+      upcoming: getData(upcomingRes).map(normalizeMatch),
+      finished: getData(finishedRes).map(normalizeMatch),
     });
-    const leagues = (data.data || []).map(l => ({
-      leagueId: l.league_id,
-      leagueName: l.league_name,
-      country: l.country,
-      countryLogo: l.country_logo,
-      leagueLogo: l.league_logo
-    }));
-    res.json(leagues);
   } catch (err) {
-    console.error("Error fetching leagues:", err.response?.data || err.message);
-    res.status(500).json({ error: "Failed to fetch leagues" });
+    console.error("❌ Error fetching matches:", err.response?.data || err.message);
+    res.status(500).json({ error: "Failed to fetch matches" });
   }
 });
 
