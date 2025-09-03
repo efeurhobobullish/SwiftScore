@@ -103,11 +103,15 @@
       border-bottom: 3px solid #2563EA;
       color: #2563EA;
     }
+    
+    .gradient-bg {
+        background-image: linear-gradient(135deg, #2563EA 0%, #1E40AF 100%);
+    }
   </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-sans">
 
-    <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
+  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
     <div class="container mx-auto flex items-center justify-between">
       <div class="flex items-center">
         <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
@@ -132,20 +136,19 @@
   </header>
 
   <main class="container mx-auto p-6 mt-8 flex-grow">
-    <div class="mb-8 flex items-center justify-between">
+    <div class="mb-8 flex flex-col sm:flex-row items-center justify-between">
       <div>
         <h1 class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">Your Profile</h1>
         <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Manage your account details and preferences</p>
       </div>
-      <div class="animate__animated animate__fadeInDown animate__delay-2s">
+      <div class="mt-4 sm:mt-0 animate__animated animate__fadeInDown animate__delay-2s">
         <div class="w-16 h-16 rounded-full gradient-bg flex items-center justify-center text-white text-2xl font-bold shadow-lg">
-          <span id="profile-avatar">U</span>
+          <span id="profile-avatar"></span>
         </div>
       </div>
     </div>
     
     <div class="grid grid-cols-1 lg:grid-cols-4 gap-6">
-      <!-- Left Column -->
       <div class="lg:col-span-1 flex flex-col space-y-6">
         <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp card-hover">
           <div class="p-4">
@@ -192,7 +195,6 @@
         </div>
       </div>
       
-      <!-- Right Column -->
       <div class="lg:col-span-3">
         <div class="bg-white rounded-lg shadow-sm overflow-hidden animate__animated animate__fadeInUp animate__delay-1s card-hover relative">
           <div class="soccer-field-pattern absolute inset-0 z-0"></div>
@@ -212,7 +214,7 @@
             
             <div class="p-6">
               <div id="loading-message" class="text-center text-gray-500 py-8">
-                <div class="animate-pulse-slow inline-block mr-2">
+                <div class="animate-pulse inline-block mr-2">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z" />
                   </svg>
@@ -260,9 +262,8 @@
                 <div class="flex items-center space-x-2 p-3 bg-gray-50 rounded-md">
                   <input id="is-verified" type="checkbox" disabled class="rounded-sm text-primary focus:ring-primary h-4 w-4">
                   <label for="is-verified" class="text-sm font-medium text-gray-700">Verified Account</label>
-                  <span class="ml-auto text-xs px-2 py-1 rounded-full bg-success bg-opacity-10 text-success">Verified</span>
+                  <span id="verified-badge" class="ml-auto text-xs px-2 py-1 rounded-full bg-success bg-opacity-10 text-success hidden">Verified</span>
                 </div>
-
               </div>
             </div>
           </div>
@@ -309,7 +310,7 @@
     </div>
   </main>
   
-  <footer class="bg-dark text-white py-8 mt-12">
+  <footer class="bg-slate-900 text-white py-8 mt-12">
     <div class="container mx-auto px-6">
       <div class="flex flex-col md:flex-row justify-between items-center">
         <div class="flex items-center mb-4 md:mb-0">
@@ -338,9 +339,9 @@
       const loadingMessage = document.getElementById('loading-message');
       const errorMessage = document.getElementById('error-message');
       const userInfoContainer = document.getElementById('user-info-container');
-      const userAvatar = document.getElementById('user-avatar');
       const profileAvatar = document.getElementById('profile-avatar');
       const memberSince = document.getElementById('member-since');
+      const verifiedBadge = document.getElementById('verified-badge');
       
       const firstNameInput = document.getElementById('first-name');
       const lastNameInput = document.getElementById('last-name');
@@ -373,6 +374,7 @@
 
           const data = await response.json();
           
+          // Populate form fields
           firstNameInput.value = data.firstName || '';
           lastNameInput.value = data.lastName || '';
           emailInput.value = data.email || '';
@@ -383,13 +385,17 @@
           memberSince.textContent = createdAt.toLocaleDateString();
           
           // Set avatar initials
-          const initials = (data.firstName?.charAt(0) || '') + (data.lastName?.charAt(0) || '');
-          if (initials) {
-            userAvatar.textContent = initials;
-            profileAvatar.textContent = initials;
-          }
+          const firstInitial = data.firstName?.charAt(0) || '';
+          const lastInitial = data.lastName?.charAt(0) || '';
+          profileAvatar.textContent = (firstInitial + lastInitial).toUpperCase();
           
+          // Update verified status and badge visibility
           verifiedInput.checked = !!data.isVerified;
+          if (data.isVerified) {
+            verifiedBadge.classList.remove('hidden');
+          } else {
+            verifiedBadge.classList.add('hidden');
+          }
 
           loadingMessage.classList.add('hidden');
           userInfoContainer.classList.remove('hidden');
