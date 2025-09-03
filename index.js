@@ -152,9 +152,40 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // Matches Routes
 // =======================
 
-app.get("/api/matches", authMiddleware, async (req, res) => {
+// ✅ Get all matches
+app.get("/api/matches", async (req, res) => {
   try {
     const matches = await Match.find().sort({ date: 1 });
+    res.json(matches);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Get live matches only
+app.get("/api/matches/live", async (req, res) => {
+  try {
+    const matches = await Match.find({ status: "LIVE" }).sort({ date: 1 });
+    res.json(matches);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Get upcoming matches
+app.get("/api/matches/upcoming", async (req, res) => {
+  try {
+    const matches = await Match.find({ status: "NS" }).sort({ date: 1 });
+    res.json(matches);
+  } catch (err) {
+    res.status(500).json({ error: "Server error" });
+  }
+});
+
+// ✅ Get finished matches
+app.get("/api/matches/finished", async (req, res) => {
+  try {
+    const matches = await Match.find({ status: "FT" }).sort({ date: -1 });
     res.json(matches);
   } catch (err) {
     res.status(500).json({ error: "Server error" });
