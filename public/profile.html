@@ -27,74 +27,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
   <style>
-    .dashboard-grid {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
-    }
-    
-    .stats-card {
-      transition: all 0.3s ease;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    
-    .stats-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
-    }
-    
-    .prediction-card {
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-      transition: all 0.3s ease;
-    }
-    
-    .prediction-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
-    }
-    
-    .team-logo {
-      width: 40px;
-      height: 40px;
-      object-fit: contain;
-    }
-    
-    .league-badge {
-      position: absolute;
-      top: 12px;
-      left: 12px;
-      background: rgba(255, 255, 255, 0.9);
-      padding: 4px 8px;
-      border-radius: 6px;
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-    
-    .accuracy-badge {
-      background: linear-gradient(135deg, #10B981 0%, #059669 100%);
-      color: white;
-      border-radius: 20px;
-      padding: 4px 12px;
-      font-size: 0.75rem;
-      font-weight: 600;
-    }
-    
-    .progress-bar {
-      height: 8px;
-      border-radius: 4px;
-      background-color: #E5E7EB;
-      overflow: hidden;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      border-radius: 4px;
-      background: linear-gradient(90deg, #2563EA 0%, #1E40AF 100%);
-    }
-    
     .profile-tab {
       transition: all 0.3s ease;
     }
@@ -147,9 +79,6 @@
               </div>
               <h2 class="text-xl font-bold text-gray-800">John Smith</h2>
               <p class="text-gray-600">Pro Member</p>
-              <div class="mt-2 px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-medium rounded-full">
-                Verified Predictor
-              </div>
             </div>
           </div>
           
@@ -172,19 +101,13 @@
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
                 </svg>
-                Billing & Subscription
+                Billing
               </a>
               <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                 </svg>
                 Security
-              </a>
-              <a href="#" class="profile-tab py-2 px-4 text-gray-700 font-medium flex items-center">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-                Prediction History
               </a>
             </div>
           </div>
@@ -206,11 +129,6 @@
             
             <div class="space-y-3 mt-6">
               <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-600">Member Since</span>
-                <span class="text-sm font-medium text-gray-800">Jan 2023</span>
-              </div>
-              
-              <div class="flex items-center justify-between">
                 <span class="text-sm font-medium text-gray-600">Total Predictions</span>
                 <span class="text-sm font-medium text-gray-800">60</span>
               </div>
@@ -218,11 +136,6 @@
               <div class="flex items-center justify-between">
                 <span class="text-sm font-medium text-gray-600">Correct Predictions</span>
                 <span class="text-sm font-medium text-gray-800">42</span>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <span class="text-sm font-medium text-gray-600">Favorite Sport</span>
-                <span class="text-sm font-medium text-gray-800">Football</span>
               </div>
             </div>
           </div>
@@ -258,11 +171,6 @@
               <div>
                 <label class="block text-sm font-medium text-gray-700 mb-1" for="username">Username</label>
                 <input id="username" type="text" value="johns" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">
-              </div>
-              
-              <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1" for="bio">Bio</label>
-                <textarea id="bio" rows="3" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent">Sports analyst and prediction enthusiast with a passion for football statistics.</textarea>
               </div>
               
               <div class="pt-4">
@@ -305,17 +213,6 @@
               
               <div class="flex items-center justify-between">
                 <div>
-                  <h3 class="text-sm font-medium text-gray-800">SMS Alerts</h3>
-                  <p class="text-xs text-gray-600">Receive text messages for important updates</p>
-                </div>
-                <label class="relative inline-flex items-center cursor-pointer">
-                  <input type="checkbox" class="sr-only peer">
-                  <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primary"></div>
-                </label>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <div>
                   <h3 class="text-sm font-medium text-gray-800">Prediction Reminders</h3>
                   <p class="text-xs text-gray-600">Get reminded to make predictions for upcoming matches</p>
                 </div>
@@ -328,62 +225,6 @@
             
             <div class="pt-6">
               <button type="button" class="px-6 py-2 bg-primary text-white font-medium rounded-md hover:bg-secondary transition-colors duration-200">Save Preferences</button>
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-lg shadow-sm overflow-hidden mt-6 animate__animated animate__fadeInUp animate__delay-3s">
-          <div class="px-6 py-4 border-b border-gray-100">
-            <h2 class="text-lg font-semibold text-gray-800">Connected Accounts</h2>
-            <p class="text-sm text-gray-600">Manage your social media connections.</p>
-          </div>
-          
-          <div class="p-6">
-            <div class="space-y-4">
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M22.675 0h-21.35c-.732 0-1.325.593-1.325 1.325v21.351c0 .731.593 1.324 1.325 1.324h11.495v-9.294h-3.128v-3.622h3.128v-2.671c0-3.1 1.893-4.788 4.659-4.788 1.325 0 2.463.099 2.795.143v3.24l-1.918.001c-1.504 0-1.795.715-1.795 1.763v2.313h3.587l-.467 3.622h-3.12v9.293h6.116c.73 0 1.323-.593 1.323-1.325v-21.35c0-.732-.593-1.325-1.325-1.325z" />
-                    </svg>
-                  </div>
-                  <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-800">Facebook</h3>
-                    <p class="text-xs text-gray-600">Connected</p>
-                  </div>
-                </div>
-                <button class="px-4 py-1 bg-red-100 text-red-600 text-sm font-medium rounded-md hover:bg-red-200 transition-colors duration-200">Disconnect</button>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm6.066 9.645c.183 4.04-2.83 8.544-8.164 8.544-1.622 0-3.131-.476-4.402-1.291 1.524.18 3.045-.244 4.252-1.189-1.256-.023-2.317-.854-2.684-1.995.451.086.895.061 1.298-.049-1.381-.278-2.335-1.522-2.304-2.853.388.215.83.344 1.301.359-1.279-.855-1.641-2.544-.889-3.835 1.416 1.738 3.533 2.881 5.92 3.001-.419-1.796.944-3.527 2.799-3.527.825 0 1.572.349 2.096.907.654-.128 1.27-.368 1.824-.697-.215.671-.67 1.233-1.263 1.589.581-.07 1.135-.224 1.649-.453-.384.578-.87 1.084-1.433 1.489z"/>
-                    </svg>
-                  </div>
-                  <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-800">Twitter</h3>
-                    <p class="text-xs text-gray-600">Not connected</p>
-                  </div>
-                </div>
-                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
-              </div>
-              
-              <div class="flex items-center justify-between">
-                <div class="flex items-center">
-                  <div class="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center text-red-600">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                  </div>
-                  <div class="ml-4">
-                    <h3 class="text-sm font-medium text-gray-800">GitHub</h3>
-                    <p class="text-xs text-gray-600">Not connected</p>
-                  </div>
-                </div>
-                <button class="px-4 py-1 bg-gray-100 text-gray-700 text-sm font-medium rounded-md hover:bg-gray-200 transition-colors duration-200">Connect</button>
-              </div>
             </div>
           </div>
         </div>
