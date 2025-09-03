@@ -19,18 +19,30 @@ const fetchMatches = async () => {
     for (let m of data.data) {
       const home = m.participants?.[0];
       const away = m.participants?.[1];
+      const league = m.league;
 
       await Match.findOneAndUpdate(
         { matchId: m.id.toString() },
         {
           matchId: m.id.toString(),
-          league: m.league?.name || "Unknown League",
+
+          // League
+          leagueId: league?.id?.toString() || null,
+          leagueName: league?.name || "Unknown League",
+          leagueLogo: league?.image_path || null,
+          leagueCountry: league?.country?.name || "Unknown Country",
+
+          // Teams
           homeTeam: home?.name || "Home",
           awayTeam: away?.name || "Away",
-          homeLogo: home?.image_path || null,   // ✅ save logo
-          awayLogo: away?.image_path || null,   // ✅ save logo
+          homeLogo: home?.image_path || null,
+          awayLogo: away?.image_path || null,
+
+          // Scores
           homeScore: m.scores?.localteam_score ?? 0,
           awayScore: m.scores?.visitorteam_score ?? 0,
+
+          // Match status & time
           status: m.state?.state || "NS",
           date: m.starting_at,
         },
@@ -45,4 +57,4 @@ const fetchMatches = async () => {
 };
 
 // Run every 5 seconds
-cron.schedule("*/9 * * * * *", fetchMatches);
+cron.schedule("*/5 * * * * *", fetchMatches);
