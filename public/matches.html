@@ -35,14 +35,40 @@
       transform: translateY(-3px);
       box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
     }
-    .team-logo { width: 40px; height: 40px; object-fit: contain; }
-    .status-badge { color: white; border-radius: 20px; padding: 4px 12px; font-size: 0.75rem; font-weight: 600; }
-    .filter-btn { transition: all 0.2s ease; }
-    .filter-btn.active { background-color: #2563EA; color: white; }
+    .team-logo { 
+      width: 40px; 
+      height: 40px; 
+      object-fit: contain; 
+      border-radius: 50%;
+      background: #f3f4f6;
+      padding: 2px;
+    }
+    .status-badge { 
+      color: white; 
+      border-radius: 20px; 
+      padding: 4px 12px; 
+      font-size: 0.75rem; 
+      font-weight: 600; 
+      text-transform: uppercase;
+    }
+    .filter-btn { 
+      transition: all 0.2s ease; 
+      cursor: pointer;
+      border: 1px solid transparent;
+    }
+    .filter-btn.active { 
+      background-color: #2563EA !important; 
+      color: white !important; 
+      border-color: #2563EA;
+    }
+    .filter-btn:hover:not(.active) {
+      background-color: #e5e7eb;
+      border-color: #d1d5db;
+    }
     .loader {
       border: 4px solid #f3f3f3;
       border-radius: 50%;
-      border-top: 4px solid #3498db;
+      border-top: 4px solid #2563EA;
       width: 40px;
       height: 40px;
       animation: spin 2s linear infinite;
@@ -52,10 +78,17 @@
       0% { transform: rotate(0deg); }
       100% { transform: rotate(360deg); }
     }
+    .match-time {
+      background: linear-gradient(135deg, #2563EA, #1E40AF);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 0.875rem;
+    }
   </style>
 </head>
 <body class="bg-gray-50 font-sans">
-
   <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
     <div class="container mx-auto flex items-center justify-between">
       <div class="flex items-center">
@@ -83,7 +116,7 @@
       <h1 id="page-title" class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">All Matches</h1>
       <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Browse and filter through live, upcoming, and finished matches.</p>
     </div>
-    
+
     <div class="bg-white rounded-lg shadow-sm p-4 mb-6 animate__animated animate__fadeInUp animate__delay-2s">
       <div class="flex flex-wrap items-center gap-4">
         <div>
@@ -97,36 +130,79 @@
         </div>
       </div>
     </div>
-    
+
     <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
         <div class="loader"></div>
         <p class="mt-4 text-gray-600">Loading matches...</p>
       </div>
     </div>
-    
+
     <div id="pagination" class="flex justify-center mt-8 hidden"></div>
   </main>
 
   <script>
     document.addEventListener('DOMContentLoaded', () => {
-      const liveTabButton = document.querySelector('[data-filter="live"]');
+      const filterButtons = document.querySelectorAll('.filter-btn');
       const matchesGrid = document.getElementById('matches-grid');
       const loadingSpinner = document.getElementById('loading-spinner');
+      let allMatches = []; // Store all fetched matches
 
       const API_URL = 'https://livescore-api.com/api-client/matches/live.json?&key=11siuSlckhxXe3BX&secret=riFrVzTlJf1eRYnSZQbuIxG2OeZ3hB0J';
 
-      liveTabButton.addEventListener('click', () => {
-        // Clear previous content and show loader
+      // Add click event listeners to all filter buttons
+      filterButtons.forEach(button => {
+        button.addEventListener('click', (e) => {
+          const filter = e.target.getAttribute('data-filter');
+          
+          // Update active button styling
+          filterButtons.forEach(btn => btn.classList.remove('active'));
+          e.target.classList.add('active');
+          
+          // Handle different filters
+          if (filter === 'live') {
+            fetchAndDisplayMatches('live');
+          } else if (filter === 'finished') {
+            fetchAndDisplayMatches('finished');
+          } else if (filter === 'upcoming') {
+            fetchAndDisplayMatches('upcoming');
+          } else {
+            fetchAndDisplayMatches('all');
+          }
+        });
+      });
+
+      // Initial load - show all matches
+      fetchAndDisplayMatches('all');
+
+      function fetchAndDisplayMatches(filterType) {
+        // Show loading spinner
         matchesGrid.innerHTML = '';
         matchesGrid.appendChild(loadingSpinner);
         loadingSpinner.style.display = 'block';
 
-        fetchLiveMatches();
-      });
+        fetchMatches()
+          .then(matches => {
+            loadingSpinner.style.display = 'none';
+            allMatches = matches;
+            
+            let filteredMatches = filterMatches(matches, filterType);
+            
+            if (filteredMatches.length > 0) {
+              displayMatches(filteredMatches);
+            } else {
+              matchesGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No ${filterType === 'all' ? '' : filterType} matches available at the moment.</p>`;
+            }
+          })
+          .catch(error => {
+            console.error('Error fetching matches:', error);
+            loadingSpinner.style.display = 'none';
+            matchesGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load matches. Please try again later.</p>';
+          });
+      }
 
-      function fetchLiveMatches() {
-        fetch(API_URL)
+      function fetchMatches() {
+        return fetch(API_URL)
           .then(response => {
             if (!response.ok) {
               throw new Error('Network response was not ok');
@@ -134,81 +210,100 @@
             return response.json();
           })
           .then(data => {
-            loadingSpinner.style.display = 'none';
-            // Check if the API response contains a "match" array and it's not empty
             if (data.data && data.data.match && data.data.match.length > 0) {
-              // Filter for matches with status "IN PLAY" or "ADDED TIME"
-              const liveMatches = data.data.match.filter(match => 
-                match.status === 'IN PLAY' || match.status === 'ADDED TIME'
-              );
-
-              if (liveMatches.length > 0) {
-                displayMatches(liveMatches);
-              } else {
-                matchesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">No live matches available at the moment.</p>';
-              }
+              return data.data.match;
             } else {
-              matchesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">No live matches available at the moment.</p>';
+              return [];
             }
-          })
-          .catch(error => {
-            console.error('Error fetching live matches:', error);
-            loadingSpinner.style.display = 'none';
-            matchesGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load matches. Please try again later.</p>';
           });
+      }
+
+      function filterMatches(matches, filterType) {
+        switch (filterType) {
+          case 'live':
+            return matches.filter(match => 
+              match.status === 'IN PLAY' || match.status === 'ADDED TIME'
+            );
+          case 'finished':
+            return matches.filter(match => match.status === 'FINISHED');
+          case 'upcoming':
+            return matches.filter(match => match.status === 'NOT STARTED');
+          default:
+            return matches;
+        }
       }
 
       function displayMatches(matches) {
         matchesGrid.innerHTML = '';
-        matches.forEach(match => {
-          const matchCard = createMatchCard(match);
+        matches.forEach((match, index) => {
+          const matchCard = createMatchCard(match, index);
           matchesGrid.appendChild(matchCard);
         });
       }
 
-      function createMatchCard(match) {
+      function createMatchCard(match, index) {
         const card = document.createElement('div');
-        card.className = 'match-card bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg animate__animated animate__fadeInUp';
+        card.className = `match-card bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg animate__animated animate__fadeInUp`;
+        card.style.animationDelay = `${index * 0.1}s`;
         
         const statusColor = getStatusColor(match.status);
-        const homeScore = match.scores.score ? match.scores.score.split('-')[0].trim() : '?';
-        const awayScore = match.scores.score ? match.scores.score.split('-')[1].trim() : '?';
+        const homeScore = match.scores && match.scores.score ? match.scores.score.split(' - ')[0].trim() : '?';
+        const awayScore = match.scores && match.scores.score ? match.scores.score.split(' - ')[1].trim() : '?';
         const homeLogo = match.home && match.home.logo ? match.home.logo : 'https://cdn.live-score-api.com/teams/default.png';
         const awayLogo = match.away && match.away.logo ? match.away.logo : 'https://cdn.live-score-api.com/teams/default.png';
+        
+        // Format time display
+        const timeDisplay = match.status === 'NOT STARTED' ? match.scheduled : 
+                           match.status === 'FINISHED' ? 'FT' : match.time;
 
         card.innerHTML = `
           <div class="flex items-center justify-between mb-4">
             <span class="status-badge" style="background-color: ${statusColor};">
-              ${match.status.toUpperCase()}
+              ${match.status.replace('_', ' ')}
             </span>
-            <div class="text-gray-500 text-sm">
-              <span class="mr-2">${match.competition.name}</span>
-              <i class="fas fa-calendar-alt"></i> ${match.scheduled}
+            <div class="text-gray-500 text-sm flex items-center">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              ${match.scheduled || 'TBD'}
             </div>
           </div>
           
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-4">
-              <img src="${homeLogo}" alt="${match.home.name}" class="team-logo">
-              <span class="font-semibold text-lg text-gray-800">${match.home.name}</span>
-            </div>
-            <div class="text-3xl font-bold text-gray-800">${homeScore}</div>
+          <div class="text-center mb-4">
+            <h3 class="text-sm font-semibold text-gray-600 mb-2">${match.competition ? match.competition.name : 'Unknown Competition'}</h3>
           </div>
           
-          <div class="flex items-center justify-between mb-4">
-            <div class="flex items-center space-x-4">
-              <img src="${awayLogo}" alt="${match.away.name}" class="team-logo">
-              <span class="font-semibold text-lg text-gray-800">${match.away.name}</span>
+          <div class="space-y-4">
+            <!-- Home Team -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3 flex-1">
+                <img src="${homeLogo}" 
+                     alt="${match.home ? match.home.name : 'Home Team'}" 
+                     class="team-logo"
+                     onerror="this.src='https://via.placeholder.com/40x40/f3f4f6/9ca3af?text=?'">
+                <span class="font-semibold text-gray-800 truncate">${match.home ? match.home.name : 'Home Team'}</span>
+              </div>
+              <div class="text-2xl font-bold text-gray-800 min-w-[2rem] text-center">${homeScore}</div>
             </div>
-            <div class="text-3xl font-bold text-gray-800">${awayScore}</div>
+            
+            <!-- Away Team -->
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-3 flex-1">
+                <img src="${awayLogo}" 
+                     alt="${match.away ? match.away.name : 'Away Team'}" 
+                     class="team-logo"
+                     onerror="this.src='https://via.placeholder.com/40x40/f3f4f6/9ca3af?text=?'">
+                <span class="font-semibold text-gray-800 truncate">${match.away ? match.away.name : 'Away Team'}</span>
+              </div>
+              <div class="text-2xl font-bold text-gray-800 min-w-[2rem] text-center">${awayScore}</div>
+            </div>
           </div>
           
-          <div class="text-center mt-4">
-            <p class="text-sm font-medium text-gray-600">
-              <i class="fas fa-clock"></i> ${match.time}
-            </p>
+          <div class="text-center mt-4 pt-4 border-t border-gray-100">
+            <div class="match-time">
+              <i class="fas fa-clock mr-1"></i> ${timeDisplay}
+            </div>
           </div>
         `;
+        
         return card;
       }
 
@@ -219,12 +314,13 @@
             return '#EF4444'; // Red for live
           case 'FINISHED':
             return '#10B981'; // Green
+          case 'NOT STARTED':
+            return '#3B82F6'; // Blue for upcoming
           default:
-            return '#3B82F6'; // Blue for not started/upcoming
+            return '#6B7280'; // Gray for unknown
         }
       }
     });
   </script>
-
 </body>
 </html>
