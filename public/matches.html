@@ -65,9 +65,12 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
     </style>
 </head>
-<body class="bg-gray-50 font-sans">
+<body class="bg-gray-50">
     <!-- Header -->
     <header class="bg-white shadow-sm">
         <div class="container mx-auto px-4 py-4">
@@ -136,8 +139,12 @@
             filterButtons.forEach(button => {
                 button.addEventListener('click', () => {
                     // Update active state
-                    filterButtons.forEach(btn => btn.classList.remove('active', 'bg-primary', 'text-white'));
+                    filterButtons.forEach(btn => {
+                        btn.classList.remove('active', 'bg-primary', 'text-white');
+                        btn.classList.add('bg-gray-100', 'text-gray-700');
+                    });
                     button.classList.add('active', 'bg-primary', 'text-white');
+                    button.classList.remove('bg-gray-100', 'text-gray-700');
                     
                     // Show loading state
                     matchesGrid.innerHTML = '';
