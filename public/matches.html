@@ -1,326 +1,289 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>SwiftScore - Matches</title>
-  <link rel="icon" href="/images/logo.png" type="image/png">
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primary: '#2563EA',
-            secondary: '#1E40AF',
-            accent: '#60A5FA',
-            light: '#F3F4F6'
-          },
-          fontFamily: {
-            sans: ['Poppins', 'sans-serif'],
-          },
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwiftScore - Matches</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#2563EA',
+                        secondary: '#1E40AF',
+                        accent: '#60A5FA',
+                        light: '#F3F4F6'
+                    },
+                    fontFamily: {
+                        sans: ['Poppins', 'sans-serif'],
+                    },
+                }
+            }
         }
-      }
-    }
-  </script>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
-  <style>
-    .stats-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
-    }
-    .match-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
-    }
-    .team-logo { 
-      width: 40px; 
-      height: 40px; 
-      object-fit: contain; 
-      border-radius: 50%;
-      background: #f3f4f6;
-      padding: 2px;
-    }
-    .status-badge { 
-      color: white; 
-      border-radius: 20px; 
-      padding: 4px 12px; 
-      font-size: 0.75rem; 
-      font-weight: 600; 
-      text-transform: uppercase;
-    }
-    .filter-btn { 
-      transition: all 0.2s ease; 
-      cursor: pointer;
-      border: 1px solid transparent;
-    }
-    .filter-btn.active { 
-      background-color: #2563EA !important; 
-      color: white !important; 
-      border-color: #2563EA;
-    }
-    .filter-btn:hover:not(.active) {
-      background-color: #e5e7eb;
-      border-color: #d1d5db;
-    }
-    .loader {
-      border: 4px solid #f3f3f3;
-      border-radius: 50%;
-      border-top: 4px solid #2563EA;
-      width: 40px;
-      height: 40px;
-      animation: spin 2s linear infinite;
-      margin: 0 auto;
-    }
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-    .match-time {
-      background: linear-gradient(135deg, #2563EA, #1E40AF);
-      color: white;
-      padding: 4px 8px;
-      border-radius: 8px;
-      font-weight: 600;
-      font-size: 0.875rem;
-    }
-  </style>
+    </script>
+    <style>
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+        }
+        .match-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(37, 99, 234, 0.15);
+        }
+        .team-logo {
+            width: 40px;
+            height: 40px;
+            object-fit: contain;
+        }
+        .status-badge {
+            color: white;
+            border-radius: 20px;
+            padding: 4px 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .filter-btn {
+            transition: all 0.2s ease;
+        }
+        .filter-btn.active {
+            background-color: #2563EA;
+            color: white;
+        }
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-radius: 50%;
+            border-top: 4px solid #3498db;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
 </head>
 <body class="bg-gray-50 font-sans">
-  <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
-    <div class="container mx-auto flex items-center justify-between">
-      <div class="flex items-center">
-        <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
-        <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
-      </div>
-      <nav class="hidden sm:flex items-center space-x-8">
-        <a href="dashboard.html" class="text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
-        <a href="matches.html" class="text-primary font-bold border-b-2 border-primary pb-1">Matches</a>
-        <a href="predictions.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
-        <a href="analytics.html" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
-      </nav>
-      <div class="flex items-center space-x-4">
-        <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
-          </svg>
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <main class="container mx-auto p-6 mt-8">
-    <div class="mb-8">
-      <h1 id="page-title" class="text-3xl font-bold text-gray-800 animate__animated animate__fadeInDown">All Matches</h1>
-      <p class="text-gray-600 mt-2 animate__animated animate__fadeInDown animate__delay-1s">Browse and filter through live, upcoming, and finished matches.</p>
-    </div>
-
-    <div class="bg-white rounded-lg shadow-sm p-4 mb-6 animate__animated animate__fadeInUp animate__delay-2s">
-      <div class="flex flex-wrap items-center gap-4">
-        <div>
-          <h3 class="text-sm font-medium text-gray-700 mb-1">Status</h3>
-          <div id="status-filters" class="flex space-x-2">
-            <button data-filter="all" class="filter-btn active px-3 py-1 rounded-full text-xs font-medium">All</button>
-            <button data-filter="live" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Live</button>
-            <button data-filter="upcoming" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Upcoming</button>
-            <button data-filter="finished" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Finished</button>
-          </div>
+    <!-- Header -->
+    <header class="bg-white shadow-sm">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
+                        <span class="text-white font-bold">S</span>
+                    </div>
+                    <h1 class="text-xl font-bold text-gray-800">SwiftScore</h1>
+                </div>
+                <nav class="hidden md:flex space-x-6">
+                    <a href="#" class="text-gray-500 hover:text-primary">Dashboard</a>
+                    <a href="#" class="text-primary font-medium">Matches</a>
+                    <a href="#" class="text-gray-500 hover:text-primary">Predictions</a>
+                    <a href="#" class="text-gray-500 hover:text-primary">Analytics</a>
+                </nav>
+                <button class="md:hidden text-gray-500">
+                    <i class="fas fa-bars text-xl"></i>
+                </button>
+            </div>
         </div>
-      </div>
-    </div>
+    </header>
 
-    <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
-        <div class="loader"></div>
-        <p class="mt-4 text-gray-600">Loading matches...</p>
-      </div>
-    </div>
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-8">
+        <div class="mb-8">
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">All Matches</h2>
+            <p class="text-gray-600">Browse and filter through live, upcoming, and finished matches.</p>
+        </div>
 
-    <div id="pagination" class="flex justify-center mt-8 hidden"></div>
-  </main>
+        <!-- Filters -->
+        <div class="bg-white rounded-lg shadow-sm p-4 mb-6 animate__animated animate__fadeInUp">
+            <div class="flex flex-wrap items-center gap-4">
+                <div>
+                    <h3 class="text-sm font-medium text-gray-700 mb-1">Status</h3>
+                    <div id="status-filters" class="flex space-x-2">
+                        <button data-filter="all" class="filter-btn active px-3 py-1 rounded-full text-xs font-medium bg-primary text-white">All</button>
+                        <button data-filter="live" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Live</button>
+                        <button data-filter="upcoming" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Upcoming</button>
+                        <button data-filter="finished" class="filter-btn px-3 py-1 rounded-full text-xs font-medium bg-gray-100 text-gray-700">Finished</button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      const filterButtons = document.querySelectorAll('.filter-btn');
-      const matchesGrid = document.getElementById('matches-grid');
-      const loadingSpinner = document.getElementById('loading-spinner');
-      let allMatches = []; // Store all fetched matches
+        <!-- Matches Grid -->
+        <div id="matches-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div id="loading-spinner" class="col-span-1 md:col-span-2 lg:col-span-3 text-center">
+                <div class="loader"></div>
+                <p class="mt-4 text-gray-600">Loading matches...</p>
+            </div>
+        </div>
 
-      const API_URL = 'https://livescore-api.com/api-client/matches/live.json?&key=11siuSlckhxXe3BX&secret=riFrVzTlJf1eRYnSZQbuIxG2OeZ3hB0J';
+        <!-- Pagination -->
+        <div id="pagination" class="flex justify-center mt-8 hidden"></div>
+    </main>
 
-      // Add click event listeners to all filter buttons
-      filterButtons.forEach(button => {
-        button.addEventListener('click', (e) => {
-          const filter = e.target.getAttribute('data-filter');
-          
-          // Update active button styling
-          filterButtons.forEach(btn => btn.classList.remove('active'));
-          e.target.classList.add('active');
-          
-          // Handle different filters
-          if (filter === 'live') {
-            fetchAndDisplayMatches('live');
-          } else if (filter === 'finished') {
-            fetchAndDisplayMatches('finished');
-          } else if (filter === 'upcoming') {
-            fetchAndDisplayMatches('upcoming');
-          } else {
-            fetchAndDisplayMatches('all');
-          }
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const matchesGrid = document.getElementById('matches-grid');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            let allMatches = [];
+            
+            // Set up filter button event listeners
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Update active state
+                    filterButtons.forEach(btn => btn.classList.remove('active', 'bg-primary', 'text-white'));
+                    button.classList.add('active', 'bg-primary', 'text-white');
+                    
+                    // Show loading state
+                    matchesGrid.innerHTML = '';
+                    matchesGrid.appendChild(loadingSpinner);
+                    loadingSpinner.style.display = 'block';
+                    
+                    // Filter matches based on selection
+                    const filter = button.getAttribute('data-filter');
+                    filterMatches(filter);
+                });
+            });
+            
+            // Initial load - show all matches
+            fetchMatches();
+            
+            function fetchMatches() {
+                const API_URL = 'https://livescore-api.com/api-client/matches/live.json?&key=11siuSlckhxXe3BX&secret=riFrVzTlJf1eRYnSZQbuIxG2OeZ3hB0J';
+                
+                fetch(API_URL)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        loadingSpinner.style.display = 'none';
+                        
+                        if (data.data && data.data.match && data.data.match.length > 0) {
+                            allMatches = data.data.match;
+                            displayMatches(allMatches);
+                        } else {
+                            matchesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">No matches available at the moment.</p>';
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error fetching matches:', error);
+                        loadingSpinner.style.display = 'none';
+                        matchesGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load matches. Please try again later.</p>';
+                    });
+            }
+            
+            function filterMatches(filter) {
+                let filteredMatches = [];
+                
+                switch(filter) {
+                    case 'all':
+                        filteredMatches = allMatches;
+                        break;
+                    case 'live':
+                        filteredMatches = allMatches.filter(match => 
+                            match.status === 'IN PLAY' || match.status === 'ADDED TIME'
+                        );
+                        break;
+                    case 'upcoming':
+                        filteredMatches = allMatches.filter(match => 
+                            match.status === 'NOT STARTED' || match.time === match.scheduled
+                        );
+                        break;
+                    case 'finished':
+                        filteredMatches = allMatches.filter(match => 
+                            match.status === 'FINISHED'
+                        );
+                        break;
+                }
+                
+                // Simulate loading delay for better UX
+                setTimeout(() => {
+                    if (filteredMatches.length > 0) {
+                        displayMatches(filteredMatches);
+                    } else {
+                        matchesGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No ${filter} matches available.</p>`;
+                    }
+                }, 500);
+            }
+            
+            function displayMatches(matches) {
+                matchesGrid.innerHTML = '';
+                
+                matches.forEach(match => {
+                    const matchCard = createMatchCard(match);
+                    matchesGrid.appendChild(matchCard);
+                });
+            }
+            
+            function createMatchCard(match) {
+                const card = document.createElement('div');
+                card.className = 'match-card bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg animate__animated animate__fadeInUp';
+                
+                const statusColor = getStatusColor(match.status);
+                const homeScore = match.scores && match.scores.score ? match.scores.score.split('-')[0].trim() : '0';
+                const awayScore = match.scores && match.scores.score ? match.scores.score.split('-')[1].trim() : '0';
+                const homeLogo = match.home && match.home.logo ? match.home.logo : 'https://cdn.live-score-api.com/teams/default.png';
+                const awayLogo = match.away && match.away.logo ? match.away.logo : 'https://cdn.live-score-api.com/teams/default.png';
+                
+                card.innerHTML = `
+                    <div class="flex items-center justify-between mb-4">
+                        <span class="status-badge" style="background-color: ${statusColor};">
+                            ${match.status.toUpperCase()}
+                        </span>
+                        <div class="text-gray-500 text-sm">
+                            <span class="mr-2">${match.competition.name}</span>
+                            <i class="fas fa-calendar-alt"></i> ${match.scheduled}
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <img src="${homeLogo}" alt="${match.home.name}" class="team-logo">
+                            <span class="font-semibold text-lg text-gray-800">${match.home.name}</span>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800">${homeScore}</div>
+                    </div>
+                    
+                    <div class="flex items-center justify-between mb-4">
+                        <div class="flex items-center space-x-4">
+                            <img src="${awayLogo}" alt="${match.away.name}" class="team-logo">
+                            <span class="font-semibold text-lg text-gray-800">${match.away.name}</span>
+                        </div>
+                        <div class="text-3xl font-bold text-gray-800">${awayScore}</div>
+                    </div>
+                    
+                    <div class="text-center mt-4">
+                        <p class="text-sm font-medium text-gray-600">
+                            <i class="fas fa-clock"></i> ${match.time}
+                        </p>
+                    </div>
+                `;
+                
+                return card;
+            }
+            
+            function getStatusColor(status) {
+                switch (status) {
+                    case 'IN PLAY':
+                    case 'ADDED TIME':
+                        return '#EF4444'; // Red for live
+                    case 'FINISHED':
+                        return '#10B981'; // Green for finished
+                    case 'NOT STARTED':
+                        return '#3B82F6'; // Blue for upcoming
+                    default:
+                        return '#6B7280'; // Gray for unknown status
+                }
+            }
         });
-      });
-
-      // Initial load - show all matches
-      fetchAndDisplayMatches('all');
-
-      function fetchAndDisplayMatches(filterType) {
-        // Show loading spinner
-        matchesGrid.innerHTML = '';
-        matchesGrid.appendChild(loadingSpinner);
-        loadingSpinner.style.display = 'block';
-
-        fetchMatches()
-          .then(matches => {
-            loadingSpinner.style.display = 'none';
-            allMatches = matches;
-            
-            let filteredMatches = filterMatches(matches, filterType);
-            
-            if (filteredMatches.length > 0) {
-              displayMatches(filteredMatches);
-            } else {
-              matchesGrid.innerHTML = `<p class="col-span-full text-center text-gray-500">No ${filterType === 'all' ? '' : filterType} matches available at the moment.</p>`;
-            }
-          })
-          .catch(error => {
-            console.error('Error fetching matches:', error);
-            loadingSpinner.style.display = 'none';
-            matchesGrid.innerHTML = '<p class="col-span-full text-center text-red-500">Failed to load matches. Please try again later.</p>';
-          });
-      }
-
-      function fetchMatches() {
-        return fetch(API_URL)
-          .then(response => {
-            if (!response.ok) {
-              throw new Error('Network response was not ok');
-            }
-            return response.json();
-          })
-          .then(data => {
-            if (data.data && data.data.match && data.data.match.length > 0) {
-              return data.data.match;
-            } else {
-              return [];
-            }
-          });
-      }
-
-      function filterMatches(matches, filterType) {
-        switch (filterType) {
-          case 'live':
-            return matches.filter(match => 
-              match.status === 'IN PLAY' || match.status === 'ADDED TIME'
-            );
-          case 'finished':
-            return matches.filter(match => match.status === 'FINISHED');
-          case 'upcoming':
-            return matches.filter(match => match.status === 'NOT STARTED');
-          default:
-            return matches;
-        }
-      }
-
-      function displayMatches(matches) {
-        matchesGrid.innerHTML = '';
-        matches.forEach((match, index) => {
-          const matchCard = createMatchCard(match, index);
-          matchesGrid.appendChild(matchCard);
-        });
-      }
-
-      function createMatchCard(match, index) {
-        const card = document.createElement('div');
-        card.className = `match-card bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg animate__animated animate__fadeInUp`;
-        card.style.animationDelay = `${index * 0.1}s`;
-        
-        const statusColor = getStatusColor(match.status);
-        const homeScore = match.scores && match.scores.score ? match.scores.score.split(' - ')[0].trim() : '?';
-        const awayScore = match.scores && match.scores.score ? match.scores.score.split(' - ')[1].trim() : '?';
-        const homeLogo = match.home && match.home.logo ? match.home.logo : 'https://cdn.live-score-api.com/teams/default.png';
-        const awayLogo = match.away && match.away.logo ? match.away.logo : 'https://cdn.live-score-api.com/teams/default.png';
-        
-        // Format time display
-        const timeDisplay = match.status === 'NOT STARTED' ? match.scheduled : 
-                           match.status === 'FINISHED' ? 'FT' : match.time;
-
-        card.innerHTML = `
-          <div class="flex items-center justify-between mb-4">
-            <span class="status-badge" style="background-color: ${statusColor};">
-              ${match.status.replace('_', ' ')}
-            </span>
-            <div class="text-gray-500 text-sm flex items-center">
-              <i class="fas fa-calendar-alt mr-1"></i>
-              ${match.scheduled || 'TBD'}
-            </div>
-          </div>
-          
-          <div class="text-center mb-4">
-            <h3 class="text-sm font-semibold text-gray-600 mb-2">${match.competition ? match.competition.name : 'Unknown Competition'}</h3>
-          </div>
-          
-          <div class="space-y-4">
-            <!-- Home Team -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3 flex-1">
-                <img src="${homeLogo}" 
-                     alt="${match.home ? match.home.name : 'Home Team'}" 
-                     class="team-logo"
-                     onerror="this.src='https://via.placeholder.com/40x40/f3f4f6/9ca3af?text=?'">
-                <span class="font-semibold text-gray-800 truncate">${match.home ? match.home.name : 'Home Team'}</span>
-              </div>
-              <div class="text-2xl font-bold text-gray-800 min-w-[2rem] text-center">${homeScore}</div>
-            </div>
-            
-            <!-- Away Team -->
-            <div class="flex items-center justify-between">
-              <div class="flex items-center space-x-3 flex-1">
-                <img src="${awayLogo}" 
-                     alt="${match.away ? match.away.name : 'Away Team'}" 
-                     class="team-logo"
-                     onerror="this.src='https://via.placeholder.com/40x40/f3f4f6/9ca3af?text=?'">
-                <span class="font-semibold text-gray-800 truncate">${match.away ? match.away.name : 'Away Team'}</span>
-              </div>
-              <div class="text-2xl font-bold text-gray-800 min-w-[2rem] text-center">${awayScore}</div>
-            </div>
-          </div>
-          
-          <div class="text-center mt-4 pt-4 border-t border-gray-100">
-            <div class="match-time">
-              <i class="fas fa-clock mr-1"></i> ${timeDisplay}
-            </div>
-          </div>
-        `;
-        
-        return card;
-      }
-
-      function getStatusColor(status) {
-        switch (status) {
-          case 'IN PLAY':
-          case 'ADDED TIME':
-            return '#EF4444'; // Red for live
-          case 'FINISHED':
-            return '#10B981'; // Green
-          case 'NOT STARTED':
-            return '#3B82F6'; // Blue for upcoming
-          default:
-            return '#6B7280'; // Gray for unknown
-        }
-      }
-    });
-  </script>
+    </script>
 </body>
 </html>
