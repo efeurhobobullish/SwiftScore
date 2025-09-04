@@ -135,8 +135,18 @@
           })
           .then(data => {
             loadingSpinner.style.display = 'none';
-            if (data.data.match && data.data.match.length > 0) {
-              displayMatches(data.data.match);
+            // Check if the API response contains a "match" array and it's not empty
+            if (data.data && data.data.match && data.data.match.length > 0) {
+              // Filter for matches with status "IN PLAY" or "ADDED TIME"
+              const liveMatches = data.data.match.filter(match => 
+                match.status === 'IN PLAY' || match.status === 'ADDED TIME'
+              );
+
+              if (liveMatches.length > 0) {
+                displayMatches(liveMatches);
+              } else {
+                matchesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">No live matches available at the moment.</p>';
+              }
             } else {
               matchesGrid.innerHTML = '<p class="col-span-full text-center text-gray-500">No live matches available at the moment.</p>';
             }
@@ -161,8 +171,10 @@
         card.className = 'match-card bg-white rounded-lg shadow-md p-6 transition-all duration-300 ease-in-out hover:shadow-lg animate__animated animate__fadeInUp';
         
         const statusColor = getStatusColor(match.status);
-        const homeScore = match.score ? match.score.split('-')[0] : '';
-        const awayScore = match.score ? match.score.split('-')[1] : '';
+        const homeScore = match.scores.score ? match.scores.score.split('-')[0].trim() : '?';
+        const awayScore = match.scores.score ? match.scores.score.split('-')[1].trim() : '?';
+        const homeLogo = match.home && match.home.logo ? match.home.logo : 'https://cdn.live-score-api.com/teams/default.png';
+        const awayLogo = match.away && match.away.logo ? match.away.logo : 'https://cdn.live-score-api.com/teams/default.png';
 
         card.innerHTML = `
           <div class="flex items-center justify-between mb-4">
@@ -170,23 +182,23 @@
               ${match.status.toUpperCase()}
             </span>
             <div class="text-gray-500 text-sm">
-              <span class="mr-2">${match.comp_name}</span>
-              <i class="fas fa-calendar-alt"></i> ${match.date}
+              <span class="mr-2">${match.competition.name}</span>
+              <i class="fas fa-calendar-alt"></i> ${match.scheduled}
             </div>
           </div>
           
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center space-x-4">
-              <img src="${match.home_image}" alt="${match.home_name}" class="team-logo">
-              <span class="font-semibold text-lg text-gray-800">${match.home_name}</span>
+              <img src="${homeLogo}" alt="${match.home.name}" class="team-logo">
+              <span class="font-semibold text-lg text-gray-800">${match.home.name}</span>
             </div>
             <div class="text-3xl font-bold text-gray-800">${homeScore}</div>
           </div>
           
           <div class="flex items-center justify-between mb-4">
             <div class="flex items-center space-x-4">
-              <img src="${match.away_image}" alt="${match.away_name}" class="team-logo">
-              <span class="font-semibold text-lg text-gray-800">${match.away_name}</span>
+              <img src="${awayLogo}" alt="${match.away.name}" class="team-logo">
+              <span class="font-semibold text-lg text-gray-800">${match.away.name}</span>
             </div>
             <div class="text-3xl font-bold text-gray-800">${awayScore}</div>
           </div>
@@ -202,12 +214,13 @@
 
       function getStatusColor(status) {
         switch (status) {
-          case 'live':
-            return '#EF4444'; // Red
-          case 'finished':
+          case 'IN PLAY':
+          case 'ADDED TIME':
+            return '#EF4444'; // Red for live
+          case 'FINISHED':
             return '#10B981'; // Green
           default:
-            return '#3B82F6'; // Blue
+            return '#3B82F6'; // Blue for not started/upcoming
         }
       }
     });
