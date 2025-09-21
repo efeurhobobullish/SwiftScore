@@ -141,65 +141,79 @@
     </main>
 
     <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const tournamentsContainer = document.getElementById('tournaments-container');
-        const loadingSpinner = document.getElementById('loading-spinner');
+   document.addEventListener('DOMContentLoaded', () => {
+    const tournamentsContainer = document.getElementById('tournaments-container');
+    const loadingSpinner = document.getElementById('loading-spinner');
 
-        const renderTournaments = (tournaments) => {
-            tournamentsContainer.innerHTML = '';
-
-            if (!Array.isArray(tournaments) || tournaments.length === 0) {
-                tournamentsContainer.innerHTML = `
-                    <p class="text-gray-600 text-center">No tournaments found.</p>
-                `;
-                return;
+    const renderTournaments = (tournaments) => {
+        tournamentsContainer.innerHTML = '';
+        if (tournaments.length === 0) {
+            tournamentsContainer.innerHTML = '<p class="text-gray-600 text-center">No tournaments found.</p>';
+            return;
+        }
+        tournaments.forEach(tournament => {
+            const tournamentItem = document.createElement('div');
+            tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
+            
+            // Determine status color
+            let statusColor = '';
+            let statusText = '';
+            switch (tournament.status) {
+                case 'ongoing':
+                    statusColor = 'bg-green-500';
+                    statusText = 'Live';
+                    break;
+                case 'not_started':
+                    statusColor = 'bg-yellow-500';
+                    statusText = 'Upcoming';
+                    break;
+                case 'error':
+                default:
+                    statusColor = 'bg-red-500';
+                    statusText = 'Error';
+                    break;
             }
 
-            tournaments.forEach(tournament => {
-                const tournamentItem = document.createElement('div');
-                tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
-                tournamentItem.innerHTML = `
-                    <img 
-                        src="${tournament.logo || 'https://via.placeholder.com/50'}" 
-                        alt="${tournament.name} Logo" 
-                        class="tournament-logo"
-                    >
+            tournamentItem.innerHTML = `
+                <div class="flex items-center flex-grow">
+                    <img src="https://via.placeholder.com/50" alt="${tournament.name} Logo" class="tournament-logo">
                     <div>
                         <h3 class="text-lg font-bold text-gray-800">${tournament.name}</h3>
-                        <p class="text-sm text-gray-500">${tournament.country || ''}</p>
+                        <p class="text-sm text-gray-500 capitalize">${tournament.type}</p>
                     </div>
-                `;
-                tournamentsContainer.appendChild(tournamentItem);
-            });
-        };
+                </div>
+                <div class="flex items-center space-x-2">
+                    <span class="status-badge ${statusColor}">${statusText}</span>
+                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
+                </div>
+            `;
+            tournamentsContainer.appendChild(tournamentItem);
+        });
+    };
 
-        const fetchTournaments = async () => {
-            try {
-                tournamentsContainer.innerHTML = '';
-                loadingSpinner.style.display = 'block';
-                tournamentsContainer.appendChild(loadingSpinner);
+    const fetchTournaments = async () => {
+        try {
+            tournamentsContainer.innerHTML = '';
+            tournamentsContainer.appendChild(loadingSpinner);
+            loadingSpinner.style.display = 'block';
 
-                const response = await fetch('/api/tournaments'); // ✅ fixed spelling
-                if (!response.ok) {
-                    throw new Error('Failed to fetch tournaments');
-                }
-
-                const data = await response.json();
-                renderTournaments(data);
-            } catch (error) {
-                console.error("Fetch tournaments error:", error);
-                tournamentsContainer.innerHTML = `
-                    <p class="text-red-500 text-center">
-                        Error loading tournaments. Please try again later.
-                    </p>
-                `;
-            } finally {
-                loadingSpinner.style.display = 'none'; // ✅ hide spinner regardless of success/error
+            // Simulate the API call from the backend
+            const response = await fetch('/api/tornaments');
+            if (!response.ok) {
+                throw new Error('Failed to fetch tournaments');
             }
-        };
+            const { data } = await response.json(); // Destructure the `data` property
+            renderTournaments(data);
+        } catch (error) {
+            console.error("Fetch tournaments error:", error);
+            tournamentsContainer.innerHTML = `<p class="text-red-500 text-center">Error loading tournaments. Please try again later.</p>`;
+        } finally {
+            loadingSpinner.style.display = 'none';
+        }
+    };
 
-        fetchTournaments();
-    });
+    fetchTournaments();
+});
 </script>
 </body>
 </html>
