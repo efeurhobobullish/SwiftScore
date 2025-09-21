@@ -141,50 +141,65 @@
     </main>
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const tournamentsContainer = document.getElementById('tournaments-container');
-            const loadingSpinner = document.getElementById('loading-spinner');
+    document.addEventListener('DOMContentLoaded', () => {
+        const tournamentsContainer = document.getElementById('tournaments-container');
+        const loadingSpinner = document.getElementById('loading-spinner');
 
-            const renderTournaments = (tournaments) => {
+        const renderTournaments = (tournaments) => {
+            tournamentsContainer.innerHTML = '';
+
+            if (!Array.isArray(tournaments) || tournaments.length === 0) {
+                tournamentsContainer.innerHTML = `
+                    <p class="text-gray-600 text-center">No tournaments found.</p>
+                `;
+                return;
+            }
+
+            tournaments.forEach(tournament => {
+                const tournamentItem = document.createElement('div');
+                tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
+                tournamentItem.innerHTML = `
+                    <img 
+                        src="${tournament.logo || 'https://via.placeholder.com/50'}" 
+                        alt="${tournament.name} Logo" 
+                        class="tournament-logo"
+                    >
+                    <div>
+                        <h3 class="text-lg font-bold text-gray-800">${tournament.name}</h3>
+                        <p class="text-sm text-gray-500">${tournament.country || ''}</p>
+                    </div>
+                `;
+                tournamentsContainer.appendChild(tournamentItem);
+            });
+        };
+
+        const fetchTournaments = async () => {
+            try {
                 tournamentsContainer.innerHTML = '';
-                if (tournaments.length === 0) {
-                    tournamentsContainer.innerHTML = '<p class="text-gray-600 text-center">No tournaments found.</p>';
-                    return;
+                loadingSpinner.style.display = 'block';
+                tournamentsContainer.appendChild(loadingSpinner);
+
+                const response = await fetch('/api/tournaments'); // ✅ fixed spelling
+                if (!response.ok) {
+                    throw new Error('Failed to fetch tournaments');
                 }
-                tournaments.forEach(tournament => {
-                    const tournamentItem = document.createElement('div');
-                    tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
-                    tournamentItem.innerHTML = `
-                        <img src="${tournament.logo || 'https://via.placeholder.com/50'}" alt="${tournament.name} Logo" class="tournament-logo">
-                        <div>
-                            <h3 class="text-lg font-bold text-gray-800">${tournament.name}</h3>
-                            <p class="text-sm text-gray-500">${tournament.country || ''}</p>
-                        </div>
-                    `;
-                    tournamentsContainer.appendChild(tournamentItem);
-                });
-            };
 
-            const fetchTournaments = async () => {
-                try {
-                    tournamentsContainer.innerHTML = '';
-                    tournamentsContainer.appendChild(loadingSpinner);
-                    loadingSpinner.style.display = 'block';
+                const data = await response.json();
+                renderTournaments(data);
+            } catch (error) {
+                console.error("Fetch tournaments error:", error);
+                tournamentsContainer.innerHTML = `
+                    <p class="text-red-500 text-center">
+                        Error loading tournaments. Please try again later.
+                    </p>
+                `;
+            } finally {
+                loadingSpinner.style.display = 'none'; // ✅ hide spinner regardless of success/error
+            }
+        };
 
-                    const response = await fetch('/api/tornaments');
-                    if (!response.ok) {
-                        throw new Error('Failed to fetch tournaments');
-                    }
-                    const data = await response.json();
-                    renderTournaments(data);
-                } catch (error) {
-                    console.error("Fetch tournaments error:", error);
-                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center">Error loading tournaments. Please try again later.</p>`;
-                }
-            };
-
-            fetchTournaments();
-        });
-    </script>
+        fetchTournaments();
+    });
+</script>
 </body>
 </html>
