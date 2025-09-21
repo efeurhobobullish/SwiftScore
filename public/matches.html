@@ -98,13 +98,21 @@
             border-radius: 50%;
             margin-right: 1rem;
         }
+
+        /* Mobile Menu */
+        .mobile-menu {
+            display: none;
+        }
+        .mobile-menu.active {
+            display: block;
+        }
     </style>
 </head>
 <body class="bg-gray-50">
     <header class="bg-white shadow-sm py-4 px-6 sticky top-0 z-40">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center">
-                <img src="/images/logo.png" alt="SwiftScore Logo" class="h-8 mr-2">
+                <img src="https://placehold.co/40x40" alt="SwiftScore Logo" class="h-8 mr-2">
                 <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
             </div>
 
@@ -115,14 +123,37 @@
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
             </nav>
 
-            
             <div class="flex items-center space-x-4">
                 <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
                     </svg>
                 </button>
+                 <div class="relative group">
+                    <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                        <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
+                        <span class="hidden sm:block">User Name</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
+                    </div>
+                </div>
+
+                <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa-solid fa-bars h-6 w-6"></i>
+                </button>
             </div>
+        </div>
+        <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow-lg py-4 px-6 mt-2">
+            <nav class="flex flex-col space-y-4">
+                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 font-medium">Dashboard</a>
+                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200">Predictions</a>
+                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200">Live Scores</a>
+                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200">Analytics</a>
+            </nav>
         </div>
     </header>
 
@@ -141,79 +172,109 @@
     </main>
 
     <script>
-   document.addEventListener('DOMContentLoaded', () => {
-    const tournamentsContainer = document.getElementById('tournaments-container');
-    const loadingSpinner = document.getElementById('loading-spinner');
+        document.addEventListener('DOMContentLoaded', () => {
+            const tournamentsContainer = document.getElementById('tournaments-container');
+            const loadingSpinner = document.getElementById('loading-spinner');
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            const profileMenuButton = document.getElementById('profile-menu-button');
+            const profileMenu = document.getElementById('profile-menu');
 
-    const renderTournaments = (tournaments) => {
-        tournamentsContainer.innerHTML = '';
-        if (tournaments.length === 0) {
-            tournamentsContainer.innerHTML = '<p class="text-gray-600 text-center">No tournaments found.</p>';
-            return;
-        }
-        tournaments.forEach(tournament => {
-            const tournamentItem = document.createElement('div');
-            tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
-            
-            // Determine status color
-            let statusColor = '';
-            let statusText = '';
-            switch (tournament.status) {
-                case 'ongoing':
-                    statusColor = 'bg-green-500';
-                    statusText = 'Live';
-                    break;
-                case 'not_started':
-                    statusColor = 'bg-yellow-500';
-                    statusText = 'Upcoming';
-                    break;
-                case 'error':
-                default:
-                    statusColor = 'bg-red-500';
-                    statusText = 'Error';
-                    break;
-            }
+            const renderTournaments = (tournaments) => {
+                tournamentsContainer.innerHTML = '';
+                if (tournaments.length === 0) {
+                    tournamentsContainer.innerHTML = '<p class="text-gray-600 text-center">No tournaments found.</p>';
+                    return;
+                }
+                tournaments.forEach(tournament => {
+                    const tournamentItem = document.createElement('div');
+                    tournamentItem.className = 'tournament-item animate__animated animate__fadeIn';
 
-            tournamentItem.innerHTML = `
-                <div class="flex items-center flex-grow">
-                    <img src="https://via.placeholder.com/50" alt="${tournament.name} Logo" class="tournament-logo">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800">${tournament.name}</h3>
-                        <p class="text-sm text-gray-500 capitalize">${tournament.type}</p>
-                    </div>
-                </div>
-                <div class="flex items-center space-x-2">
-                    <span class="status-badge ${statusColor}">${statusText}</span>
-                    <i class="fa-solid fa-chevron-right text-gray-400"></i>
-                </div>
-            `;
-            tournamentsContainer.appendChild(tournamentItem);
+                    let statusColor = '';
+                    let statusText = '';
+                    switch (tournament.status) {
+                        case 'ongoing':
+                            statusColor = 'bg-green-500';
+                            statusText = 'Live';
+                            break;
+                        case 'not_started':
+                            statusColor = 'bg-yellow-500';
+                            statusText = 'Upcoming';
+                            break;
+                        case 'completed':
+                            statusColor = 'bg-gray-500';
+                            statusText = 'Completed';
+                            break;
+                        default:
+                            statusColor = 'bg-red-500';
+                            statusText = 'Error';
+                            break;
+                    }
+
+                    tournamentItem.innerHTML = `
+                        <div class="flex items-center flex-grow">
+                            <img src="${tournament.logo}" alt="${tournament.name} Logo" class="tournament-logo">
+                            <div>
+                                <h3 class="text-lg font-bold text-gray-800">${tournament.name}</h3>
+                                <p class="text-sm text-gray-500 capitalize">${tournament.type}</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <span class="status-badge ${statusColor}">${statusText}</span>
+                            <i class="fa-solid fa-chevron-right text-gray-400"></i>
+                        </div>
+                    `;
+                    tournamentsContainer.appendChild(tournamentItem);
+                });
+            };
+
+            const fetchTournaments = async () => {
+                try {
+                    tournamentsContainer.innerHTML = '';
+                    tournamentsContainer.appendChild(loadingSpinner);
+                    loadingSpinner.style.display = 'block';
+
+                    const response = await fetch("/api/tournaments", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tournaments');
+                    }
+                    
+                    const { data } = await response.json();
+                    renderTournaments(data);
+                } catch (error) {
+                    console.error("Fetch tournaments error:", error);
+                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center">Error loading tournaments. Please try again later.</p>`;
+                } finally {
+                    loadingSpinner.style.display = 'none';
+                }
+            };
+
+            fetchTournaments();
+
+            // Toggle mobile menu
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('active');
+            });
+
+            // Toggle profile dropdown
+            profileMenuButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                profileMenu.classList.toggle('dropdown-menu');
+            });
+
+            document.addEventListener('click', (event) => {
+                if (!profileMenu.contains(event.target) && !profileMenuButton.contains(event.target)) {
+                    profileMenu.classList.add('dropdown-menu');
+                }
+            });
         });
-    };
-
-    const fetchTournaments = async () => {
-        try {
-            tournamentsContainer.innerHTML = '';
-            tournamentsContainer.appendChild(loadingSpinner);
-            loadingSpinner.style.display = 'block';
-
-            // Simulate the API call from the backend
-            const response = await fetch('/api/tornaments');
-            if (!response.ok) {
-                throw new Error('Failed to fetch tournaments');
-            }
-            const { data } = await response.json(); // Destructure the `data` property
-            renderTournaments(data);
-        } catch (error) {
-            console.error("Fetch tournaments error:", error);
-            tournamentsContainer.innerHTML = `<p class="text-red-500 text-center">Error loading tournaments. Please try again later.</p>`;
-        } finally {
-            loadingSpinner.style.display = 'none';
-        }
-    };
-
-    fetchTournaments();
-});
-</script>
+    </script>
 </body>
 </html>
