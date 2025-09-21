@@ -148,16 +148,39 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // =======================
 // Matches Routes
 // =======================
+
 app.get("/api/tournaments", authMiddleware, async (req, res) => {
   try {
-    if (!process.env.SOCCER_API) {
+    const baseUrl = process.env.SOCCER_API;
+    if (!baseUrl) {
       return res.status(500).json({ message: "Soccer API URL not configured" });
     }
 
-    const response = await axios.get(`${process.env.SOCCER_API}/v1/tournaments`);
-    res.json(response.data);
+    // Fetch tournaments from external API
+    const { data } = await axios.get(`${baseUrl.replace(/\/$/, "")}/v1/tournaments`);
+
+    // Clean and format response
+    const tournaments = (data.data || []).map(t => ({
+      id: t.id,
+      name: t.name,
+      type: t.type,
+      status: t.status,
+      isActive: t.isActive
+    }));
+
+    // Send structured response
+    res.status(200).json({
+      status: 200,
+      count: tournaments.length,
+      tournaments
+    });
+
   } catch (error) {
-    console.error("Fetch tournaments error:", error.response?.data || error.message);
+    console.error("Fetch tournaments error:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+    });
     res.status(500).json({ message: "Failed to fetch tournaments" });
   }
 });
