@@ -148,15 +148,17 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // =======================
 // Matches Routes
 // =======================
-// Example: Fetch all tournaments
-app.get("/api/tornaments", authMiddleware, async (req, res) => {
+app.get("/api/tournaments", authMiddleware, async (req, res) => {
   try {
-    const response = await axios.get(`process.env.S0CCER_API/v1/tournaments`);
+    if (!process.env.SOCCER_API) {
+      return res.status(500).json({ message: "Soccer API URL not configured" });
+    }
+
+    const response = await axios.get(`${process.env.SOCCER_API}/v1/tournaments`);
     res.json(response.data);
-  }
-  catch (error) {
-    console.error("Fetch tournaments error:", error.message);
-    res.status(500).json({ message: "Fetch tournaments error" });
+  } catch (error) {
+    console.error("Fetch tournaments error:", error.response?.data || error.message);
+    res.status(500).json({ message: "Failed to fetch tournaments" });
   }
 });
 
