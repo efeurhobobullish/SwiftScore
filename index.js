@@ -19,7 +19,7 @@ connectDB();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
-const api = process.env.SOCCER_API;
+
 
 
 
@@ -109,7 +109,6 @@ app.post("/api/login", async (req, res) => {
         firstName: user.firstName,
         lastName: user.lastName,
         email: user.email,
-        balance: user.balance,
         role: user.role,
         isVerified: user.isVerified,
       },
@@ -134,7 +133,6 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
       firstName: user.firstName,
       lastName: user.lastName,
       email: user.email,
-      balance: user.balance,
       role: user.role,
       isVerified: user.isVerified,
       createdAt: user.createdAt,
@@ -150,7 +148,7 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 // =======================
 // Matches Routes
 // =======================
-// Example: Fetch all leagues
+// Example: Fetch all tournaments
 app.get("/api/tornaments", authMiddleware, async (req, res) => {
   try {
     const response = await axios.get(`process.env.S0CCER_API/v1/tournaments`);
