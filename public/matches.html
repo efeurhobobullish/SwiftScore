@@ -6,7 +6,6 @@
     <title>SwiftScore - Tournaments</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -30,17 +29,18 @@
     <style>
         .status-badge {
             color: white;
-            border-radius: 12px;
-            padding: 2px 8px;
-            font-size: 0.65rem;
+            border-radius: 8px;
+            padding: 1px 6px;
+            font-size: 0.6rem;
             font-weight: 600;
+            white-space: nowrap;
         }
         .loader {
-            border: 3px solid #f3f3f3;
+            border: 2px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 3px solid #2563EA;
-            width: 30px;
-            height: 30px;
+            border-top: 2px solid #2563EA;
+            width: 20px;
+            height: 20px;
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -50,6 +50,7 @@
         }
         body {
             font-family: 'Poppins', sans-serif;
+            font-size: 0.8rem;
         }
 
         .dropdown-menu {
@@ -61,29 +62,29 @@
 
         .tournaments-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 0.5rem;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 0.4rem;
         }
         .tournament-item {
             display: flex;
             align-items: center;
-            padding: 0.5rem;
-            border-radius: 0.375rem;
+            padding: 0.4rem;
+            border-radius: 0.3rem;
             background-color: #ffffff;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             border: 1px solid #e5e7eb;
-            height: 60px;
-            font-size: 0.8rem;
+            height: 48px;
+            font-size: 0.7rem;
         }
         .tournament-item:hover {
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
         }
         .tournament-logo {
-            width: 32px;
-            height: 32px;
+            width: 24px;
+            height: 24px;
             object-fit: cover;
             border-radius: 50%;
-            margin-right: 0.5rem;
+            margin-right: 0.4rem;
             background-color: #f3f4f6;
         }
 
@@ -93,34 +94,39 @@
         .mobile-menu.active {
             display: block;
         }
+        
+        /* Ultra compact header */
+        .compact-header {
+            padding: 0.3rem 0.8rem;
+        }
     </style>
 </head>
 <body class="bg-light">
-    <header class="bg-white shadow-sm py-2 px-4 sticky top-0 z-40">
+    <header class="bg-white shadow-sm compact-header sticky top-0 z-40">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center">
-                <img src="https://placehold.co/40x40/2563EA/FFFFFF?text=SS" alt="SwiftScore Logo" class="h-6 w-6 rounded-full mr-2">
-                <h1 class="text-base font-bold text-primary">SwiftScore</h1>
+                <img src="https://placehold.co/40x40/2563EA/FFFFFF?text=SS" alt="SwiftScore Logo" class="h-5 w-5 rounded-full mr-1">
+                <h1 class="text-sm font-bold text-primary">SwiftScore</h1>
             </div>
 
-            <nav class="hidden sm:flex items-center space-x-4">
+            <nav class="hidden sm:flex items-center space-x-3">
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs font-medium">Dashboard</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Predictions</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Live Scores</a>
                 <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Analytics</a>
             </nav>
 
-            <div class="flex items-center space-x-2">
+            <div class="flex items-center space-x-1">
                 <button class="p-1 text-gray-600 hover:text-primary transition-colors duration-200">
                     <i class="fa-regular fa-bell h-3 w-3"></i>
                 </button>
                  <div class="relative group">
                     <button id="profile-menu-button" class="flex items-center space-x-1 text-gray-600 hover:text-primary transition-colors duration-200">
-                        <img src="https://placehold.co/32x32" alt="User Profile" class="h-5 w-5 rounded-full border border-primary">
+                        <img src="https://placehold.co/32x32" alt="User Profile" class="h-4 w-4 rounded-full border border-primary">
                         <span class="hidden sm:block text-xs">User</span>
                         <i class="fa-solid fa-chevron-down text-xs"></i>
                     </button>
-                    <div id="profile-menu" class="absolute right-0 mt-1 w-32 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
+                    <div id="profile-menu" class="absolute right-0 mt-1 w-28 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
                         <a href="#" class="block px-2 py-1 text-xs text-gray-700 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-2 py-1 text-xs text-gray-700 hover:bg-gray-100">Settings</a>
                         <a href="#" class="block px-2 py-1 text-xs text-red-600 hover:bg-gray-100">Sign Out</a>
@@ -132,7 +138,7 @@
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-1 px-3 mt-1">
+        <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-1 px-2 mt-1">
             <nav class="flex flex-col space-y-1">
                 <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs font-medium">Dashboard</a>
                 <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Predictions</a>
@@ -142,9 +148,9 @@
         </div>
     </header>
 
-    <main class="container mx-auto px-3 py-3">
-        <div class="mb-3">
-            <h2 class="text-lg font-bold text-gray-800 mb-1">Tournaments</h2>
+    <main class="container mx-auto px-2 py-2">
+        <div class="mb-2">
+            <h2 class="text-base font-bold text-gray-800">Tournaments</h2>
             <p class="text-xs text-gray-500">Browse tournaments</p>
         </div>
 
@@ -163,9 +169,9 @@
 
             const showLoadingSpinner = () => {
                 tournamentsContainer.innerHTML = `
-                    <div class="col-span-3 text-center p-4">
+                    <div class="col-span-3 text-center p-3">
                         <div class="loader"></div>
-                        <p class="mt-2 text-gray-600 text-xs">Loading tournaments...</p>
+                        <p class="mt-1 text-gray-600 text-xs">Loading...</p>
                     </div>
                 `;
             };
@@ -173,7 +179,7 @@
             const renderTournaments = (tournaments) => {
                 tournamentsContainer.innerHTML = '';
                 if (!tournaments || tournaments.length === 0) {
-                    tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center p-4 text-xs">No tournaments found.</p>';
+                    tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center p-3 text-xs">No tournaments found.</p>';
                     return;
                 }
 
@@ -181,7 +187,7 @@
                     const tournamentItem = document.createElement('div');
                     tournamentItem.className = 'tournament-item';
                     
-                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=32`;
+                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24`;
 
                     let statusColor = 'bg-gray-400';
                     let statusText = 'Unknown';
@@ -203,7 +209,6 @@
                         </div>
                         <div class="flex items-center space-x-1">
                             <span class="status-badge ${statusColor}">${statusText}</span>
-                            <i class="fa-solid fa-chevron-right text-gray-400 text-xs"></i>
                         </div>
                     `;
                     tournamentsContainer.appendChild(tournamentItem);
@@ -236,7 +241,7 @@
 
                 } catch (error) {
                     console.error("Fetch tournaments error:", error);
-                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center p-4 text-xs">Error: ${error.message}</p>`;
+                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center p-3 text-xs">Error: ${error.message}</p>`;
                 }
             };
 
