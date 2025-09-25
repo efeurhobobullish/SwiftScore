@@ -1,7 +1,7 @@
 {
   "name": "swiftscore",
   "version": "1.0.0",
-  "description": "A website to predict scores",
+  "description": "SwiftScore is a dynamic web application for making, tracking, and analyzing predictions on various events.",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
