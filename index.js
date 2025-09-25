@@ -151,7 +151,7 @@ app.get("/api/dashboard", authMiddleware, async (req, res) => {
 
 app.get("/api/tournaments", authMiddleware, async (req, res) => {
   try {
-    const baseUrl = process.env.SOCCER_API;
+    const baseUrl = process.env.SPORTS_API;
     if (!baseUrl) {
       return res.status(500).json({ message: "Soccer API URL not configured" });
     }
