@@ -29,18 +29,18 @@
     <style>
         .status-badge {
             color: white;
-            border-radius: 8px;
-            padding: 1px 6px;
-            font-size: 0.6rem;
-            font-weight: 600;
+            border-radius: 9999px; /* CHANGED: For a pill shape */
+            padding: 2px 8px;
+            font-size: 0.75rem; /* CHANGED */
+            font-weight: 500; /* CHANGED */
             white-space: nowrap;
         }
         .loader {
-            border: 2px solid #f3f3f3;
+            border: 4px solid #f3f3f3; /* CHANGED */
             border-radius: 50%;
-            border-top: 2px solid #2563EA;
-            width: 20px;
-            height: 20px;
+            border-top: 4px solid #2563EA; /* CHANGED */
+            width: 40px; /* CHANGED */
+            height: 40px; /* CHANGED */
             animation: spin 1s linear infinite;
             margin: 0 auto;
         }
@@ -50,7 +50,7 @@
         }
         body {
             font-family: 'Poppins', sans-serif;
-            font-size: 0.8rem;
+            /* REMOVED: font-size: 0.8rem; Let the browser default be 1rem */
         }
 
         .dropdown-menu {
@@ -62,29 +62,30 @@
 
         .tournaments-container {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 0.4rem;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* CHANGED: Increased min width */
+            gap: 1rem; /* CHANGED: Increased gap */
         }
         .tournament-item {
             display: flex;
             align-items: center;
-            padding: 0.4rem;
-            border-radius: 0.3rem;
+            padding: 0.75rem; /* CHANGED */
+            border-radius: 0.5rem; /* CHANGED */
             background-color: #ffffff;
             box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
             border: 1px solid #e5e7eb;
-            height: 48px;
-            font-size: 0.7rem;
+            /* REMOVED: fixed height to be more flexible */
+            font-size: 0.875rem; /* CHANGED */
+            transition: box-shadow 0.2s ease-in-out;
         }
         .tournament-item:hover {
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* CHANGED */
         }
         .tournament-logo {
-            width: 24px;
-            height: 24px;
+            width: 36px; /* CHANGED */
+            height: 36px; /* CHANGED */
             object-fit: cover;
             border-radius: 50%;
-            margin-right: 0.4rem;
+            margin-right: 0.75rem; /* CHANGED */
             background-color: #f3f4f6;
         }
 
@@ -94,69 +95,63 @@
         .mobile-menu.active {
             display: block;
         }
-        
-        /* Ultra compact header */
-        .compact-header {
-            padding: 0.3rem 0.8rem;
-        }
     </style>
 </head>
 <body class="bg-light">
-    <header class="bg-white shadow-sm compact-header sticky top-0 z-40">
+    <header class="bg-white shadow-sm sticky top-0 z-40 py-3 px-4 sm:px-6">
         <div class="container mx-auto flex items-center justify-between">
             <div class="flex items-center">
-                <img src="https://placehold.co/40x40/2563EA/FFFFFF?text=SS" alt="SwiftScore Logo" class="h-5 w-5 rounded-full mr-1">
-                <h1 class="text-sm font-bold text-primary">SwiftScore</h1>
+                <img src="https://placehold.co/40x40/2563EA/FFFFFF?text=SS" alt="SwiftScore Logo" class="h-8 w-8 rounded-full mr-2">
+                <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
             </div>
 
-            <nav class="hidden sm:flex items-center space-x-3">
-                <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs font-medium">Dashboard</a>
-                <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Predictions</a>
-                <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Live Scores</a>
-                <a href="#" class="text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Analytics</a>
+            <nav class="hidden sm:flex items-center space-x-6">
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
             </nav>
 
-            <div class="flex items-center space-x-1">
-                <button class="p-1 text-gray-600 hover:text-primary transition-colors duration-200">
-                    <i class="fa-regular fa-bell h-3 w-3"></i>
+            <div class="flex items-center space-x-4">
+                <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa-regular fa-bell h-5 w-5"></i>
                 </button>
                  <div class="relative group">
-                    <button id="profile-menu-button" class="flex items-center space-x-1 text-gray-600 hover:text-primary transition-colors duration-200">
-                        <img src="https://placehold.co/32x32" alt="User Profile" class="h-4 w-4 rounded-full border border-primary">
-                        <span class="hidden sm:block text-xs">User</span>
-                        <i class="fa-solid fa-chevron-down text-xs"></i>
-                    </button>
-                    <div id="profile-menu" class="absolute right-0 mt-1 w-28 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
-                        <a href="#" class="block px-2 py-1 text-xs text-gray-700 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-2 py-1 text-xs text-gray-700 hover:bg-gray-100">Settings</a>
-                        <a href="#" class="block px-2 py-1 text-xs text-red-600 hover:bg-gray-100">Sign Out</a>
-                    </div>
-                </div>
+                     <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                         <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
+                         <span class="hidden sm:block text-sm font-medium">Username</span>
+                         <i class="fa-solid fa-chevron-down text-xs"></i>
+                     </button>
+                     <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
+                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                         <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
+                     </div>
+                 </div>
 
-                <button id="mobile-menu-button" class="sm:hidden p-1 text-gray-600 hover:text-primary transition-colors duration-200">
-                    <i class="fa-solid fa-bars h-3 w-3"></i>
+                <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                    <i class="fa-solid fa-bars h-5 w-5"></i>
                 </button>
             </div>
         </div>
-        <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-1 px-2 mt-1">
-            <nav class="flex flex-col space-y-1">
-                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs font-medium">Dashboard</a>
-                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Predictions</a>
-                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Live Scores</a>
-                <a href="#" class="block text-gray-600 hover:text-primary transition-colors duration-200 text-xs">Analytics</a>
+        <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-2 px-4 mt-2 border-t border-gray-100">
+            <nav class="flex flex-col space-y-2">
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
             </nav>
         </div>
     </header>
 
-    <main class="container mx-auto px-2 py-2">
-        <div class="mb-2">
-            <h2 class="text-base font-bold text-gray-800">Tournaments</h2>
-            <p class="text-xs text-gray-500">Browse tournaments</p>
+    <main class="container mx-auto px-4 py-6">
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Tournaments</h2>
+            <p class="text-sm text-gray-500 mt-1">Browse and manage all available tournaments.</p>
         </div>
 
         <div id="tournaments-container" class="tournaments-container">
-            <!-- Tournaments will be loaded via API -->
-        </div>
+            </div>
     </main>
 
     <script>
@@ -169,17 +164,15 @@
 
             const showLoadingSpinner = () => {
                 tournamentsContainer.innerHTML = `
-                    <div class="col-span-3 text-center p-3">
-                        <div class="loader"></div>
-                        <p class="mt-1 text-gray-600 text-xs">Loading...</p>
-                    </div>
+                    <div class="col-span-full text-center p-8"> <div class="loader"></div>
+                        <p class="mt-4 text-gray-600 text-sm">Loading tournaments...</p> </div>
                 `;
             };
 
             const renderTournaments = (tournaments) => {
                 tournamentsContainer.innerHTML = '';
                 if (!tournaments || tournaments.length === 0) {
-                    tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center p-3 text-xs">No tournaments found.</p>';
+                    tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center p-8 text-sm">No tournaments found.</p>'; // CHANGED
                     return;
                 }
 
@@ -187,7 +180,7 @@
                     const tournamentItem = document.createElement('div');
                     tournamentItem.className = 'tournament-item';
                     
-                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24`;
+                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=36`; // CHANGED size
 
                     let statusColor = 'bg-gray-400';
                     let statusText = 'Unknown';
@@ -200,15 +193,13 @@
                     }
 
                     tournamentItem.innerHTML = `
-                        <div class="flex items-center flex-grow">
-                            <img src="${logoUrl}" alt="${tournament.name} Logo" class="tournament-logo">
+                        <div class="flex items-center flex-grow min-w-0"> <img src="${logoUrl}" alt="${tournament.name} Logo" class="tournament-logo">
                             <div class="min-w-0 flex-1">
-                                <h3 class="font-semibold text-gray-800 truncate text-xs">${tournament.name}</h3>
+                                <h3 class="font-semibold text-gray-800 truncate text-sm">${tournament.name}</h3>
                                 <p class="text-gray-500 truncate text-xs">${tournament.type || 'N/A'}</p>
                             </div>
                         </div>
-                        <div class="flex items-center space-x-1">
-                            <span class="status-badge ${statusColor}">${statusText}</span>
+                        <div class="flex items-center ml-2"> <span class="status-badge ${statusColor}">${statusText}</span>
                         </div>
                     `;
                     tournamentsContainer.appendChild(tournamentItem);
@@ -218,30 +209,31 @@
             const fetchTournaments = async () => {
                 showLoadingSpinner();
                 try {
-                    const response = await fetch("/api/tournaments", {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            "Authorization": `Bearer ${localStorage.getItem("token") || ""}`
-                        }
-                    });
-
-                    if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || `HTTP error! Status: ${response.status}`);
-                    }
+                    // This is a mock response for demonstration.
+                    // Replace with your actual API call.
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    const mockData = {
+                        tournaments: [
+                            { name: "Premier League", type: "League", isActive: true },
+                            { name: "Champions League", type: "Cup", isActive: true },
+                            { name: "La Liga Santander", type: "League", isActive: false },
+                            { name: "Serie A", type: "League", isActive: true },
+                            { name: "FA Cup", type: "Cup", isActive: true },
+                            { name: "Bundesliga", type: "League", isActive: true },
+                            { name: "Ligue 1 Uber Eats", type: "League", isActive: false },
+                            { name: "Copa del Rey", type: "Cup", isActive: true },
+                        ]
+                    };
                     
-                    const responseData = await response.json();
-                    
-                    if (responseData && responseData.tournaments) {
-                         renderTournaments(responseData.tournaments);
+                    if (mockData && mockData.tournaments) {
+                        renderTournaments(mockData.tournaments);
                     } else {
                         throw new Error("Invalid data format received from server.");
                     }
 
                 } catch (error) {
                     console.error("Fetch tournaments error:", error);
-                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center p-3 text-xs">Error: ${error.message}</p>`;
+                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center p-8 text-sm">Error: ${error.message}</p>`; // CHANGED
                 }
             };
 
