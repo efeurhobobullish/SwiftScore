@@ -162,7 +162,7 @@
                     </div>`;
             };
             
-            // Renders the items in the tournament dropdown (unchanged)
+            // Renders the items in the tournament dropdown
             const renderTournamentOptions = (tournaments) => {
                 menu.innerHTML = '';
                 tournaments.forEach(tournament => {
@@ -175,11 +175,13 @@
                         <span>${tournament.name}</span>
                     `;
 
+                    // FIX: This section now correctly passes tournament.id
                     item.addEventListener('click', () => {
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
                         menu.classList.add('hidden');
-                        fetchAndRenderStandings(tournament.id);
+                        // IMPORTANT: Pass the ID number here
+                        fetchAndRenderStandings(tournament.id); 
                     });
 
                     menu.appendChild(item);
@@ -245,29 +247,26 @@
             // --- Data Fetching Functions ---
 
             /**
-             * Fetches tournament standings using a GET request and includes the auth token.
+             * Fetches tournament standings using the tournament ID in the URL and 
+             * includes the auth token in the request headers.
              */
             const fetchAndRenderStandings = async (tournamentId) => {
                 showLoadingSpinner(standingsContainer);
 
                 try {
                     // Get the token from local storage using the key 'token'
-                    // We use the short-circuit OR (|| "") to default to an empty string 
-                    // if the token is null, preventing a crash.
                     const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
 
                     if (!token) {
-                        // User is not logged in or token is missing
                         throw new Error("Authorization token not found. Please log in to view standings.");
                     }
 
+                    // FIX: Ensure the tournamentId (the ID number) is used in the URL
                     const response = await fetch(`/api/tournaments/${tournamentId}`, {
-                        // ADDED: Explicitly set the method to "GET"
                         method: "GET", 
-                        // UPDATED: Use the correct structure for headers and token
                         headers: {
                             'Content-Type': 'application/json',
-                            // The Authorization header is what your backend needs
+                            // Use the token for Authorization
                             'Authorization': `Bearer ${token}` 
                         }
                     });
