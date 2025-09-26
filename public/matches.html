@@ -27,74 +27,24 @@
         }
     </script>
     <style>
-        .status-badge {
-            color: white;
-            border-radius: 9999px; /* CHANGED: For a pill shape */
-            padding: 2px 8px;
-            font-size: 0.75rem; /* CHANGED */
-            font-weight: 500; /* CHANGED */
-            white-space: nowrap;
+        /* CSS is now minimal as Tailwind handles most styling */
+        body {
+            font-family: 'Poppins', sans-serif;
         }
         .loader {
-            border: 4px solid #f3f3f3; /* CHANGED */
+            border: 3px solid #f3f3f3;
             border-radius: 50%;
-            border-top: 4px solid #2563EA; /* CHANGED */
-            width: 40px; /* CHANGED */
-            height: 40px; /* CHANGED */
+            border-top: 3px solid #2563EA;
+            width: 24px;
+            height: 24px;
             animation: spin 1s linear infinite;
-            margin: 0 auto;
         }
         @keyframes spin {
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        body {
-            font-family: 'Poppins', sans-serif;
-            /* REMOVED: font-size: 0.8rem; Let the browser default be 1rem */
-        }
-
-        .dropdown-menu {
-            display: none;
-        }
-        .dropdown-menu.active {
-            display: block;
-        }
-
-        .tournaments-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); /* CHANGED: Increased min width */
-            gap: 1rem; /* CHANGED: Increased gap */
-        }
-        .tournament-item {
-            display: flex;
-            align-items: center;
-            padding: 0.75rem; /* CHANGED */
-            border-radius: 0.5rem; /* CHANGED */
-            background-color: #ffffff;
-            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
-            /* REMOVED: fixed height to be more flexible */
-            font-size: 0.875rem; /* CHANGED */
-            transition: box-shadow 0.2s ease-in-out;
-        }
-        .tournament-item:hover {
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* CHANGED */
-        }
-        .tournament-logo {
-            width: 36px; /* CHANGED */
-            height: 36px; /* CHANGED */
-            object-fit: cover;
-            border-radius: 50%;
-            margin-right: 0.75rem; /* CHANGED */
-            background-color: #f3f4f6;
-        }
-
-        .mobile-menu {
-            display: none;
-        }
-        .mobile-menu.active {
-            display: block;
-        }
+        .dropdown-menu { display: none; }
+        .dropdown-menu.active { display: block; }
     </style>
 </head>
 <body class="bg-light">
@@ -104,19 +54,15 @@
                 <img src="https://placehold.co/40x40/2563EA/FFFFFF?text=SS" alt="SwiftScore Logo" class="h-8 w-8 rounded-full mr-2">
                 <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
             </div>
-
             <nav class="hidden sm:flex items-center space-x-6">
                 <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
                 <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
             </nav>
-
             <div class="flex items-center space-x-4">
-                <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-                    <i class="fa-regular fa-bell h-5 w-5"></i>
-                </button>
-                 <div class="relative group">
+                <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-regular fa-bell h-5 w-5"></i></button>
+                <div class="relative group">
                      <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
                          <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
                          <span class="hidden sm:block text-sm font-medium">Username</span>
@@ -128,10 +74,7 @@
                          <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
                      </div>
                  </div>
-
-                <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200">
-                    <i class="fa-solid fa-bars h-5 w-5"></i>
-                </button>
+                <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-solid fa-bars h-5 w-5"></i></button>
             </div>
         </div>
         <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-2 px-4 mt-2 border-t border-gray-100">
@@ -145,116 +88,128 @@
     </header>
 
     <main class="container mx-auto px-4 py-6">
-        <div class="mb-6">
+        <div class="mb-4">
             <h2 class="text-2xl font-bold text-gray-800">Tournaments</h2>
-            <p class="text-sm text-gray-500 mt-1">Browse and manage all available tournaments.</p>
+            <p class="text-sm text-gray-500 mt-1">Select a tournament to view details.</p>
         </div>
 
-        <div id="tournaments-container" class="tournaments-container">
-            </div>
+        <div id="tournament-selector" class="relative w-full max-w-sm">
+            <button id="dropdown-button" class="flex items-center justify-between w-full bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary">
+                <div class="flex items-center">
+                    <img id="selected-logo" src="https://placehold.co/24x24/f0f0f0/999999?text=?" alt="Selected tournament" class="h-6 w-6 rounded-full mr-3">
+                    <span id="selected-name" class="text-sm font-medium text-gray-700">Select a Tournament</span>
+                </div>
+                <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
+            </button>
+            
+            <div id="dropdown-menu-list" class="hidden absolute mt-1 w-full bg-white shadow-lg border rounded-md z-10 max-h-60 overflow-y-auto">
+                </div>
+        </div>
+
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const tournamentsContainer = document.getElementById('tournaments-container');
+            // Dropdown elements
+            const selector = document.getElementById('tournament-selector');
+            const button = document.getElementById('dropdown-button');
+            const menu = document.getElementById('dropdown-menu-list');
+            const selectedName = document.getElementById('selected-name');
+            const selectedLogo = document.getElementById('selected-logo');
+
+            // Header menu elements (unchanged)
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const profileMenuButton = document.getElementById('profile-menu-button');
             const profileMenu = document.getElementById('profile-menu');
 
             const showLoadingSpinner = () => {
-                tournamentsContainer.innerHTML = `
-                    <div class="col-span-full text-center p-8"> <div class="loader"></div>
-                        <p class="mt-4 text-gray-600 text-sm">Loading tournaments...</p> </div>
+                menu.innerHTML = `
+                    <div class="flex items-center justify-center p-4">
+                        <div class="loader"></div>
+                        <span class="ml-2 text-sm text-gray-500">Loading...</span>
+                    </div>
                 `;
             };
 
             const renderTournaments = (tournaments) => {
-                tournamentsContainer.innerHTML = '';
+                menu.innerHTML = ''; // Clear previous content
                 if (!tournaments || tournaments.length === 0) {
-                    tournamentsContainer.innerHTML = '<p class="text-gray-500 text-center p-8 text-sm">No tournaments found.</p>'; // CHANGED
+                    menu.innerHTML = '<div class="p-4 text-sm text-gray-500">No tournaments found.</div>';
                     return;
                 }
 
                 tournaments.forEach(tournament => {
-                    const tournamentItem = document.createElement('div');
-                    tournamentItem.className = 'tournament-item';
+                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24`;
                     
-                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=36`; // CHANGED size
-
-                    let statusColor = 'bg-gray-400';
-                    let statusText = 'Unknown';
-                    if (tournament.isActive) {
-                        statusColor = 'bg-green-500';
-                        statusText = 'Active';
-                    } else {
-                         statusColor = 'bg-red-500';
-                         statusText = 'Inactive';
-                    }
-
-                    tournamentItem.innerHTML = `
-                        <div class="flex items-center flex-grow min-w-0"> <img src="${logoUrl}" alt="${tournament.name} Logo" class="tournament-logo">
-                            <div class="min-w-0 flex-1">
-                                <h3 class="font-semibold text-gray-800 truncate text-sm">${tournament.name}</h3>
-                                <p class="text-gray-500 truncate text-xs">${tournament.type || 'N/A'}</p>
-                            </div>
-                        </div>
-                        <div class="flex items-center ml-2"> <span class="status-badge ${statusColor}">${statusText}</span>
-                        </div>
+                    const item = document.createElement('div');
+                    item.className = 'flex items-center px-4 py-2 text-sm text-gray-800 hover:bg-light cursor-pointer';
+                    
+                    item.innerHTML = `
+                        <img src="${logoUrl}" alt="${tournament.name}" class="h-6 w-6 rounded-full mr-3">
+                        <span>${tournament.name}</span>
+                        <span class="ml-auto text-xs font-semibold ${tournament.isActive ? 'text-green-600' : 'text-red-600'}">
+                            ${tournament.isActive ? 'Active' : 'Inactive'}
+                        </span>
                     `;
-                    tournamentsContainer.appendChild(tournamentItem);
+
+                    // Add click event to each item
+                    item.addEventListener('click', () => {
+                        selectedName.textContent = tournament.name;
+                        selectedLogo.src = logoUrl;
+                        menu.classList.add('hidden'); // Hide menu on selection
+                    });
+
+                    menu.appendChild(item);
                 });
             };
 
             const fetchTournaments = async () => {
                 showLoadingSpinner();
                 try {
-                    // This is a mock response for demonstration.
-                    // Replace with your actual API call.
+                    // Mock API call
                     await new Promise(resolve => setTimeout(resolve, 1500));
                     const mockData = {
                         tournaments: [
-                            { name: "Premier League", type: "League", isActive: true },
-                            { name: "Champions League", type: "Cup", isActive: true },
-                            { name: "La Liga Santander", type: "League", isActive: false },
-                            { name: "Serie A", type: "League", isActive: true },
-                            { name: "FA Cup", type: "Cup", isActive: true },
-                            { name: "Bundesliga", type: "League", isActive: true },
-                            { name: "Ligue 1 Uber Eats", type: "League", isActive: false },
-                            { name: "Copa del Rey", type: "Cup", isActive: true },
+                            { name: "Premier League", type: "League", isActive: true }, { name: "Champions League", type: "Cup", isActive: true }, { name: "La Liga Santander", type: "League", isActive: false }, { name: "Serie A", type: "League", isActive: true }, { name: "FA Cup", type: "Cup", isActive: true }, { name: "Bundesliga", type: "League", isActive: true }, { name: "Ligue 1 Uber Eats", type: "League", isActive: false }, { name: "Copa del Rey", type: "Cup", isActive: true },
                         ]
                     };
-                    
-                    if (mockData && mockData.tournaments) {
-                        renderTournaments(mockData.tournaments);
-                    } else {
-                        throw new Error("Invalid data format received from server.");
-                    }
-
+                    renderTournaments(mockData.tournaments);
                 } catch (error) {
                     console.error("Fetch tournaments error:", error);
-                    tournamentsContainer.innerHTML = `<p class="text-red-500 text-center p-8 text-sm">Error: ${error.message}</p>`; // CHANGED
+                    menu.innerHTML = `<div class="p-4 text-sm text-red-500">Error: ${error.message}</div>`;
                 }
             };
+            
+            // --- Event Listeners ---
 
-            // Initial fetch
-            fetchTournaments();
-
-            // Event Listeners
-            mobileMenuButton.addEventListener('click', () => {
-                mobileMenu.classList.toggle('active');
+            // Toggle dropdown menu
+            button.addEventListener('click', (event) => {
+                event.stopPropagation();
+                menu.classList.toggle('hidden');
             });
 
+            // Close dropdown if clicked outside
+            document.addEventListener('click', (event) => {
+                if (!selector.contains(event.target)) {
+                    menu.classList.add('hidden');
+                }
+            });
+
+            // Unchanged header menu listeners
+            mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('active'));
             profileMenuButton.addEventListener('click', (event) => {
                 event.stopPropagation();
                 profileMenu.classList.toggle('active');
             });
-
             document.addEventListener('click', (event) => {
                 if (!profileMenu.contains(event.target) && !profileMenuButton.contains(event.target)) {
                     profileMenu.classList.remove('active');
                 }
             });
+
+            // Initial fetch
+            fetchTournaments();
         });
     </script>
 </body>
