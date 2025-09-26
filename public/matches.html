@@ -54,22 +54,23 @@
                 <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
             </div>
             <nav class="hidden sm:flex items-center space-x-6">
-                <a href="/dashboard" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
-                <a href="/dashboard/predictions" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
-                <a href="/dashboard/matches" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Matches</a>
-                <a href="/dashboard/profile" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Profile</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
+                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
             </nav>
             <div class="flex items-center space-x-4">
                 <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-regular fa-bell h-5 w-5"></i></button>
                 <div class="relative group">
                     <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
                         <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
-                        <span class="hidden sm:block text-sm font-medium">User</span>
+                        <span class="hidden sm:block text-sm font-medium">Username</span>
                         <i class="fa-solid fa-chevron-down text-xs"></i>
                     </button>
                     <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
-                        <a href="/dashboard/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100" onclick="localStorage.removeItem('token'); window.location.href='/auth/login';">Sign Out</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
                     </div>
                 </div>
                 <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-solid fa-bars h-5 w-5"></i></button>
@@ -77,13 +78,14 @@
         </div>
         <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-2 px-4 mt-2 border-t border-gray-100">
             <nav class="flex flex-col space-y-2">
-                <a href="/dashboard" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
-                <a href="/dashboard/predictions" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
-                <a href="/dashboard/matches" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Matches</a>
-                <a href="/dashboard/profile" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Profile</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
+                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
             </nav>
         </div>
     </header>
+
     <main class="container mx-auto px-4 py-6">
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Tournament Standings</h2>
@@ -128,6 +130,8 @@
             // --- CONFIGURATION ---
             const AUTH_TOKEN_KEY = 'token'; 
             
+            // NOTE: Hardcoded TOURNAMENTS array is REMOVED.
+
             // --- UI Helper Functions ---
             const showLoadingSpinner = (container, message = "Loading...") => {
                 container.innerHTML = `
@@ -168,10 +172,6 @@
                             'Authorization': `Bearer ${token}` 
                         }
                     });
-
-                    if (response.status === 401) {
-                         throw new Error("Session expired. Please log in again.");
-                    }
 
                     if (!response.ok) {
                         const errorData = await response.json().catch(() => ({ message: "Failed to fetch list." }));
@@ -223,73 +223,73 @@
                 });
             };
 
-            // Renders the standings table (FIXED: All data fields included)
-            const renderStandingsTable = (data) => {
-                if (!data || !data.data || data.data.length === 0) {
-                    standingsContainer.innerHTML = `
-                        <div class="p-8 text-center text-gray-500">
-                            <i class="fa-solid fa-search-minus text-4xl text-gray-300 mb-3"></i>
-                            <p>No standings data available for this tournament yet.</p>
-                        </div>`;
-                    return;
-                }
+            // Renders the standings table (Corrected for flat JSON and logo placeholder)
+             // Renders the standings table (Corrected for complete data fields)
+const renderStandingsTable = (data) => {
+    if (!data || !data.data || data.data.length === 0) {
+        standingsContainer.innerHTML = `
+            <div class="p-8 text-center text-gray-500">
+                <i class="fa-solid fa-search-minus text-4xl text-gray-300 mb-3"></i>
+                <p>No standings data available for this tournament yet.</p>
+            </div>`;
+        return;
+    }
 
-                // Updated table headers to include GF and GA
-                const tableHeaders = `
-                    <thead class="bg-gray-50">
-                        <tr>
-                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">Pos</th>
-                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">P</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">W</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">D</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">L</th>
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GF</th> 
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GA</th> 
-                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GD</th>
-                            <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">Pts</th>
-                        </tr>
-                    </thead>
-                `;
+    // Ensure the table headers match the data columns (G F, G A added)
+    const tableHeaders = `
+        <thead class="bg-gray-50">
+            <tr>
+                <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">Pos</th>
+                <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">P</th>
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">W</th>
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">D</th>
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">L</th>
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GF</th> 
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GA</th> 
+                <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GD</th>
+                <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">Pts</th>
+            </tr>
+        </thead>
+    `;
 
-                const tableRows = data.data.map(team => {
-                    // Generate a placeholder logo for each team
-                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(team.name)}&background=1F2937&color=fff&size=24`;
+    const tableRows = data.data.map(team => {
+        // Generate a placeholder logo for each team
+        const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(team.name)}&background=1F2937&color=fff&size=24`;
 
-                    return `
-                        <tr class="border-b border-gray-200 hover:bg-light">
-                            <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
-                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
-                               <div class="flex items-center">
-                                   <img src="${logoUrl}" alt="${team.name} Logo" class="h-6 w-6 rounded-full mr-3 object-contain">
-                                   ${team.name}
-                               </div>
-                            </td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsFor}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsAgainst}</td>
-                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
-                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
-                        </tr>
-                    `;
-                }).join('');
+        return `
+            <tr class="border-b border-gray-200 hover:bg-light">
+                <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
+                <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
+                   <div class="flex items-center">
+                       <img src="${logoUrl}" alt="${team.name} Logo" class="h-6 w-6 rounded-full mr-3 object-contain">
+                       ${team.name}
+                   </div>
+                </td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsFor}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsAgainst}</td>
+                <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
+                <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
+            </tr>
+        `;
+    }).join('');
 
-                standingsContainer.innerHTML = `
-                    <div class="overflow-x-auto">
-                        <table class="min-w-full divide-y divide-gray-200">
-                            ${tableHeaders}
-                            <tbody class="bg-white divide-y divide-gray-200">
-                                ${tableRows}
-                            </tbody>
-                        </table>
-                    </div>
-                `;
-            };
-
-            // --- Data Fetching Functions (Unchanged as they were correct) ---
+    standingsContainer.innerHTML = `
+        <div class="overflow-x-auto">
+            <table class="min-w-full divide-y divide-gray-200">
+                ${tableHeaders}
+                <tbody class="bg-white divide-y divide-gray-200">
+                    ${tableRows}
+                </tbody>
+            </table>
+        </div>
+    `;
+};
+            // --- Data Fetching Functions ---
 
             const fetchAndRenderStandings = async (tournamentId) => {
                 showLoadingSpinner(standingsContainer, "Fetching standings...");
@@ -301,6 +301,7 @@
                         throw new Error("Authorization token not found. Please log in.");
                     }
 
+                    // Request URL uses the numeric ID fetched from the tournaments endpoint
                     const response = await fetch(`/api/tournaments/${tournamentId}`, {
                         method: "GET", 
                         headers: {
@@ -308,10 +309,6 @@
                             'Authorization': `Bearer ${token}` 
                         }
                     });
-
-                    if (response.status === 401) {
-                         throw new Error("Session expired. Please log in again.");
-                    }
 
                     if (!response.ok) {
                         let errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
@@ -333,7 +330,7 @@
                 }
             };
             
-            // --- Event Listeners and Initial Load ---
+            // --- Event Listeners ---
             
             button.addEventListener('click', (event) => {
                 event.stopPropagation();
@@ -357,7 +354,8 @@
                 }
             });
 
-            // Call to fetch tournaments on initial load
+            // --- Initial Load ---
+            // Fetch tournaments dynamically instead of using a hardcoded list
             fetchTournaments(); 
         });
     </script>
