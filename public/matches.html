@@ -40,8 +40,10 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .dropdown-menu { display: none; }
-        .dropdown-menu.active { display: block; }
+        /* The mobile-menu and profile dropdown use the .active class and the custom CSS below. 
+           The tournament dropdown will now use the Tailwind 'hidden' class directly for simplicity. */
+        .profile-dropdown-menu { display: none; }
+        .profile-dropdown-menu.active { display: block; }
         .mobile-menu { display: none; }
         .mobile-menu.active { display: block; }
     </style>
@@ -67,7 +69,7 @@
                         <span class="hidden sm:block text-sm font-medium">User</span>
                         <i class="fa-solid fa-chevron-down text-xs"></i>
                     </button>
-                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 profile-dropdown-menu">
                         <a href="/dashboard/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
                         <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100" onclick="localStorage.removeItem('token'); window.location.href='/auth/login';">Sign Out</a>
                     </div>
@@ -99,7 +101,7 @@
                 <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
             </button>
             <div id="dropdown-menu-list" class="hidden absolute mt-1 w-full bg-white shadow-lg border rounded-md z-10 max-h-60 overflow-y-auto">
-                </div>
+            </div>
         </div>
 
         <div id="standings-container" class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -149,6 +151,8 @@
             
             // Fetches tournaments from your backend API
             const fetchTournaments = async () => {
+                // Ensure the dropdown shows an error/loading message while open
+                menu.classList.remove('hidden'); // Temporarily show the menu to display status
                 showLoadingSpinner(menu, "Fetching list...");
                 
                 try {
@@ -160,7 +164,8 @@
                         button.disabled = true;
                         return;
                     }
-
+                    
+                    // NOTE: This fetch will likely fail without a live backend, but the structure is correct
                     const response = await fetch(`/api/tournaments`, {
                         method: "GET", 
                         headers: {
@@ -183,7 +188,6 @@
                     if (data.tournaments && data.tournaments.length > 0) {
                         renderTournamentOptions(data.tournaments);
                         selectedName.textContent = "Select a Tournament";
-                        menu.innerHTML = ''; // Clear loading spinner
                     } else {
                         showErrorMessage(menu, "No active tournaments found.");
                         selectedName.textContent = "No Tournaments";
@@ -193,6 +197,9 @@
                     console.error("Fetch tournaments error:", error);
                     showErrorMessage(menu, error.message);
                     selectedName.textContent = "Error Loading";
+                } finally {
+                    // Hide the menu again after loading, whether successful or not
+                    menu.classList.add('hidden'); 
                 }
             };
 
@@ -214,7 +221,7 @@
                     item.addEventListener('click', () => {
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
-                        menu.classList.add('hidden');
+                        menu.classList.add('hidden'); // <-- Correctly hides the dropdown after selection
                         // Correctly passing the external ID number from the API response
                         fetchAndRenderStandings(tournament.id); 
                     });
@@ -335,17 +342,20 @@
             
             // --- Event Listeners and Initial Load ---
             
+            // FIX: Toggle the 'hidden' class to show/hide the dropdown
             button.addEventListener('click', (event) => {
                 event.stopPropagation();
-                menu.classList.toggle('hidden');
+                menu.classList.toggle('hidden'); // FIX APPLIED HERE
             });
 
+            // FIX: Hide dropdown when clicking outside
             document.addEventListener('click', (event) => {
                 if (!selector.contains(event.target)) {
-                    menu.classList.add('hidden');
+                    menu.classList.add('hidden'); // FIX APPLIED HERE
                 }
             });
             
+            // Profile and mobile menu logic (renamed profile-menu-class in CSS)
             mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('active'));
             profileMenuButton.addEventListener('click', (event) => {
                 event.stopPropagation();
