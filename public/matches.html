@@ -54,23 +54,22 @@
                 <h1 class="text-xl font-bold text-primary">SwiftScore</h1>
             </div>
             <nav class="hidden sm:flex items-center space-x-6">
-                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
-                <a href="#" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
+                <a href="/dashboard" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="/dashboard/predictions" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="/dashboard/matches" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Matches</a>
+                <a href="/dashboard/profile" class="text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Profile</a>
             </nav>
             <div class="flex items-center space-x-4">
                 <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-regular fa-bell h-5 w-5"></i></button>
                 <div class="relative group">
                     <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
                         <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
-                        <span class="hidden sm:block text-sm font-medium">Username</span>
+                        <span class="hidden sm:block text-sm font-medium">User</span>
                         <i class="fa-solid fa-chevron-down text-xs"></i>
                     </button>
                     <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
+                        <a href="/dashboard/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100" onclick="localStorage.removeItem('token'); window.location.href='/auth/login';">Sign Out</a>
                     </div>
                 </div>
                 <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-solid fa-bars h-5 w-5"></i></button>
@@ -78,14 +77,13 @@
         </div>
         <div id="mobile-menu" class="mobile-menu sm:hidden bg-white shadow py-2 px-4 mt-2 border-t border-gray-100">
             <nav class="flex flex-col space-y-2">
-                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
-                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
-                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Live Scores</a>
-                <a href="#" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Analytics</a>
+                <a href="/dashboard" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm font-medium">Dashboard</a>
+                <a href="/dashboard/predictions" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Predictions</a>
+                <a href="/dashboard/matches" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Matches</a>
+                <a href="/dashboard/profile" class="block text-gray-700 hover:text-primary transition-colors duration-200 text-sm">Profile</a>
             </nav>
         </div>
     </header>
-
     <main class="container mx-auto px-4 py-6">
         <div class="mb-6">
             <h2 class="text-2xl font-bold text-gray-800">Tournament Standings</h2>
@@ -96,12 +94,12 @@
             <button id="dropdown-button" class="flex items-center justify-between w-full bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary">
                 <div class="flex items-center">
                     <img id="selected-logo" src="https://placehold.co/24x24/f0f0f0/999999?text=?" alt="Selected tournament" class="h-6 w-6 rounded-full mr-3">
-                    <span id="selected-name" class="text-sm font-medium text-gray-700">Select a Tournament</span>
+                    <span id="selected-name" class="text-sm font-medium text-gray-700">Loading Tournaments...</span>
                 </div>
                 <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
             </button>
             <div id="dropdown-menu-list" class="hidden absolute mt-1 w-full bg-white shadow-lg border rounded-md z-10 max-h-60 overflow-y-auto">
-            </div>
+                </div>
         </div>
 
         <div id="standings-container" class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -122,7 +120,6 @@
             const selectedName = document.getElementById('selected-name');
             const selectedLogo = document.getElementById('selected-logo');
             const standingsContainer = document.getElementById('standings-container');
-
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const profileMenuButton = document.getElementById('profile-menu-button');
@@ -130,24 +127,13 @@
             
             // --- CONFIGURATION ---
             const AUTH_TOKEN_KEY = 'token'; 
-
-            const TOURNAMENTS = [
-                { id: 1, name: "Champions League" },
-                { id: 2, name: "Europa League" },
-                { id: 3, name: "Premier League" },
-                { id: 4, name: "Bundesliga" },
-                { id: 5, name: "Brasileirão" },
-                { id: 6, name: "La Liga" },
-                { id: 7, name: "Serie A" },
-                { id: 8, name: "Championship" },
-            ];
-
+            
             // --- UI Helper Functions ---
-            const showLoadingSpinner = (container) => {
+            const showLoadingSpinner = (container, message = "Loading...") => {
                 container.innerHTML = `
                     <div class="flex items-center justify-center p-8">
                         <div class="loader"></div>
-                        <span class="ml-3 text-sm text-gray-500">Fetching standings...</span>
+                        <span class="ml-3 text-sm text-gray-500">${message}</span>
                     </div>
                 `;
             };
@@ -161,10 +147,61 @@
                     </div>`;
             };
             
-            // Renders the items in the tournament dropdown (Passing ID number)
+            // Fetches tournaments from your backend API
+            const fetchTournaments = async () => {
+                showLoadingSpinner(menu, "Fetching list...");
+                
+                try {
+                    const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+
+                    if (!token) {
+                        showErrorMessage(menu, "Authorization token not found. Please log in.");
+                        selectedName.textContent = "Login Required";
+                        button.disabled = true;
+                        return;
+                    }
+
+                    const response = await fetch(`/api/tournaments`, {
+                        method: "GET", 
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Authorization': `Bearer ${token}` 
+                        }
+                    });
+
+                    if (response.status === 401) {
+                         throw new Error("Session expired. Please log in again.");
+                    }
+
+                    if (!response.ok) {
+                        const errorData = await response.json().catch(() => ({ message: "Failed to fetch list." }));
+                        throw new Error(errorData.message || `HTTP Error: ${response.status} ${response.statusText}`);
+                    }
+
+                    const data = await response.json();
+                    
+                    if (data.tournaments && data.tournaments.length > 0) {
+                        renderTournamentOptions(data.tournaments);
+                        selectedName.textContent = "Select a Tournament";
+                        menu.innerHTML = ''; // Clear loading spinner
+                    } else {
+                        showErrorMessage(menu, "No active tournaments found.");
+                        selectedName.textContent = "No Tournaments";
+                    }
+
+                } catch (error) {
+                    console.error("Fetch tournaments error:", error);
+                    showErrorMessage(menu, error.message);
+                    selectedName.textContent = "Error Loading";
+                }
+            };
+
+
+            // Renders the items in the tournament dropdown
             const renderTournamentOptions = (tournaments) => {
                 menu.innerHTML = '';
                 tournaments.forEach(tournament => {
+                    // Use a logo placeholder based on the tournament name
                     const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24&bold=true`;
                     
                     const item = document.createElement('div');
@@ -178,7 +215,7 @@
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
                         menu.classList.add('hidden');
-                        // Correctly passing the ID number
+                        // Correctly passing the external ID number from the API response
                         fetchAndRenderStandings(tournament.id); 
                     });
 
@@ -186,7 +223,7 @@
                 });
             };
 
-            // Renders the standings table (FIXED for flat JSON and logo)
+            // Renders the standings table (FIXED: All data fields included)
             const renderStandingsTable = (data) => {
                 if (!data || !data.data || data.data.length === 0) {
                     standingsContainer.innerHTML = `
@@ -197,6 +234,7 @@
                     return;
                 }
 
+                // Updated table headers to include GF and GA
                 const tableHeaders = `
                     <thead class="bg-gray-50">
                         <tr>
@@ -206,15 +244,16 @@
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">W</th>
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">D</th>
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">L</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GF</th> 
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GA</th> 
                             <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GD</th>
                             <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">Pts</th>
                         </tr>
                     </thead>
                 `;
 
-                // FIX: Team logo generation and accessing flat data structure
                 const tableRows = data.data.map(team => {
-                    // Generate a placeholder logo since the API response doesn't include one
+                    // Generate a placeholder logo for each team
                     const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(team.name)}&background=1F2937&color=fff&size=24`;
 
                     return `
@@ -230,6 +269,8 @@
                             <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
                             <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
                             <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsFor}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalsAgainst}</td>
                             <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
                             <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
                         </tr>
@@ -248,19 +289,18 @@
                 `;
             };
 
-            // --- Data Fetching Functions (Corrected Method and Header) ---
+            // --- Data Fetching Functions (Unchanged as they were correct) ---
 
             const fetchAndRenderStandings = async (tournamentId) => {
-                showLoadingSpinner(standingsContainer);
+                showLoadingSpinner(standingsContainer, "Fetching standings...");
 
                 try {
                     const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
 
                     if (!token) {
-                        throw new Error("Authorization token not found. Please log in to view standings.");
+                        throw new Error("Authorization token not found. Please log in.");
                     }
 
-                    // Request URL uses the numeric ID
                     const response = await fetch(`/api/tournaments/${tournamentId}`, {
                         method: "GET", 
                         headers: {
@@ -268,6 +308,10 @@
                             'Authorization': `Bearer ${token}` 
                         }
                     });
+
+                    if (response.status === 401) {
+                         throw new Error("Session expired. Please log in again.");
+                    }
 
                     if (!response.ok) {
                         let errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
@@ -289,7 +333,7 @@
                 }
             };
             
-            // --- Event Listeners (unchanged) ---
+            // --- Event Listeners and Initial Load ---
             
             button.addEventListener('click', (event) => {
                 event.stopPropagation();
@@ -313,8 +357,8 @@
                 }
             });
 
-            // --- Initial Load ---
-            renderTournamentOptions(TOURNAMENTS);
+            // Call to fetch tournaments on initial load
+            fetchTournaments(); 
         });
     </script>
 </body>
