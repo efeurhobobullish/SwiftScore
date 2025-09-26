@@ -129,7 +129,6 @@
             const profileMenu = document.getElementById('profile-menu');
             
             // --- CONFIGURATION ---
-            // Using 'token' as the localStorage key, as requested.
             const AUTH_TOKEN_KEY = 'token'; 
 
             const TOURNAMENTS = [
@@ -143,7 +142,7 @@
                 { id: 8, name: "Championship" },
             ];
 
-            // --- UI Helper Functions (unchanged) ---
+            // --- UI Helper Functions ---
             const showLoadingSpinner = (container) => {
                 container.innerHTML = `
                     <div class="flex items-center justify-center p-8">
@@ -162,7 +161,7 @@
                     </div>`;
             };
             
-            // Renders the items in the tournament dropdown
+            // Renders the items in the tournament dropdown (Passing ID number)
             const renderTournamentOptions = (tournaments) => {
                 menu.innerHTML = '';
                 tournaments.forEach(tournament => {
@@ -175,12 +174,11 @@
                         <span>${tournament.name}</span>
                     `;
 
-                    // FIX: This section now correctly passes tournament.id
                     item.addEventListener('click', () => {
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
                         menu.classList.add('hidden');
-                        // IMPORTANT: Pass the ID number here
+                        // Correctly passing the ID number
                         fetchAndRenderStandings(tournament.id); 
                     });
 
@@ -188,7 +186,7 @@
                 });
             };
 
-            // Renders the standings table (unchanged)
+            // Renders the standings table (FIXED for flat JSON and logo)
             const renderStandingsTable = (data) => {
                 if (!data || !data.data || data.data.length === 0) {
                     standingsContainer.innerHTML = `
@@ -214,23 +212,29 @@
                     </thead>
                 `;
 
-                const tableRows = data.data.map(team => `
-                    <tr class="border-b border-gray-200 hover:bg-light">
-                        <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
-                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
-                           <div class="flex items-center">
-                               <img src="${team.team.logo}" alt="${team.team.name}" class="h-6 w-6 mr-3 object-contain">
-                               ${team.team.name}
-                           </div>
-                        </td>
-                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
-                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
-                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
-                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
-                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
-                        <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
-                    </tr>
-                `).join('');
+                // FIX: Team logo generation and accessing flat data structure
+                const tableRows = data.data.map(team => {
+                    // Generate a placeholder logo since the API response doesn't include one
+                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(team.name)}&background=1F2937&color=fff&size=24`;
+
+                    return `
+                        <tr class="border-b border-gray-200 hover:bg-light">
+                            <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
+                            <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
+                               <div class="flex items-center">
+                                   <img src="${logoUrl}" alt="${team.name} Logo" class="h-6 w-6 rounded-full mr-3 object-contain">
+                                   ${team.name}
+                               </div>
+                            </td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
+                            <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
+                            <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
+                        </tr>
+                    `;
+                }).join('');
 
                 standingsContainer.innerHTML = `
                     <div class="overflow-x-auto">
@@ -244,29 +248,23 @@
                 `;
             };
 
-            // --- Data Fetching Functions ---
+            // --- Data Fetching Functions (Corrected Method and Header) ---
 
-            /**
-             * Fetches tournament standings using the tournament ID in the URL and 
-             * includes the auth token in the request headers.
-             */
             const fetchAndRenderStandings = async (tournamentId) => {
                 showLoadingSpinner(standingsContainer);
 
                 try {
-                    // Get the token from local storage using the key 'token'
                     const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
 
                     if (!token) {
                         throw new Error("Authorization token not found. Please log in to view standings.");
                     }
 
-                    // FIX: Ensure the tournamentId (the ID number) is used in the URL
+                    // Request URL uses the numeric ID
                     const response = await fetch(`/api/tournaments/${tournamentId}`, {
                         method: "GET", 
                         headers: {
                             'Content-Type': 'application/json',
-                            // Use the token for Authorization
                             'Authorization': `Bearer ${token}` 
                         }
                     });
