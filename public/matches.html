@@ -42,7 +42,7 @@
         }
         .dropdown-menu { display: none; }
         .dropdown-menu.active { display: block; }
-        .mobile-menu { display: none; } /* Ensure mobile menu is hidden by default */
+        .mobile-menu { display: none; }
         .mobile-menu.active { display: block; }
     </style>
 </head>
@@ -101,7 +101,7 @@
                 <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
             </button>
             <div id="dropdown-menu-list" class="hidden absolute mt-1 w-full bg-white shadow-lg border rounded-md z-10 max-h-60 overflow-y-auto">
-                </div>
+            </div>
         </div>
 
         <div id="standings-container" class="bg-white rounded-lg shadow-md overflow-hidden">
@@ -121,14 +121,17 @@
             const menu = document.getElementById('dropdown-menu-list');
             const selectedName = document.getElementById('selected-name');
             const selectedLogo = document.getElementById('selected-logo');
-            const standingsContainer = document.getElementById('standings-container'); // --- ADDED
+            const standingsContainer = document.getElementById('standings-container');
 
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const profileMenuButton = document.getElementById('profile-menu-button');
             const profileMenu = document.getElementById('profile-menu');
             
-            // --- MODIFIED ---: This list now matches your backend TOURNAMENT_MAP
+            // --- CONFIGURATION ---
+            // Using 'token' as the localStorage key, as requested.
+            const AUTH_TOKEN_KEY = 'token'; 
+
             const TOURNAMENTS = [
                 { id: 1, name: "Champions League" },
                 { id: 2, name: "Europa League" },
@@ -140,7 +143,7 @@
                 { id: 8, name: "Championship" },
             ];
 
-            // --- UI Helper Functions ---
+            // --- UI Helper Functions (unchanged) ---
             const showLoadingSpinner = (container) => {
                 container.innerHTML = `
                     <div class="flex items-center justify-center p-8">
@@ -159,11 +162,9 @@
                     </div>`;
             };
             
-            // --- Rendering Functions ---
-
-            // Renders the items in the tournament dropdown
+            // Renders the items in the tournament dropdown (unchanged)
             const renderTournamentOptions = (tournaments) => {
-                menu.innerHTML = ''; // Clear previous content
+                menu.innerHTML = '';
                 tournaments.forEach(tournament => {
                     const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24&bold=true`;
                     
@@ -174,22 +175,25 @@
                         <span>${tournament.name}</span>
                     `;
 
-                    // --- MODIFIED ---: Click now fetches data
                     item.addEventListener('click', () => {
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
                         menu.classList.add('hidden');
-                        fetchAndRenderStandings(tournament.id); // Fetch standings for the selected tournament
+                        fetchAndRenderStandings(tournament.id);
                     });
 
                     menu.appendChild(item);
                 });
             };
 
-            // --- ADDED ---: Renders the standings table
+            // Renders the standings table (unchanged)
             const renderStandingsTable = (data) => {
                 if (!data || !data.data || data.data.length === 0) {
-                    standingsContainer.innerHTML = '<div class="p-8 text-center text-gray-500">No standings data available for this tournament.</div>';
+                    standingsContainer.innerHTML = `
+                        <div class="p-8 text-center text-gray-500">
+                            <i class="fa-solid fa-search-minus text-4xl text-gray-300 mb-3"></i>
+                            <p>No standings data available for this tournament yet.</p>
+                        </div>`;
                     return;
                 }
 
@@ -213,8 +217,8 @@
                         <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
                         <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
                            <div class="flex items-center">
-                                <img src="${team.team.logo}" alt="${team.team.name}" class="h-6 w-6 mr-3 object-contain">
-                                ${team.team.name}
+                               <img src="${team.team.logo}" alt="${team.team.name}" class="h-6 w-6 mr-3 object-contain">
+                               ${team.team.name}
                            </div>
                         </td>
                         <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
@@ -240,26 +244,55 @@
 
             // --- Data Fetching Functions ---
 
-            // --- MODIFIED ---: This function now connects to your backend
+            /**
+             * Fetches tournament standings using a GET request and includes the auth token.
+             */
             const fetchAndRenderStandings = async (tournamentId) => {
                 showLoadingSpinner(standingsContainer);
+
                 try {
-                    const response = await fetch(`/api/tournaments/${tournamentId}`);
+                    // Get the token from local storage using the key 'token'
+                    // We use the short-circuit OR (|| "") to default to an empty string 
+                    // if the token is null, preventing a crash.
+                    const token = localStorage.getItem(AUTH_TOKEN_KEY) || "";
+
+                    if (!token) {
+                        // User is not logged in or token is missing
+                        throw new Error("Authorization token not found. Please log in to view standings.");
+                    }
+
+                    const response = await fetch(`/api/tournaments/${tournamentId}`, {
+                        // ADDED: Explicitly set the method to "GET"
+                        method: "GET", 
+                        // UPDATED: Use the correct structure for headers and token
+                        headers: {
+                            'Content-Type': 'application/json',
+                            // The Authorization header is what your backend needs
+                            'Authorization': `Bearer ${token}` 
+                        }
+                    });
 
                     if (!response.ok) {
-                        const errorData = await response.json();
-                        throw new Error(errorData.message || `API error: ${response.status}`);
+                        let errorMessage = `HTTP Error: ${response.status} ${response.statusText}`;
+                        try {
+                             const errorData = await response.json();
+                             errorMessage = errorData.message || errorMessage;
+                        } catch (e) {
+                        }
+                        
+                        throw new Error(errorMessage);
                     }
 
                     const data = await response.json();
                     renderStandingsTable(data);
+
                 } catch (error) {
                     console.error("Fetch standings error:", error);
                     showErrorMessage(standingsContainer, error.message);
                 }
             };
             
-            // --- Event Listeners ---
+            // --- Event Listeners (unchanged) ---
             
             button.addEventListener('click', (event) => {
                 event.stopPropagation();
@@ -272,7 +305,6 @@
                 }
             });
             
-            // --- Unchanged Header Menu Logic ---
             mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('active'));
             profileMenuButton.addEventListener('click', (event) => {
                 event.stopPropagation();
