@@ -20,19 +20,6 @@ connectDB();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Map numbers (frontend sends) -> tournament slugs (API needs)
-const TOURNAMENT_MAP = {
-  1: "champions-league",
-  2: "europa-league",
-  3: "premier-league",
-  4: "bundesliga",
-  5: "brasileirao",
-  6: "la-liga",
-  7: "serie-a",
-  8: "championship",
-};
-
-
 
 // Middleware
 app.use(cors());
@@ -197,48 +184,51 @@ app.get("/api/tournaments", authMiddleware, async (req, res) => {
 });
 
 
-// Fetch tournament standings by number (1–8)
 app.get("/api/tournaments/:id", authMiddleware, async (req, res) => {
-  try {
-    const baseUrl = process.env.SPORTS_API;
-    if (!baseUrl) {
-      return res.status(500).json({ message: "Soccer API URL not configured" });
+    try {
+        const baseUrl = process.env.SPORTS_API;
+        if (!baseUrl) {
+            return res.status(500).json({ message: "Soccer API URL not configured" });
+        }
+
+        const { id } = req.params;
+        
+        // Input validation: Ensure the ID is a number between 1 and 8 (based on your original map keys)
+        const tournamentId = parseInt(id, 10);
+        if (isNaN(tournamentId) || tournamentId < 1 || tournamentId > 8) {
+            return res.status(400).json({ message: "Invalid tournament ID number" });
+        }
+
+        // 🌟 FIX: Use the ID number directly in the external API URL
+        // If the external API uses slugs, you MUST revert to using the TOURNAMENT_MAP.
+        // Assuming the external API now accepts the number (e.g., /v1/standings/3)
+        const apiUrl = `${baseUrl.replace(/\/$/, "")}/v1/standings/${tournamentId}`;
+        
+        const { data } = await axios.get(apiUrl);
+
+        if (!data?.tournament || !Array.isArray(data.data)) {
+            return res.status(404).json({ message: "Tournament standings not found or external API error" });
+        }
+
+        // Send data back to frontend
+        res.status(200).json({
+            status: data.status || 200,
+            tournament: data.tournament,
+            competitionStatus: data.competitionStatus,
+            data: data.data,
+        });
+    } catch (error) {
+        console.error("Fetch tournament standings error:", {
+            message: error.message,
+            status: error.response?.status,
+            data: error.response?.data,
+        });
+
+        res.status(500).json({
+            message: "Failed to fetch tournament standings",
+            error: error.message,
+        });
     }
-
-    const { id } = req.params;
-    const tournamentSlug = TOURNAMENT_MAP[id];
-
-    if (!tournamentSlug) {
-      return res.status(400).json({ message: "Invalid tournament ID" });
-    }
-
-    // Build correct API URL
-    const apiUrl = `${baseUrl.replace(/\/$/, "")}/v1/standings/${tournamentSlug}`;
-    const { data } = await axios.get(apiUrl);
-
-    if (!data?.tournament || !Array.isArray(data.data)) {
-      return res.status(404).json({ message: "Tournament standings not found" });
-    }
-
-    // Send data back to frontend
-    res.status(200).json({
-      status: data.status || 200,
-      tournament: data.tournament,
-      competitionStatus: data.competitionStatus,
-      data: data.data,
-    });
-  } catch (error) {
-    console.error("Fetch tournament standings error:", {
-      message: error.message,
-      status: error.response?.status,
-      data: error.response?.data,
-    });
-
-    res.status(500).json({
-      message: "Failed to fetch tournament standings",
-      error: error.message,
-    });
-  }
 });
 
 // =========================
