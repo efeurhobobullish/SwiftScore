@@ -27,10 +27,7 @@
         }
     </script>
     <style>
-        /* CSS is now minimal as Tailwind handles most styling */
-        body {
-            font-family: 'Poppins', sans-serif;
-        }
+        body { font-family: 'Poppins', sans-serif; }
         .loader {
             border: 3px solid #f3f3f3;
             border-radius: 50%;
@@ -45,6 +42,8 @@
         }
         .dropdown-menu { display: none; }
         .dropdown-menu.active { display: block; }
+        .mobile-menu { display: none; } /* Ensure mobile menu is hidden by default */
+        .mobile-menu.active { display: block; }
     </style>
 </head>
 <body class="bg-light">
@@ -63,17 +62,17 @@
             <div class="flex items-center space-x-4">
                 <button class="p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-regular fa-bell h-5 w-5"></i></button>
                 <div class="relative group">
-                     <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
-                         <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
-                         <span class="hidden sm:block text-sm font-medium">Username</span>
-                         <i class="fa-solid fa-chevron-down text-xs"></i>
-                     </button>
-                     <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
-                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
-                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
-                         <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
-                     </div>
-                 </div>
+                    <button id="profile-menu-button" class="flex items-center space-x-2 text-gray-600 hover:text-primary transition-colors duration-200">
+                        <img src="https://placehold.co/32x32" alt="User Profile" class="h-8 w-8 rounded-full border-2 border-primary">
+                        <span class="hidden sm:block text-sm font-medium">Username</span>
+                        <i class="fa-solid fa-chevron-down text-xs"></i>
+                    </button>
+                    <div id="profile-menu" class="absolute right-0 mt-2 w-48 bg-white border border-gray-200 rounded-md shadow-lg py-1 z-50 dropdown-menu">
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Settings</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-red-600 hover:bg-gray-100">Sign Out</a>
+                    </div>
+                </div>
                 <button id="mobile-menu-button" class="sm:hidden p-2 text-gray-600 hover:text-primary transition-colors duration-200"><i class="fa-solid fa-bars h-5 w-5"></i></button>
             </div>
         </div>
@@ -88,12 +87,12 @@
     </header>
 
     <main class="container mx-auto px-4 py-6">
-        <div class="mb-4">
-            <h2 class="text-2xl font-bold text-gray-800">Tournaments</h2>
-            <p class="text-sm text-gray-500 mt-1">Select a tournament to view details.</p>
+        <div class="mb-6">
+            <h2 class="text-2xl font-bold text-gray-800">Tournament Standings</h2>
+            <p class="text-sm text-gray-500 mt-1">Select a tournament to view the live league table.</p>
         </div>
 
-        <div id="tournament-selector" class="relative w-full max-w-sm">
+        <div id="tournament-selector" class="relative w-full max-w-sm mb-8">
             <button id="dropdown-button" class="flex items-center justify-between w-full bg-white border border-gray-300 rounded-md shadow-sm px-4 py-2 text-left cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary">
                 <div class="flex items-center">
                     <img id="selected-logo" src="https://placehold.co/24x24/f0f0f0/999999?text=?" alt="Selected tournament" class="h-6 w-6 rounded-full mr-3">
@@ -101,115 +100,192 @@
                 </div>
                 <i class="fa-solid fa-chevron-down text-gray-500 text-xs"></i>
             </button>
-            
             <div id="dropdown-menu-list" class="hidden absolute mt-1 w-full bg-white shadow-lg border rounded-md z-10 max-h-60 overflow-y-auto">
                 </div>
+        </div>
+
+        <div id="standings-container" class="bg-white rounded-lg shadow-md overflow-hidden">
+             <div class="p-8 text-center text-gray-500">
+                <i class="fa-solid fa-table-list text-4xl text-gray-300 mb-3"></i>
+                <p>Please select a tournament to view the standings.</p>
+            </div>
         </div>
 
     </main>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Dropdown elements
+            // --- DOM Elements ---
             const selector = document.getElementById('tournament-selector');
             const button = document.getElementById('dropdown-button');
             const menu = document.getElementById('dropdown-menu-list');
             const selectedName = document.getElementById('selected-name');
             const selectedLogo = document.getElementById('selected-logo');
+            const standingsContainer = document.getElementById('standings-container'); // --- ADDED
 
-            // Header menu elements (unchanged)
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             const profileMenuButton = document.getElementById('profile-menu-button');
             const profileMenu = document.getElementById('profile-menu');
+            
+            // --- MODIFIED ---: This list now matches your backend TOURNAMENT_MAP
+            const TOURNAMENTS = [
+                { id: 1, name: "Champions League" },
+                { id: 2, name: "Europa League" },
+                { id: 3, name: "Premier League" },
+                { id: 4, name: "Bundesliga" },
+                { id: 5, name: "Brasileirão" },
+                { id: 6, name: "La Liga" },
+                { id: 7, name: "Serie A" },
+                { id: 8, name: "Championship" },
+            ];
 
-            const showLoadingSpinner = () => {
-                menu.innerHTML = `
-                    <div class="flex items-center justify-center p-4">
+            // --- UI Helper Functions ---
+            const showLoadingSpinner = (container) => {
+                container.innerHTML = `
+                    <div class="flex items-center justify-center p-8">
                         <div class="loader"></div>
-                        <span class="ml-2 text-sm text-gray-500">Loading...</span>
+                        <span class="ml-3 text-sm text-gray-500">Fetching standings...</span>
                     </div>
                 `;
             };
 
-            const renderTournaments = (tournaments) => {
-                menu.innerHTML = ''; // Clear previous content
-                if (!tournaments || tournaments.length === 0) {
-                    menu.innerHTML = '<div class="p-4 text-sm text-gray-500">No tournaments found.</div>';
-                    return;
-                }
+            const showErrorMessage = (container, message) => {
+                container.innerHTML = `
+                    <div class="p-8 text-center text-red-600 bg-red-50">
+                        <i class="fa-solid fa-circle-exclamation text-4xl text-red-400 mb-3"></i>
+                        <p class="font-semibold">Failed to load data</p>
+                        <p class="text-sm">${message}</p>
+                    </div>`;
+            };
+            
+            // --- Rendering Functions ---
 
+            // Renders the items in the tournament dropdown
+            const renderTournamentOptions = (tournaments) => {
+                menu.innerHTML = ''; // Clear previous content
                 tournaments.forEach(tournament => {
-                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24`;
+                    const logoUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(tournament.name)}&background=2563EA&color=fff&size=24&bold=true`;
                     
                     const item = document.createElement('div');
                     item.className = 'flex items-center px-4 py-2 text-sm text-gray-800 hover:bg-light cursor-pointer';
-                    
                     item.innerHTML = `
                         <img src="${logoUrl}" alt="${tournament.name}" class="h-6 w-6 rounded-full mr-3">
                         <span>${tournament.name}</span>
-                        <span class="ml-auto text-xs font-semibold ${tournament.isActive ? 'text-green-600' : 'text-red-600'}">
-                            ${tournament.isActive ? 'Active' : 'Inactive'}
-                        </span>
                     `;
 
-                    // Add click event to each item
+                    // --- MODIFIED ---: Click now fetches data
                     item.addEventListener('click', () => {
                         selectedName.textContent = tournament.name;
                         selectedLogo.src = logoUrl;
-                        menu.classList.add('hidden'); // Hide menu on selection
+                        menu.classList.add('hidden');
+                        fetchAndRenderStandings(tournament.id); // Fetch standings for the selected tournament
                     });
 
                     menu.appendChild(item);
                 });
             };
 
-            const fetchTournaments = async () => {
-                showLoadingSpinner();
+            // --- ADDED ---: Renders the standings table
+            const renderStandingsTable = (data) => {
+                if (!data || !data.data || data.data.length === 0) {
+                    standingsContainer.innerHTML = '<div class="p-8 text-center text-gray-500">No standings data available for this tournament.</div>';
+                    return;
+                }
+
+                const tableHeaders = `
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th scope="col" class="px-3 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-12">Pos</th>
+                            <th scope="col" class="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Club</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">P</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">W</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">D</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">L</th>
+                            <th scope="col" class="px-2 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">GD</th>
+                            <th scope="col" class="px-3 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider font-bold">Pts</th>
+                        </tr>
+                    </thead>
+                `;
+
+                const tableRows = data.data.map(team => `
+                    <tr class="border-b border-gray-200 hover:bg-light">
+                        <td class="px-3 py-3 whitespace-nowrap text-sm font-medium text-gray-900 text-center">${team.position}</td>
+                        <td class="px-4 py-3 whitespace-nowrap text-sm text-gray-800">
+                           <div class="flex items-center">
+                                <img src="${team.team.logo}" alt="${team.team.name}" class="h-6 w-6 mr-3 object-contain">
+                                ${team.team.name}
+                           </div>
+                        </td>
+                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.played}</td>
+                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.wins}</td>
+                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.draws}</td>
+                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.losses}</td>
+                        <td class="px-2 py-3 whitespace-nowrap text-sm text-gray-500 text-center">${team.goalDifference}</td>
+                        <td class="px-3 py-3 whitespace-nowrap text-sm text-gray-900 font-bold text-center">${team.points}</td>
+                    </tr>
+                `).join('');
+
+                standingsContainer.innerHTML = `
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full divide-y divide-gray-200">
+                            ${tableHeaders}
+                            <tbody class="bg-white divide-y divide-gray-200">
+                                ${tableRows}
+                            </tbody>
+                        </table>
+                    </div>
+                `;
+            };
+
+            // --- Data Fetching Functions ---
+
+            // --- MODIFIED ---: This function now connects to your backend
+            const fetchAndRenderStandings = async (tournamentId) => {
+                showLoadingSpinner(standingsContainer);
                 try {
-                    // Mock API call
-                    await new Promise(resolve => setTimeout(resolve, 1500));
-                    const mockData = {
-                        tournaments: [
-                            { name: "Premier League", type: "League", isActive: true }, { name: "Champions League", type: "Cup", isActive: true }, { name: "La Liga Santander", type: "League", isActive: false }, { name: "Serie A", type: "League", isActive: true }, { name: "FA Cup", type: "Cup", isActive: true }, { name: "Bundesliga", type: "League", isActive: true }, { name: "Ligue 1 Uber Eats", type: "League", isActive: false }, { name: "Copa del Rey", type: "Cup", isActive: true },
-                        ]
-                    };
-                    renderTournaments(mockData.tournaments);
+                    const response = await fetch(`/api/tournaments/${tournamentId}`);
+
+                    if (!response.ok) {
+                        const errorData = await response.json();
+                        throw new Error(errorData.message || `API error: ${response.status}`);
+                    }
+
+                    const data = await response.json();
+                    renderStandingsTable(data);
                 } catch (error) {
-                    console.error("Fetch tournaments error:", error);
-                    menu.innerHTML = `<div class="p-4 text-sm text-red-500">Error: ${error.message}</div>`;
+                    console.error("Fetch standings error:", error);
+                    showErrorMessage(standingsContainer, error.message);
                 }
             };
             
             // --- Event Listeners ---
-
-            // Toggle dropdown menu
+            
             button.addEventListener('click', (event) => {
                 event.stopPropagation();
                 menu.classList.toggle('hidden');
             });
 
-            // Close dropdown if clicked outside
             document.addEventListener('click', (event) => {
                 if (!selector.contains(event.target)) {
                     menu.classList.add('hidden');
                 }
             });
-
-            // Unchanged header menu listeners
+            
+            // --- Unchanged Header Menu Logic ---
             mobileMenuButton.addEventListener('click', () => mobileMenu.classList.toggle('active'));
             profileMenuButton.addEventListener('click', (event) => {
                 event.stopPropagation();
                 profileMenu.classList.toggle('active');
             });
             document.addEventListener('click', (event) => {
-                if (!profileMenu.contains(event.target) && !profileMenuButton.contains(event.target)) {
+                if (!profileMenuButton.contains(event.target) && !profileMenu.contains(event.target)) {
                     profileMenu.classList.remove('active');
                 }
             });
 
-            // Initial fetch
-            fetchTournaments();
+            // --- Initial Load ---
+            renderTournamentOptions(TOURNAMENTS);
         });
     </script>
 </body>
